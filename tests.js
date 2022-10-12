@@ -90,14 +90,13 @@ const test = () => {
 		const actual = inflectFuncs[Input.PartOfSpeech](Input.Lemma);
 
 		const actualStringified = JSON.stringify(actual);
-		const inputStringified = JSON.stringify(Input);
 		const expectedStringified = JSON.stringify(Expected);
 
 		if (Object.keys(Expected) === 0) {
 			console.log(`Expected forms have not been defined for this test; ${Input.Lemma}) => ${actual}`);
 		}
 		else if (actualStringified === '{}') {
-			console.log(`Inflection function has not been defined for ${Input.PartOfSpeech}`);
+			console.log(`Inflection function has not been defined for ${Input.PartOfSpeech}.`);
 		}
 		else if (actualStringified === expectedStringified) {
 			console.log(`Yay! ${Input.Lemma}) => ${actualStringified}`);
