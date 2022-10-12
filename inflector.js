@@ -14,14 +14,41 @@
 //// Functions for building the output Json:
 ////
 
+const inflectFuncs = {
+	"Adjective": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Interjection": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Noun": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Pronoun": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+	"Verb": ({Lemma, PartOfSpeech, ...rest}) => {
+		return {};
+	},
+}
+
+
 //// `outputAsArray` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)
 //// or gets written to a file (in the Node-only section).
 let outputAsArray = [];
-
-const output = (jsonObject) => {
-
-};
 
 const convertInputToOutputData = (lemmata) => {
 	outputAsArray.length = 0; // Clear the output in case there’s anything from previous runs.
@@ -32,9 +59,12 @@ const convertInputToOutputData = (lemmata) => {
 		const lemma = lemmata[i];
 
 		try {
-			const resultsForLine = {};
+			const parsingData = inflectFuncs[lemma.PartOfSpeech](lemma);
 
-			output(resultsForLine);
+			if (Object.keys(parsingData).length === 0) {
+				console.log(`inflectFunc[${lemma.PartOfSpeech}] has not been defined yet.`);
+			}
+			outputAsArray.push(parsingData);
 		} catch (error) {
 			console.error(
 				`Error when processing lemma ${i} — ${error}`
