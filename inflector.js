@@ -44,6 +44,15 @@ const inflectFuncs = {
 	},
 }
 
+const convertParsingObjectToFormsArray = (parsingObject) =>{
+	if (Array.isArray(parsingObject)) {
+		return parsingObject;
+	}
+	return Object.values(parsingObject).flatMap(object => convertParsingObjectToFormsArray(object));
+}
+const convertParsingObjectToFormsSet = (parsingObject) => {
+	return new Set(convertParsingObjectToFormsArray(parsingObject));
+}
 
 //// `outputAsArray` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)
