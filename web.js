@@ -18,7 +18,39 @@ textareaOutput.value = '';
 const sampleData =
 `[
 	{
-
+		"Lemma": "ā",
+		"PartOfSpeech": "Noun",
+		"Meanings": "letter Aa"
+	},
+	{
+		"Lemma": "ab",
+		"PartOfSpeech": "Preposition",
+		"Meanings": "from; by; since"
+	},
+	{
+		"Lemma": "abarceō",
+		"PartOfSpeech": "Verb",
+		"Meanings": "keep away"
+	},
+	{
+		"Lemma": "abavia",
+		"PartOfSpeech": "Noun",
+		"Meanings": "great-great-grandmother"
+	},
+	{
+		"Lemma": "abavus",
+		"PartOfSpeech": "Noun",
+		"Meanings": "great-great-grandfather"
+	},
+	{
+		"Lemma": "abdicō",
+		"PartOfSpeech": "Verb",
+		"Meanings": "deny; abdicate; renounce"
+	},
+	{
+		"Lemma": "abdīcō",
+		"PartOfSpeech": "Verb",
+		"Meanings": "deny (an omen or right)"
 	}
 ]
 `
