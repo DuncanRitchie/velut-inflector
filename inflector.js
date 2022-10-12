@@ -114,19 +114,18 @@ if (typeof require !== 'undefined') {
 					array.length > size
 						? [array.slice(0, size), ...splitArrayIntoBatches(array.slice(size), size)]
 						: [array];
-				const inputRowsBatched = splitArrayIntoBatches(inputRows, batchSize);
+				const inputLemmataBatched = splitArrayIntoBatches(inputLemmata, batchSize);
 
 				let outputRowsBatched = [];
-				inputRowsBatched.forEach((batch, index, array) => {
+				inputLemmataBatched.forEach((batch, index, array) => {
 					const outputBatch = convertInputToOutputData(batch);
 					outputRowsBatched.push([...outputBatch]);
 				});
 
 				batchFilepaths = outputRowsBatched
-					.map((batch, _) => batch.join('\n'))
 					.map((batch, batchNumber) => {
 						const filepath = getOutputFileUrlForBatch(batchNumber)
-						fs.writeFileSync(filepath, batch);
+						fs.writeFileSync(filepath, JSON.stringify(batch, null, '\t'));
 						return filepath;
 					});
 				console.log('Output all data! See your file at ' + outputFileUrl + ' or ' + batchFilepaths);
@@ -137,10 +136,17 @@ if (typeof require !== 'undefined') {
 			const concatenateBatches = () => {
 				console.time('concatenatingOutput');
 
-				let output = '';
-				batchFilepaths.forEach(filename => {
-					output += fs.readFileSync(filename, 'utf8') + '\n';
+				let output = '[\n';
+				batchFilepaths.forEach((filename, index) => {
+					const batchAsString = fs.readFileSync(filename, 'utf8');
+					const substring = batchAsString.substring(2, batchAsString.length - 2);
+					output += substring;
+					if (index < batchFilepaths.length - 1) {
+						 output += ',';
+					}
+					output += '\n';
 				})
+				output += ']';
 				fs.writeFileSync(outputFileUrl, output);
 
 				console.timeEnd('concatenatingOutput');
