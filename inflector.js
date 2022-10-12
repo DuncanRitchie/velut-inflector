@@ -50,8 +50,9 @@ const inflectFuncs = {
 //// or gets written to a file (in the Node-only section).
 let outputAsArray = [];
 
+const clearOutputArray = () => outputAsArray.length = 0;
 const convertInputToOutputData = (lemmata) => {
-	outputAsArray.length = 0; // Clear the output in case there’s anything from previous runs.
+	clearOutputArray(); // Clear the output in case there’s anything from previous runs.
 	const countRows = lemmata.length;
 
 	//// For each line of values in the input...
