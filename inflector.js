@@ -50,7 +50,10 @@ const inflectFuncs = {
 //// or gets written to a file (in the Node-only section).
 let outputAsArray = [];
 
+const validPartsOfSpeech = Object.keys(inflectFuncs);
+
 const clearOutputArray = () => outputAsArray.length = 0;
+
 const convertInputToOutputData = (lemmata) => {
 	clearOutputArray(); // Clear the output in case there’s anything from previous runs.
 	const countRows = lemmata.length;
@@ -58,6 +61,27 @@ const convertInputToOutputData = (lemmata) => {
 	//// For each line of values in the input...
 	for (let i = 0; i < countRows; i++) {
 		const lemma = lemmata[i];
+
+		if (!lemma.Lemma) {
+			console.error(
+				`Lemma property missing from lemma ${i}`
+			);
+			continue;
+		}
+
+		if (!lemma.PartOfSpeech) {
+			console.error(
+				`PartOfSpeech property missing from lemma ${i}`
+			);
+			continue;
+		}
+
+		if (!validPartsOfSpeech.includes(lemma.PartOfSpeech)) {
+			console.error(
+				`Not a valid PartOfSpech: ${lemma.PartOfSpeech}`
+			);
+			continue;
+		}
 
 		try {
 			const parsingData = inflectFuncs[lemma.PartOfSpeech](lemma);
