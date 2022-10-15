@@ -19,7 +19,7 @@ const inflectFuncs = {
 		return {};
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		return rest.Forms || [Lemma];
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
