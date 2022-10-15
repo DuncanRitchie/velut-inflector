@@ -54,17 +54,17 @@ const convertParsingObjectToFormsSet = (parsingObject) => {
 	return new Set(convertParsingObjectToFormsArray(parsingObject));
 }
 
-//// `outputAsArray` gets modified by `convertInputToOutputData` inside `generateJson`
+//// `outputAsObject` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)
 //// or gets written to a file (in the Node-only section).
-let outputAsArray = [];
+let outputAsObject = {};
 
 const validPartsOfSpeech = Object.keys(inflectFuncs);
 
-const clearOutputArray = () => outputAsArray.length = 0;
+const clearOutputObject = () => outputAsObject = {};
 
 const convertInputToOutputData = (lemmata) => {
-	clearOutputArray(); // Clear the output in case there’s anything from previous runs.
+	clearOutputObject(); // Clear the output in case there’s anything from previous runs.
 	const countRows = lemmata.length;
 
 	//// For each line of values in the input...
@@ -98,14 +98,14 @@ const convertInputToOutputData = (lemmata) => {
 			if (Object.keys(parsingData).length === 0) {
 				console.log(`Inflection function has not been defined for ${lemma.PartOfSpeech}.`);
 			}
-			outputAsArray.push(parsingData);
+			outputAsObject[lemma.Lemma] = parsingData;
 		} catch (error) {
 			console.error(
 				`Error when processing lemma ${i} — ${error}`
 			);
 		}
 	}
-	return outputAsArray;
+	return outputAsObject;
 };
 
 

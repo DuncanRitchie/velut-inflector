@@ -84,7 +84,7 @@ const warnOfEmptyOutput = () => {
 
 const generateJson = () => {
 	clearTextMessages();
-	clearOutputArray();
+	clearOutputObject();
 	textByGenerateJson.textContent = 'Generating Json, please wait...';
 	const allInputRows = JSON.parse(textareaInput.value);
 
@@ -95,7 +95,7 @@ const generateJson = () => {
 }
 
 const displayOutput = () => {
-	textareaOutput.value = JSON.stringify(outputAsArray, null, '\t');
+	textareaOutput.value = JSON.stringify(outputAsObject, null, '\t');
 }
 
 const copyToClipboard = () => {
