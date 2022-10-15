@@ -51,6 +51,12 @@ const sampleData =
 		"Lemma": "abdīcō",
 		"PartOfSpeech": "Verb",
 		"Meanings": "deny (an omen or right)"
+	},
+	{
+		"Lemma": "ac",
+		"PartOfSpeech": "Conjunction",
+		"Meanings": "and; compared to",
+		"Forms": ["ac", "atque"]
 	}
 ]
 `
