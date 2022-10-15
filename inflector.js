@@ -45,10 +45,16 @@ const inflectFuncs = {
 }
 
 const convertParsingObjectToFormsArray = (parsingObject) =>{
+	if (!parsingObject) {
+		console.warn(`parsingObject is ${parsingObject}`);
+		return [];
+	}
 	if (Array.isArray(parsingObject)) {
 		return parsingObject;
 	}
-	return Object.values(parsingObject).flatMap(object => convertParsingObjectToFormsArray(object));
+	return Object.values(parsingObject)
+		.filter(object => object !== null && object !== undefined)
+		.flatMap(object => convertParsingObjectToFormsArray(object));
 }
 const convertParsingObjectToFormsSet = (parsingObject) => {
 	return new Set(convertParsingObjectToFormsArray(parsingObject));
@@ -148,8 +154,8 @@ if (typeof require !== 'undefined') {
 		const outputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo.json';
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
-		// const expectedOutputFileUrl =
-		// 	'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/expected-words_mongo.json';
+		const expectedOutputFileUrl =
+			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-from-collator_mongo.json';
 
 		try {
 			let batchFilepaths = [];
@@ -168,7 +174,7 @@ if (typeof require !== 'undefined') {
 				let outputRowsBatched = [];
 				inputLemmataBatched.forEach((batch, index, array) => {
 					const outputBatch = convertInputToOutputData(batch);
-					outputRowsBatched.push([...outputBatch]);
+					outputRowsBatched.push({...outputBatch});
 				});
 
 				batchFilepaths = outputRowsBatched
@@ -185,85 +191,54 @@ if (typeof require !== 'undefined') {
 			const concatenateBatches = () => {
 				console.time('concatenatingOutput');
 
-				let output = '[\n';
-				batchFilepaths.forEach((filename, index) => {
-					const batchAsString = fs.readFileSync(filename, 'utf8');
-					const substring = batchAsString.substring(2, batchAsString.length - 2);
-					output += substring;
-					if (index < batchFilepaths.length - 1) {
-						 output += ',';
-					}
-					output += '\n';
-				})
-				output += ']';
-				fs.writeFileSync(outputFileUrl, output);
+				const combinedOutput = {};
+				batchFilepaths.forEach((filename) =>{
+					const outputBatch = require(filename);
+					Object.entries(outputBatch).forEach(([lemma, parsingData]) => combinedOutput[lemma] = parsingData);
+				});
+
+				fs.writeFileSync(outputFileUrl, JSON.stringify(combinedOutput));
 
 				console.timeEnd('concatenatingOutput');
 			}
 
-			// const checkAgainstExpected = () => {
-			// 	console.time('checkingOutput');
+			const checkAgainstExpected = () => {
+				console.time('checkingOutput');
 
-			// 	const outputRows = fs.readFileSync(outputFileUrl, 'utf8').split('\n');
+				const output = require(outputFileUrl);
+				const expectedOutput = require(expectedOutputFileUrl);
 
-			// 	const expectedOutput = fs.readFileSync(expectedOutputFileUrl, 'utf8');
-			// 	const expectedOutputRows = expectedOutput.split('\n');
+				let successCount = 0;
+				let errorCount = 0;
+				const outputEntries = Object.entries(output);
+				for ([lemma, parsingData] of outputEntries) {
+					if (!parsingData) continue;
+					if (Object.keys(parsingData).length === 0) continue;
 
-			// 	let errorCount = 0;
-			// 	let lastWordSeen = '';
-			// 	for (
-			// 		let i = 0;
-			// 		i < outputRows.length && i < expectedOutputRows.length;
-			// 		i++
-			// 	) {
-			// 		if (outputRows[i].startsWith('"Word":')) {
-			// 			lastWordSeen = outputRows[i];
-			// 		}
+					const formsAsSet = convertParsingObjectToFormsSet(parsingData);
+					const expectedFormsAsSet = convertParsingObjectToFormsSet(expectedOutput[lemma]);
 
-			// 		if (outputRows[i] === expectedOutputRows[i]) {
-			// 			// console.log('Yay!');
-			// 		} else {
-			// 			// if (
-			// 			// 	// !outputRows[i].startsWith('"Scansion"')
-			// 			// 	!lastWordSeen.startsWith('"Word": "coic') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "caelit') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "coiēns"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "conlātaque"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "deiēns"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "dein"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "deinde"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "hymenaeus"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "ignōrātiō') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "introiēns"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "iūsiūrandum"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "īnspectemque"') &&
-			// 			// 	!lastWordSeen.startsWith('"Word": "nūmin') &&
-			// 			// 	!lastWordSeen.includes('nf') &&
-			// 			// 	!lastWordSeen.includes('ifer') &&
-			// 			// 	!lastWordSeen.includes('iger') &&
-			// 			// 	!outputRows[i].startsWith('"LemmaCount"') &&
-			// 			// 	!outputRows[i].startsWith('"IsFitForDactyl"') &&
-			// 			// 	!outputRows[i].startsWith('"Uncompounded"')
-			// 			// 	// !outputRows[i].startsWith('"RhymeConsonants"')
-			// 			// ) {
-			// 			errorCount++;
-			// 			console.error({
-			// 				message: `Mismatch at line ${i}`,
-			// 				excelSays: expectedOutputRows[i],
-			// 				javascriptSays: outputRows[i],
-			// 				for: lastWordSeen,
-			// 			});
-			// 			// }
-			// 		}
-			// 	}
-			// 	console.warn(`There were ${errorCount} mismatches.`);
+					if (isSuperset(formsAsSet, expectedFormsAsSet)) {
+						successCount++;
+						// console.log('Yay!');
+					} else {
+						errorCount++;
+						console.error({
+							expected: expectedFormsAsSet,
+							actual: formsAsSet,
+							for: lemma,
+						});
+						// }
+					}
+				}
+				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes).`);
 
-			// 	console.timeEnd('checkingOutput');
-			// };
+				console.timeEnd('checkingOutput');
+			};
 
 			generateOutputAndSaveInBatches();
 			concatenateBatches();
-			// checkAgainstExpected();
+			checkAgainstExpected();
 
 		} catch (err) {
 			console.error(err);
