@@ -5,10 +5,22 @@
 //// hardcoded filepath, and compares the output to a third hardcoded filepath.
 ////
 //// Contents:
+//// - Helper functions
 //// - Functions for building the output Json
 //// - Node-only code
 ////
 
+
+////
+//// Helper functions
+////
+
+const removeBrackets = (lemma) => {
+	if (lemma.includes('[')) {
+		return lemma.substring(0, lemma.indexOf('['));
+	}
+	return lemma;
+}
 
 ////
 //// Functions for building the output Json:
@@ -19,7 +31,7 @@ const inflectFuncs = {
 		return {};
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
-		return rest.Forms || [Lemma];
+		return rest.Forms || [removeBrackets(Lemma)];
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
