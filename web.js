@@ -53,7 +53,7 @@ const sampleData =
 		"Meanings": "deny (an omen or right)"
 	},
 	{
-		"Lemma": "ac",
+		"Lemma": "atque",
 		"PartOfSpeech": "Conjunction",
 		"Meanings": "and; compared to",
 		"Forms": ["ac", "atque"]
