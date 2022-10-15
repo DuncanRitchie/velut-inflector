@@ -176,7 +176,7 @@ const convertInputToOutputData = (lemmata) => {
 			outputAsObject[lemma.Lemma] = parsingData;
 		} catch (error) {
 			console.error(
-				`Error when processing lemma ${i} — ${error}`
+				`Error when processing lemma ${i} (${lemma.Lemma}) — ${error}`
 			);
 		}
 	}
