@@ -22,6 +22,42 @@ const removeBrackets = (lemma) => {
 	return lemma;
 }
 
+const multiplyWithEnclitics = (parsingObject) => {
+	if (parsingObject.unencliticized) {
+		return parsingObject;
+	}
+
+	const addEnclitic = (object, enclitic) => {
+		try {
+			if (!object) {
+				console.warn(`parsingObject is ${object}`);
+				return {};
+			}
+			if (Array.isArray(object)) {
+				return object.map(form => form + enclitic);
+			}
+			return Object.entries(object)
+				.filter(([key, obj]) => obj !== null && obj !== undefined)
+				.map(([key, obj]) => [key, addEnclitic(obj, enclitic)])
+				.reduce((accumulated, current) => {
+					accumulated[current[0]] = current[1];
+					return accumulated;
+				}, {});
+		}
+		catch (error) {
+			console.error(`Error in addEnclitics(${object}): error`);
+			return {}
+		}
+	}
+
+	return {
+		'unencliticized': parsingObject,
+		'ne': addEnclitic(parsingObject, 'ne'),
+		'que': addEnclitic(parsingObject, 'que'),
+		've': addEnclitic(parsingObject, 've'),
+	}
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -43,7 +79,13 @@ const inflectFuncs = {
 		return {};
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		if (rest.Forms && Array.isArray(rest.Forms)) {
+			return multiplyWithEnclitics([... new Set(rest.Forms).add(removeBrackets(Lemma))]);
+		}
+		if (rest.Forms) {
+			return multiplyWithEnclitics(rest.Forms);
+		}
+		return multiplyWithEnclitics([removeBrackets(Lemma)]);
 	},
 	"Pronoun": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
