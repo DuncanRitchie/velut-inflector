@@ -31,7 +31,7 @@ const inflectFuncs = {
 		return {};
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
-		return rest.Forms || [removeBrackets(Lemma)];
+		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
