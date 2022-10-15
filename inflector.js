@@ -129,7 +129,7 @@ const convertInputToOutputData = (lemmata) => {
 			const parsingData = inflectFuncs[lemma.PartOfSpeech](lemma);
 
 			if (Object.keys(parsingData).length === 0) {
-				console.log(`Inflection function has not been defined for ${lemma.PartOfSpeech}.`);
+				// console.log(`Inflection function has not been defined for ${lemma.PartOfSpeech}.`);
 			}
 			outputAsObject[lemma.Lemma] = parsingData;
 		} catch (error) {
