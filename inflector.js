@@ -53,6 +53,21 @@ const convertParsingObjectToFormsArray = (parsingObject) =>{
 const convertParsingObjectToFormsSet = (parsingObject) => {
 	return new Set(convertParsingObjectToFormsArray(parsingObject));
 }
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#implementing_basic_set_operations
+function isSuperset(set, subset) {
+  for (const elem of subset) {
+    if (!set.has(elem)) {
+      return false;
+    }
+  }
+  return true;
+}
+function isEqualSet(set1, set2) {
+	if (set1.size !== set2.size) {
+		return false;
+	}
+	return isSuperset(set1, set2);
+}
 
 //// `outputAsObject` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)

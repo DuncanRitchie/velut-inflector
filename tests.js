@@ -81,16 +81,30 @@ const tests = [
 		},
 		Expected: {},
 	},
+	{
+		Input: {
+			"Lemma": "ac",
+			"PartOfSpeech": "Conjunction",
+			"Meanings": "and; compared to",
+			"Forms": ["ac", "atque"],
+		},
+		Expected: ["ac", "atque"],
+	}
 ];
 
 //// Tests looping over the above arrays:
 
 const test = () => {
 	tests.forEach(({Input, Expected}) => {
-		const actual = inflectFuncs[Input.PartOfSpeech](Input.Lemma);
+		const actual = inflectFuncs[Input.PartOfSpeech](Input);
 
 		const actualStringified = JSON.stringify(actual);
 		const expectedStringified = JSON.stringify(Expected);
+
+		const actualFormsSet = convertParsingObjectToFormsSet(actual);
+		const expectedFormsSet = convertParsingObjectToFormsSet(Expected);
+
+		console.log({actualFormsSet, expectedFormsSet});
 
 		if (Object.keys(Expected) === 0) {
 			console.log(`Expected forms have not been defined for this test; ${Input.Lemma}) => ${actual}`);
@@ -99,7 +113,23 @@ const test = () => {
 			console.log(`Inflection function has not been defined for ${Input.PartOfSpeech}.`);
 		}
 		else if (actualStringified === expectedStringified) {
-			console.log(`Yay! ${Input.Lemma}) => ${actualStringified}`);
+			console.log(`Yay! ${Input.Lemma} => ${actualStringified}`);
+		}
+		else if (isEqualSet(expectedFormsSet, actualFormsSet)) {
+			console.error({
+				message: 'Set of forms is correct but Json is different',
+				Input,
+				Expected,
+				actual,
+			});
+		}
+		else if (isSuperset(expectedFormsSet, actualFormsSet)) {
+			console.error({
+				message: 'Forms are missing',
+				Input,
+				expectedFormsSet,
+				actualFormsSet,
+			});
 		}
 		else {
 			console.error({
