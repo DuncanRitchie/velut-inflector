@@ -15,8 +15,8 @@ textareaOutput.value = '';
 
 //// Sample data the user can load if they don’t have my Excel file:
 
-const sampleData =
-`[
+const sampleDataJson =
+[
 	{
 		"Lemma": "ā",
 		"PartOfSpeech": "Noun",
@@ -57,9 +57,135 @@ const sampleData =
 		"PartOfSpeech": "Conjunction",
 		"Meanings": "and; compared to",
 		"Forms": ["ac", "atque"]
+	},
+	{
+		"Lemma": "ex",
+		"PartOfSpeech": "Preposition",
+		"Meanings": "out of",
+		"Forms": ["ē"]
+	},
+	{
+		"Lemma": "inter",
+		"PartOfSpeech": "Preposition",
+		"Meanings": "between; among; ‘interior’ = farther inside; ‘intimus’ = farthest inside",
+		"Forms": {
+			"positive": ["inter"],
+			"comparative": {
+				"masculine": {
+					"singular": {
+						"nominative": ["interior"],
+						"vocative": ["interior"],
+						"accusative": ["interiōrem"],
+						"genitive": ["interiōris"],
+						"dative": ["interiōrī"],
+						"ablative": ["interiōre"]
+					},
+					"plural": {
+						"nominative": ["interiōrēs"],
+						"vocative": ["interiōrēs"],
+						"accusative": ["interiōrēs"],
+						"genitive": ["interiōrum"],
+						"dative": ["interiōribus"],
+						"ablative": ["interiōribus"]
+					}
+				},
+				"feminine": {
+					"singular": {
+						"nominative": ["interior"],
+						"vocative": ["interior"],
+						"accusative": ["interiōrem"],
+						"genitive": ["interiōris"],
+						"dative": ["interiōrī"],
+						"ablative": ["interiōre"]
+					},
+					"plural": {
+						"nominative": ["interiōrēs"],
+						"vocative": ["interiōrēs"],
+						"accusative": ["interiōrēs"],
+						"genitive": ["interiōrum"],
+						"dative": ["interiōribus"],
+						"ablative": ["interiōribus"]
+					}
+				},
+				"neuter": {
+					"singular": {
+						"nominative": ["interius"],
+						"vocative": ["interius"],
+						"accusative": ["interius"],
+						"genitive": ["interiōris"],
+						"dative": ["interiōrī"],
+						"ablative": ["interiōre"]
+					},
+					"plural": {
+						"nominative": ["interiōra"],
+						"vocative": ["interiōra"],
+						"accusative": ["interiōra"],
+						"genitive": ["interiōrum"],
+						"dative": ["interiōribus"],
+						"ablative": ["interiōribus"]
+					}
+				}
+			}
+		},
+	"superlative": {
+		"masculine": {
+			"singular": {
+				"nominative": ["intimus"],
+				"vocative": ["intime"],
+				"accusative": ["intimum"],
+				"genitive": ["intimī"],
+				"dative": ["intimō"],
+				"ablative": ["intimō"]
+			},
+			"plural": {
+				"nominative": ["intimī"],
+				"vocative": ["intimī"],
+				"accusative": ["intimōs"],
+				"genitive": ["intimōrum"],
+				"dative": ["intimīs"],
+				"ablative": ["intimīs"]
+			}
+		},
+		"feminine": {
+			"singular": {
+				"nominative": ["intima"],
+				"vocative": ["intima"],
+				"accusative": ["intimam"],
+				"genitive": ["intimae"],
+				"dative": ["intimae"],
+				"ablative": ["intimā"]
+			},
+			"plural": {
+				"nominative": ["intimae"],
+				"vocative": ["intimae"],
+				"accusative": ["intimās"],
+				"genitive": ["intimārum"],
+				"dative": ["intimīs"],
+				"ablative": ["intimīs"]
+			}
+		},
+		"neuter": {
+			"singular": {
+				"nominative": ["intimum"],
+				"vocative": ["intimum"],
+				"accusative": ["intimum"],
+				"genitive": ["intimī"],
+				"dative": ["intimō"],
+				"ablative": ["intimō"]
+			},
+			"plural": {
+				"nominative": ["intima"],
+				"vocative": ["intima"],
+				"accusative": ["intima"],
+				"genitive": ["intimōrum"],
+				"dative": ["intimīs"],
+				"ablative": ["intimīs"]
+			}
+		}
 	}
+}
 ]
-`
+const sampleData = JSON.stringify(sampleDataJson, null, '\t');
 
 
 //// Functions used in `generateJson`:
