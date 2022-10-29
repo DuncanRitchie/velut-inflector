@@ -36,6 +36,10 @@ const multiplyWithEnclitics = (parsingObject) => {
 			if (Array.isArray(object)) {
 				return object.map(form => form + enclitic);
 			}
+			if (typeof object === "string") {
+				console.error(`parsingObject is a string: ${object}`);
+				throw `parsingObject is a string: ${object}`;
+			}
 			return Object.entries(object)
 				.filter(([key, obj]) => obj !== null && obj !== undefined)
 				.map(([key, obj]) => [key, addEnclitic(obj, enclitic)])
@@ -58,6 +62,27 @@ const multiplyWithEnclitics = (parsingObject) => {
 	}
 }
 
+const deleteUnwantedForms = (formsObject, unwantedParsings) => {
+	if (!unwantedParsings) {
+		return formsObject;
+	}
+	if (!formsObject) {
+		console.warn(`formsObject is ${formsObject}`);
+		return {};
+	}
+	if (Array.isArray(formsObject)) {
+		return formsObject;
+	}
+	return Object.entries(formsObject)
+		.filter(([key, obj]) => obj !== null && obj !== undefined)
+		.filter(([key, obj]) => !unwantedParsings.includes(key))
+		.map(([key, obj]) => [key, deleteUnwantedForms(obj, unwantedParsings)])
+		.reduce((accumulated, current) => {
+			accumulated[current[0]] = current[1];
+			return accumulated;
+		}, {});
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -70,7 +95,21 @@ const inflectFuncs = {
 		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		if (rest.Forms) {
+			return multiplyWithEnclitics(rest.Forms);
+		}
+		const positive = removeBrackets(Lemma);
+		const stem = rest.ObliqueStem || positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī)$/, "");
+		if (positive === stem) { return multiplyWithEnclitics({ positive: [positive] })}
+		const comparative = stem + "ius";
+		const superlative = (/[bce]r$/.test(stem) ? stem.replace(/e?r$/, "errimē") : stem + "issimē");
+		const allForms = {
+			positive: [positive],
+			comparative: [comparative],
+			superlative: [superlative]
+		};
+		const wantedForms = deleteUnwantedForms(allForms, rest.ParsingsToExclude);
+		return multiplyWithEnclitics(wantedForms);
 	},
 	"Interjection": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms) {
@@ -109,8 +148,11 @@ const convertParsingObjectToFormsArray = (parsingObject) =>{
 	if (Array.isArray(parsingObject)) {
 		return parsingObject;
 	}
+	if (typeof parsingObject === "string") {
+		console.warn(`parsingObject should is a string: ${parsingObject}`)
+	}
 	return Object.values(parsingObject)
-		.filter(object => object !== null && object !== undefined)
+		// .filter(object => object !== null && object !== undefined)
 		.flatMap(object => convertParsingObjectToFormsArray(object));
 }
 const convertParsingObjectToFormsSet = (parsingObject) => {
