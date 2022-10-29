@@ -304,34 +304,41 @@ if (typeof require !== 'undefined') {
 			const checkAgainstExpected = () => {
 				console.time('checkingOutput');
 
-				const output = require(outputFileUrl);
+				// const output = require(outputFileUrl);
 				const expectedOutput = require(expectedOutputFileUrl);
 
 				let successCount = 0;
 				let errorCount = 0;
-				const outputEntries = Object.entries(output);
-				const totalLemmata = outputEntries.length;
+				let totalLemmata = 0;
+				// const totalLemmata = outputEntries.length;
 
-				for ([lemma, parsingData] of outputEntries) {
-					if (!parsingData) continue;
-					if (Object.keys(parsingData).length === 0) continue;
+				batchFilepaths.forEach((filename) => {
+					const outputBatch = require(filename);
+					const outputEntries = Object.entries(outputBatch);
 
-					const formsAsSet = convertParsingObjectToFormsSet(parsingData);
-					const expectedFormsAsSet = convertParsingObjectToFormsSet(expectedOutput[lemma]);
+					for ([lemma, parsingData] of outputEntries) {
+						totalLemmata++;
 
-					if (isSuperset(formsAsSet, expectedFormsAsSet)) {
-						successCount++;
-						// console.log('Yay!');
-					} else {
-						errorCount++;
-						console.error({
-							expected: expectedFormsAsSet,
-							actual: formsAsSet,
-							for: lemma,
-						});
-						// }
+						if (!parsingData) continue;
+						if (Object.keys(parsingData).length === 0) continue;
+
+						const formsAsSet = convertParsingObjectToFormsSet(parsingData);
+						const expectedFormsAsSet = convertParsingObjectToFormsSet(expectedOutput[lemma]);
+
+						if (isSuperset(formsAsSet, expectedFormsAsSet)) {
+							successCount++;
+							// console.log('Yay! ' + lemma);
+						} else {
+							errorCount++;
+							console.error({
+								expected: expectedFormsAsSet,
+								actual: formsAsSet,
+								for: lemma,
+							});
+							// }
+						}
 					}
-				}
+				});
 				const skippedCount = totalLemmata - errorCount - successCount;
 				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes and ${skippedCount} skipped) out of ${totalLemmata} lemmata.`);
 
