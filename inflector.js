@@ -73,7 +73,10 @@ const inflectFuncs = {
 		return {};
 	},
 	"Interjection": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		if (rest.Forms) {
+			return rest.Forms;
+		}
+		return [removeBrackets(Lemma)];
 	},
 	"Noun": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
