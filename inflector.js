@@ -100,7 +100,14 @@ const inflectFuncs = {
 		}
 		const positive = removeBrackets(Lemma);
 		const stem = rest.ObliqueStem || positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī)$/, "");
-		if (positive === stem) { return multiplyWithEnclitics({ positive: [positive] })}
+
+		if (rest.IsIndeclinable
+			|| positive === stem
+			|| (!rest.ObliqueStem && (positive.endsWith("ātim") || positive.endsWith("ūtim")))
+		) {
+			return multiplyWithEnclitics({positive: [positive]});
+		}
+
 		const comparative = stem + "ius";
 		const superlative = (/[bce]r$/.test(stem) ? stem.replace(/e?r$/, "errimē") : stem + "issimē");
 		const allForms = {
