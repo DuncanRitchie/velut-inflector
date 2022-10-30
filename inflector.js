@@ -83,6 +83,26 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		}, {});
 }
 
+const mergeObjects = (formsObject, objectToMerge) => {
+	if (!objectToMerge) {
+		return formsObject;
+	}
+	if (!formsObject) {
+		console.warn(`formsObject is ${formsObject}`);
+		return {};
+	}
+	if (Array.isArray(formsObject)) {
+		return formsObject.concat(objectToMerge);
+	}
+	return Object.entries(formsObject)
+	.filter(([key, obj]) => obj !== null && obj !== undefined)
+	.map(([key, obj]) => [key, mergeObjects(obj, objectToMerge[key])])
+	.reduce((accumulated, current) => {
+		accumulated[current[0]] = current[1];
+		return accumulated;
+	}, {});
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -267,7 +287,9 @@ const inflectFuncs = {
 					},
 				},
 			};
-			return deleteUnwantedForms(multiplyWithEnclitics(allUnencliticizedForms));
+			const withEnclitics = multiplyWithEnclitics(allUnencliticizedForms);
+			const wantedForms = deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
+			return mergeObjects(wantedForms, rest.ExtraForms);
 		}
 		//// 3rd-declension adjectives
 		return {};
