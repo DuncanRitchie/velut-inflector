@@ -94,13 +94,25 @@ const mergeObjects = (formsObject, objectToMerge) => {
 	if (Array.isArray(formsObject)) {
 		return formsObject.concat(objectToMerge);
 	}
-	return Object.entries(formsObject)
-	.filter(([key, obj]) => obj !== null && obj !== undefined)
-	.map(([key, obj]) => [key, mergeObjects(obj, objectToMerge[key])])
-	.reduce((accumulated, current) => {
-		accumulated[current[0]] = current[1];
-		return accumulated;
-	}, {});
+	//// Take `formsObject` & merge properties with the same key in the two objects.
+	const objectWithSamePropertiesMerged = Object.entries(formsObject)
+		.filter(([key, obj]) => obj !== null && obj !== undefined)
+		.map(([key, obj]) => [key, mergeObjects(obj, objectToMerge[key])])
+		.reduce((accumulated, current) => {
+			accumulated[current[0]] = current[1];
+			return accumulated;
+		}, {});
+
+	//// Merge properties in `objectToMerge` that are not in `formsObject`.
+	if (Object.keys(objectToMerge).find(key => !objectWithSamePropertiesMerged.hasOwnProperty(key))) {
+		return Object.entries(objectToMerge)
+			.filter((key, obj) => !objectWithSamePropertiesMerged.hasOwnProperty(key))
+			.reduce((accumulated, current) => {
+				accumulated[current[0]] = current[1];
+				return accumulated;
+			}, objectWithSamePropertiesMerged);
+	}
+	return objectWithSamePropertiesMerged;
 }
 
 ////
