@@ -359,6 +359,13 @@ function isEqualSet(set1, set2) {
 	}
 	return isSuperset(set1, set2);
 }
+function subtractSet(superset, setToSubtract) {
+  const _difference = new Set(superset);
+  for (const elem of setToSubtract) {
+    _difference.delete(elem);
+  }
+  return _difference;
+}
 
 //// `outputAsObject` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)
@@ -519,6 +526,7 @@ if (typeof require !== 'undefined') {
 							console.error({
 								expected: expectedFormsAsSet,
 								actual: formsAsSet,
+								missing: subtractSet(expectedFormsAsSet, formsAsSet),
 								for: lemma,
 							});
 							// }
