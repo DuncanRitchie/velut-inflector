@@ -117,6 +117,16 @@ const inflectFuncs = {
 			const stem = Lemma.substring(0, Lemma.length - 2);
 			const nonPositiveStem = rest.NonPositiveStem || stem;
 
+			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
+			const getPositiveMasculineSingularGenitiveForms = () => {
+				const uncontracted = stem + 'ī';
+				const contracted = stem.substring(0, stem.length - 1) + 'ī';
+				if (stem.endsWith('i')) {
+					return [uncontracted, contracted];
+				}
+				return [uncontracted];
+			}
+
 			const allUnencliticizedForms = {
 				positive: {
 					masculine: {
@@ -124,7 +134,7 @@ const inflectFuncs = {
 							nominative: [Lemma],
 							vocative: [stem + 'e'],
 							accusative: [stem + 'um'],
-							genitive: [stem + 'ī'],
+							genitive: getPositiveMasculineSingularGenitiveForms(),
 							dative: [stem + 'ō'],
 							ablative: [stem + 'ō'],
 						},
