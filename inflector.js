@@ -125,7 +125,7 @@ const inflectFuncs = {
 			return multiplyWithEnclitics(rest.Forms);
 		}
 		//// 1st/2nd-declension adjectives
-		if (Lemma.endsWith("us")) {
+		if (Lemma.endsWith("us") && rest.Declension !== 3) {
 			const stem = Lemma.substring(0, Lemma.length - 2);
 			const nonPositiveStem = rest.NonPositiveStem || stem;
 
