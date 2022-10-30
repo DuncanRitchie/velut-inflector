@@ -89,6 +89,185 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 
 const inflectFuncs = {
 	"Adjective": ({Lemma, PartOfSpeech, ...rest}) => {
+		if (rest.Forms) {
+			return multiplyWithEnclitics(rest.Forms);
+		}
+		//// 1st/2nd-declension adjectives
+		if (Lemma.endsWith("us")) {
+			const stem = Lemma.substring(0, Lemma.length - 2)
+			const allUnencliticizedForms = {
+				positive: {
+					masculine: {
+						singular: {
+							nominative: [Lemma],
+							vocative: [stem + 'e'],
+							accusative: [stem + 'um'],
+							genitive: [stem + 'ī'],
+							dative: [stem + 'ō'],
+							ablative: [stem + 'ō'],
+						},
+						plural: {
+							nominative: [stem + 'ī'],
+							vocative: [stem + 'ī'],
+							accusative: [stem + 'ōs'],
+							genitive: [stem + 'ōrum'],
+							dative: [stem + 'īs'],
+							ablative: [stem + 'īs'],
+						},
+					},
+					feminine: {
+						singular: {
+							nominative: [stem + 'a'],
+							vocative: [stem + 'a'],
+							accusative: [stem + 'am'],
+							genitive: [stem + 'ae'],
+							dative: [stem + 'ae'],
+							ablative: [stem + 'ā'],
+						},
+						plural: {
+							nominative: [stem + 'ae'],
+							vocative: [stem + 'ae'],
+							accusative: [stem + 'ās'],
+							genitive: [stem + 'ārum'],
+							dative: [stem + 'īs'],
+							ablative: [stem + 'īs'],
+						},
+					},
+					neuter: {
+						singular: {
+							nominative: [stem + 'um'],
+							vocative: [stem + 'um'],
+							accusative: [stem + 'um'],
+							genitive: [stem + 'ī'],
+							dative: [stem + 'ō'],
+							ablative: [stem + 'ō'],
+						},
+						plural: {
+							nominative: [stem + 'a'],
+							vocative: [stem + 'a'],
+							accusative: [stem + 'a'],
+							genitive: [stem + 'ōrum'],
+							dative: [stem + 'īs'],
+							ablative: [stem + 'īs'],
+						},
+					},
+				},
+				comparative: {
+					masculine: {
+						singular: {
+							nominative: [stem + 'ior'],
+							vocative: [stem + 'ior'],
+							accusative: [stem + 'iōrem'],
+							genitive: [stem + 'iōris'],
+							dative: [stem + 'iōrī'],
+							ablative: [stem + 'iōre'],
+						},
+						plural: {
+							nominative: [stem + 'iōrēs'],
+							vocative: [stem + 'iōrēs'],
+							accusative: [stem + 'iōrēs'],
+							genitive: [stem + 'iōrum'],
+							dative: [stem + 'iōribus'],
+							ablative: [stem + 'iōribus'],
+						},
+					},
+					feminine: {
+						singular: {
+							nominative: [stem + 'ior'],
+							vocative: [stem + 'ior'],
+							accusative: [stem + 'iōrem'],
+							genitive: [stem + 'iōris'],
+							dative: [stem + 'iōrī'],
+							ablative: [stem + 'iōre'],
+						},
+						plural: {
+							nominative: [stem + 'iōrēs'],
+							vocative: [stem + 'iōrēs'],
+							accusative: [stem + 'iōrēs'],
+							genitive: [stem + 'iōrum'],
+							dative: [stem + 'iōribus'],
+							ablative: [stem + 'iōribus'],
+						},
+					},
+					neuter: {
+						singular: {
+							nominative: [stem + 'ius'],
+							vocative: [stem + 'ius'],
+							accusative: [stem + 'ius'],
+							genitive: [stem + 'iōris'],
+							dative: [stem + 'iōrī'],
+							ablative: [stem + 'iōre'],
+						},
+						plural: {
+							nominative: [stem + 'iōra'],
+							vocative: [stem + 'iōra'],
+							accusative: [stem + 'iōra'],
+							genitive: [stem + 'iōrum'],
+							dative: [stem + 'iōribus'],
+							ablative: [stem + 'iōribus'],
+						},
+					},
+				},
+				superlative: {
+					masculine: {
+						singular: {
+							nominative: [stem + 'issimus'],
+							vocative: [stem + 'issime'],
+							accusative: [stem + 'issimum'],
+							genitive: [stem + 'issimī'],
+							dative: [stem + 'issimō'],
+							ablative: [stem + 'issimō'],
+						},
+						plural: {
+							nominative: [stem + 'issimī'],
+							vocative: [stem + 'issimī'],
+							accusative: [stem + 'issimōs'],
+							genitive: [stem + 'issimōrum'],
+							dative: [stem + 'issimīs'],
+							ablative: [stem + 'issimīs'],
+						},
+					},
+					feminine: {
+						singular: {
+							nominative: [stem + 'issima'],
+							vocative: [stem + 'issima'],
+							accusative: [stem + 'issimam'],
+							genitive: [stem + 'issimae'],
+							dative: [stem + 'issimae'],
+							ablative: [stem + 'issimā'],
+						},
+						plural: {
+							nominative: [stem + 'issimae'],
+							vocative: [stem + 'issimae'],
+							accusative: [stem + 'issimās'],
+							genitive: [stem + 'issimārum'],
+							dative: [stem + 'issimīs'],
+							ablative: [stem + 'issimīs'],
+						},
+					},
+					neuter: {
+						singular: {
+							nominative: [stem + 'issimum'],
+							vocative: [stem + 'issimum'],
+							accusative: [stem + 'issimum'],
+							genitive: [stem + 'issimī'],
+							dative: [stem + 'issimō'],
+							ablative: [stem + 'issimō'],
+						},
+						plural: {
+							nominative: [stem + 'issima'],
+							vocative: [stem + 'issima'],
+							accusative: [stem + 'issima'],
+							genitive: [stem + 'issimōrum'],
+							dative: [stem + 'issimīs'],
+							ablative: [stem + 'issimīs'],
+						},
+					},
+				},
+			};
+			return deleteUnwantedForms(multiplyWithEnclitics(allUnencliticizedForms));
+		}
+		//// 3rd-declension adjectives
 		return {};
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
