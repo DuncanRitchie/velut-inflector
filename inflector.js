@@ -133,7 +133,7 @@ const inflectFuncs = {
 			const getPositiveMasculineSingularGenitiveForms = () => {
 				const uncontracted = stem + 'ī';
 				const contracted = stem.substring(0, stem.length - 1) + 'ī';
-				if (stem.endsWith('i')) {
+				if (stem.endsWith('i') || stem.endsWith("ï")) {
 					return [uncontracted, contracted];
 				}
 				return [uncontracted];
