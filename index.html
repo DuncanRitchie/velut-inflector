@@ -47,47 +47,780 @@
 				<em>Note: If you’re not me, you’re unlikely to have much use for this Inflector.</em>
 			</p>
 
-			<!-- <p>
-				The Inflector generates the data for my Latin rhyming dictionary, <a href="https://www.velut.co.uk/">velut</a>; specifically it generates the “words” data. For each word and corresponding list of lemmata, this generates fields such as the phonetic representation, the number of syllables, the rhyming-part, and strings that words are sorted on.
+			<p>
+				<a href="https://www.velut.co.uk/">velut</a> is my Latin rhyming dictionary.
+				All the data for this are stored in Json files on my computer.
+				For example, I have a list of lemmata (dictionary headwords), stored as an array of Json objects.
+				The purpose of the Inflector is to read from the list of lemmata, generate the inflected forms for each lemma, and write them to my hard disk for further processing.
+				I do this by running <a href="https://github.com/DuncanRitchie/velut-inflector/blob/main/inflector.js">the inflector.js script</a> in Node.
 			</p>
 
 			<p>
-				This webpage is nice for showing you what the generator does.
+				But I also made this webpage, to demonstrate what the Inflector does.
 				You can input several lemmata (as Json) in the first box, click “Generate forms”, and see the output in the second box.
 				The resultant Json can be downloaded or copied to the clipboard.
 			</p>
 
 			<p>
-				But the generator can also be used by simply running <a href="https://github.com/DuncanRitchie/velut-inflector/blob/main/generator.js">one JavaScript file named generator.js</a> in Node, outside of the browser.
-				If it’s running in Node, it reads from a hardcoded filepath and saves its output to another hardcoded filepath.
-				(It also saves the output to a smaller file for each batch of 50,000 words.)
-				Once the output is on my hard drive, I have a script to upload it to the MongoDB database that the velut website uses.
+				The Inflector is still a work in progress, so the Inflector may generate incorrect forms, and does not attempt to create inflections for the more complicated parts of speech (eg verbs).
+				I will fix this as best I can, but it’s a lot of work.
 			</p>
 
-			<h3>Input and output format</h3>
+			<h3>Input format</h3>
 
 			<p>
-				Each line of input must be a word, whitespace, and the space-separated list of lemmata.
-				The “Load sample” button will give you some examples; the examples use a tab for the whitespace between the word and the lemmata, because you get tabs when pasting from Excel cells.
-				But you can use a normal space (or several) if you prefer.
+				The input needs to be a Json array of objects.
+				Each object must have the string fields of <code>Lemma</code> and <code>PartOfSpeech</code>.
+				Additionally, the Inflector also looks for some optional fields.
+				(However, not all of these apply to all parts of speech.)
 			</p>
 
+			<dl>
+				<dt><code>"ComparativeStems"</code></dt>
+				<dd>String array of stems for the comparative forms of adjectives and adverbs.</dd>
+
+				<dt><code>"Declension"</code></dt>
+				<dd>For nouns; possible values will be 1, 2, 3, 4, 5.</dd>
+
+				<dt><code>"ExtraForms"</code></dt>
+				<dd>Object of forms to add to whatever the Inflector generates itself.</dd>
+
+				<dt><code>"Forms"</code></dt>
+				<dd>
+					Object of forms to use instead of anything the Inflector would generate itself.
+					But if the object does not have <code>"unencliticized"</code> as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
+				</dd>
+
+				<dt><code>"IsIndeclinable"</code></dt>
+				<dd>Boolean.</dd>
+
+				<dt><code>"NonPositiveStem"</code></dt>
+				<dd>For adverbs, this should probably be replaced with <code>"ComparativeStems"</code>, <code>"SuperlativeStems"</code>, etc.</dd>
+
+				<dt><code>"ObliqueStem"</code></dt>
+				<dd>
+					String, for 3rd-declension nouns and adjectives, eg <samp>"āctiōn"</samp> for <q lang="la">āctiō’</q> or <samp>"veter"</samp> for <q lang="la">vetus</q>.
+					For adverbs, this should probably be replaced with <code>"ComparativeStems"</code>, <code>"SuperlativeStems"</code>, etc.
+				</dd>
+
+				<dt><code>"ParsingsToExclude"</code></dt>
+				<dd>String array, eg <samp>["comparative", "superlative"]</samp> for an adjective that does not have these forms.</dd>
+
+				<dt><code>"ReplacementForms"</code></dt>
+				<dd>Object of forms to use instead of the regularly generated forms for the parsings that are specified.</dd>
+
+				<dt><code>"SuperlativeStems"</code></dt>
+				<dd>String array of stems for the superlative forms of adjectives and adverbs.</dd>
+			</dl>
+
 			<p>
-				The Json generated does not have commas separating the objects, or square brackets around the entire array. This is not the standard Json format, but is the format required by mongoimport (which is the tool my script uses to import into the database).
+				The “Load sample” button will give you some examples of my lemma objects.
 			</p>
 
-			<h3>The velut Excel file & how I’ve replaced parts of it</h3>
+			<h3>Forms objects</h3>
 
 			<p>
-				Although the velut website uses a MongoDB database, and this page produces Json data for the MongoDB database, I privately have a large Excel file for generating and storing the data in velut. This webpage is intended to replace a sheet called “wordsform” in that Excel file. The sheet can generate all the data from words and lemmata entered into the second and third columns — which is why the second and third fields of the output are Word and Lemmata, the two columns that don’t have Excel formulae.
+				The output objects, and any <code>"Forms"</code>, <code>"ExtraForms"</code>, or <code>"ReplacementForms"</code> fields in the input, contain string arrays inside nested objects.
+				An example of an output object is below.
+				Fields in the input will not need so many subfields.
 			</p>
 
-			<p>
-				One of the differences between the “wordsform” sheet and this Inflector is that in the sheet the output data are in Excel cells, but in the generator they’re in Json format. Copying data from Excel makes them tab-delimited. To convert the tab-delimited data to Json, I use my <a href="https://www.duncanritchie.co.uk/velut-json-generator">Json Generator</a>, which is a separate webpage. But I have less need of that than when I didn’t have this Inflector, because the data from this are already in Json format. (The Json Generator is still useful for other sheets in the Excel file.)
-			</p>
+			<details>
+				<summary>Show/hide full inflections object for a regular adjective</summary>
+				<pre><code>
+{
+	"unencliticized": {
+		"positive": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdus"],
+					"vocative": ["absurde"],
+					"accusative": ["absurdum"],
+					"genitive": ["absurdī"],
+					"dative": ["absurdō"],
+					"ablative": ["absurdō"]
+				},
+				"plural": {
+					"nominative": ["absurdī"],
+					"vocative": ["absurdī"],
+					"accusative": ["absurdōs"],
+					"genitive": ["absurdōrum"],
+					"dative": ["absurdīs"],
+					"ablative": ["absurdīs"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurda"],
+					"vocative": ["absurda"],
+					"accusative": ["absurdam"],
+					"genitive": ["absurdae"],
+					"dative": ["absurdae"],
+					"ablative": ["absurdā"]
+				},
+				"plural": {
+					"nominative": ["absurdae"],
+					"vocative": ["absurdae"],
+					"accusative": ["absurdās"],
+					"genitive": ["absurdārum"],
+					"dative": ["absurdīs"],
+					"ablative": ["absurdīs"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdum"],
+					"vocative": ["absurdum"],
+					"accusative": ["absurdum"],
+					"genitive": ["absurdī"],
+					"dative": ["absurdō"],
+					"ablative": ["absurdō"]
+				},
+				"plural": {
+					"nominative": ["absurda"],
+					"vocative": ["absurda"],
+					"accusative": ["absurda"],
+					"genitive": ["absurdōrum"],
+					"dative": ["absurdīs"],
+					"ablative": ["absurdīs"]
+				}
+			}
+		},
+		"comparative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdior"],
+					"vocative": ["absurdior"],
+					"accusative": ["absurdiōrem"],
+					"genitive": ["absurdiōris"],
+					"dative": ["absurdiōrī"],
+					"ablative": ["absurdiōre"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēs"],
+					"vocative": ["absurdiōrēs"],
+					"accusative": ["absurdiōrēs", "absurdiōrīs"],
+					"genitive": ["absurdiōrum"],
+					"dative": ["absurdiōribus"],
+					"ablative": ["absurdiōribus"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdior"],
+					"vocative": ["absurdior"],
+					"accusative": ["absurdiōrem"],
+					"genitive": ["absurdiōris"],
+					"dative": ["absurdiōrī"],
+					"ablative": ["absurdiōre"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēs"],
+					"vocative": ["absurdiōrēs"],
+					"accusative": ["absurdiōrēs", "absurdiōrīs"],
+					"genitive": ["absurdiōrum"],
+					"dative": ["absurdiōribus"],
+					"ablative": ["absurdiōribus"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdius"],
+					"vocative": ["absurdius"],
+					"accusative": ["absurdius"],
+					"genitive": ["absurdiōris"],
+					"dative": ["absurdiōrī"],
+					"ablative": ["absurdiōre"]
+				},
+				"plural": {
+					"nominative": ["absurdiōra"],
+					"vocative": ["absurdiōra"],
+					"accusative": ["absurdiōra"],
+					"genitive": ["absurdiōrum"],
+					"dative": ["absurdiōribus"],
+					"ablative": ["absurdiōribus"]
+				}
+			}
+		},
+		"superlative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdissimus"],
+					"vocative": ["absurdissime"],
+					"accusative": ["absurdissimum"],
+					"genitive": ["absurdissimī"],
+					"dative": ["absurdissimō"],
+					"ablative": ["absurdissimō"]
+				},
+				"plural": {
+					"nominative": ["absurdissimī"],
+					"vocative": ["absurdissimī"],
+					"accusative": ["absurdissimōs"],
+					"genitive": ["absurdissimōrum"],
+					"dative": ["absurdissimīs"],
+					"ablative": ["absurdissimīs"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdissima"],
+					"vocative": ["absurdissima"],
+					"accusative": ["absurdissimam"],
+					"genitive": ["absurdissimae"],
+					"dative": ["absurdissimae"],
+					"ablative": ["absurdissimā"]
+				},
+				"plural": {
+					"nominative": ["absurdissimae"],
+					"vocative": ["absurdissimae"],
+					"accusative": ["absurdissimās"],
+					"genitive": ["absurdissimārum"],
+					"dative": ["absurdissimīs"],
+					"ablative": ["absurdissimīs"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdissimum"],
+					"vocative": ["absurdissimum"],
+					"accusative": ["absurdissimum"],
+					"genitive": ["absurdissimī"],
+					"dative": ["absurdissimō"],
+					"ablative": ["absurdissimō"]
+				},
+				"plural": {
+					"nominative": ["absurdissima"],
+					"vocative": ["absurdissima"],
+					"accusative": ["absurdissima"],
+					"genitive": ["absurdissimōrum"],
+					"dative": ["absurdissimīs"],
+					"ablative": ["absurdissimīs"]
+				}
+			}
+		}
+	},
+	"ne": {
+		"positive": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdusne"],
+					"vocative": ["absurdene"],
+					"accusative": ["absurdumne"],
+					"genitive": ["absurdīne"],
+					"dative": ["absurdōne"],
+					"ablative": ["absurdōne"]
+				},
+				"plural": {
+					"nominative": ["absurdīne"],
+					"vocative": ["absurdīne"],
+					"accusative": ["absurdōsne"],
+					"genitive": ["absurdōrumne"],
+					"dative": ["absurdīsne"],
+					"ablative": ["absurdīsne"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdane"],
+					"vocative": ["absurdane"],
+					"accusative": ["absurdamne"],
+					"genitive": ["absurdaene"],
+					"dative": ["absurdaene"],
+					"ablative": ["absurdāne"]
+				},
+				"plural": {
+					"nominative": ["absurdaene"],
+					"vocative": ["absurdaene"],
+					"accusative": ["absurdāsne"],
+					"genitive": ["absurdārumne"],
+					"dative": ["absurdīsne"],
+					"ablative": ["absurdīsne"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdumne"],
+					"vocative": ["absurdumne"],
+					"accusative": ["absurdumne"],
+					"genitive": ["absurdīne"],
+					"dative": ["absurdōne"],
+					"ablative": ["absurdōne"]
+				},
+				"plural": {
+					"nominative": ["absurdane"],
+					"vocative": ["absurdane"],
+					"accusative": ["absurdane"],
+					"genitive": ["absurdōrumne"],
+					"dative": ["absurdīsne"],
+					"ablative": ["absurdīsne"]
+				}
+			}
+		},
+		"comparative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdiorne"],
+					"vocative": ["absurdiorne"],
+					"accusative": ["absurdiōremne"],
+					"genitive": ["absurdiōrisne"],
+					"dative": ["absurdiōrīne"],
+					"ablative": ["absurdiōrene"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsne"],
+					"vocative": ["absurdiōrēsne"],
+					"accusative": ["absurdiōrēsne", "absurdiōrīsne"],
+					"genitive": ["absurdiōrumne"],
+					"dative": ["absurdiōribusne"],
+					"ablative": ["absurdiōribusne"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdiorne"],
+					"vocative": ["absurdiorne"],
+					"accusative": ["absurdiōremne"],
+					"genitive": ["absurdiōrisne"],
+					"dative": ["absurdiōrīne"],
+					"ablative": ["absurdiōrene"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsne"],
+					"vocative": ["absurdiōrēsne"],
+					"accusative": ["absurdiōrēsne", "absurdiōrīsne"],
+					"genitive": ["absurdiōrumne"],
+					"dative": ["absurdiōribusne"],
+					"ablative": ["absurdiōribusne"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdiusne"],
+					"vocative": ["absurdiusne"],
+					"accusative": ["absurdiusne"],
+					"genitive": ["absurdiōrisne"],
+					"dative": ["absurdiōrīne"],
+					"ablative": ["absurdiōrene"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrane"],
+					"vocative": ["absurdiōrane"],
+					"accusative": ["absurdiōrane"],
+					"genitive": ["absurdiōrumne"],
+					"dative": ["absurdiōribusne"],
+					"ablative": ["absurdiōribusne"]
+				}
+			}
+		},
+		"superlative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdissimusne"],
+					"vocative": ["absurdissimene"],
+					"accusative": ["absurdissimumne"],
+					"genitive": ["absurdissimīne"],
+					"dative": ["absurdissimōne"],
+					"ablative": ["absurdissimōne"]
+				},
+				"plural": {
+					"nominative": ["absurdissimīne"],
+					"vocative": ["absurdissimīne"],
+					"accusative": ["absurdissimōsne"],
+					"genitive": ["absurdissimōrumne"],
+					"dative": ["absurdissimīsne"],
+					"ablative": ["absurdissimīsne"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdissimane"],
+					"vocative": ["absurdissimane"],
+					"accusative": ["absurdissimamne"],
+					"genitive": ["absurdissimaene"],
+					"dative": ["absurdissimaene"],
+					"ablative": ["absurdissimāne"]
+				},
+				"plural": {
+					"nominative": ["absurdissimaene"],
+					"vocative": ["absurdissimaene"],
+					"accusative": ["absurdissimāsne"],
+					"genitive": ["absurdissimārumne"],
+					"dative": ["absurdissimīsne"],
+					"ablative": ["absurdissimīsne"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdissimumne"],
+					"vocative": ["absurdissimumne"],
+					"accusative": ["absurdissimumne"],
+					"genitive": ["absurdissimīne"],
+					"dative": ["absurdissimōne"],
+					"ablative": ["absurdissimōne"]
+				},
+				"plural": {
+					"nominative": ["absurdissimane"],
+					"vocative": ["absurdissimane"],
+					"accusative": ["absurdissimane"],
+					"genitive": ["absurdissimōrumne"],
+					"dative": ["absurdissimīsne"],
+					"ablative": ["absurdissimīsne"]
+				}
+			}
+		}
+	},
+	"que": {
+		"positive": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdusque"],
+					"vocative": ["absurdeque"],
+					"accusative": ["absurdumque"],
+					"genitive": ["absurdīque"],
+					"dative": ["absurdōque"],
+					"ablative": ["absurdōque"]
+				},
+				"plural": {
+					"nominative": ["absurdīque"],
+					"vocative": ["absurdīque"],
+					"accusative": ["absurdōsque"],
+					"genitive": ["absurdōrumque"],
+					"dative": ["absurdīsque"],
+					"ablative": ["absurdīsque"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdaque"],
+					"vocative": ["absurdaque"],
+					"accusative": ["absurdamque"],
+					"genitive": ["absurdaeque"],
+					"dative": ["absurdaeque"],
+					"ablative": ["absurdāque"]
+				},
+				"plural": {
+					"nominative": ["absurdaeque"],
+					"vocative": ["absurdaeque"],
+					"accusative": ["absurdāsque"],
+					"genitive": ["absurdārumque"],
+					"dative": ["absurdīsque"],
+					"ablative": ["absurdīsque"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdumque"],
+					"vocative": ["absurdumque"],
+					"accusative": ["absurdumque"],
+					"genitive": ["absurdīque"],
+					"dative": ["absurdōque"],
+					"ablative": ["absurdōque"]
+				},
+				"plural": {
+					"nominative": ["absurdaque"],
+					"vocative": ["absurdaque"],
+					"accusative": ["absurdaque"],
+					"genitive": ["absurdōrumque"],
+					"dative": ["absurdīsque"],
+					"ablative": ["absurdīsque"]
+				}
+			}
+		},
+		"comparative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdiorque"],
+					"vocative": ["absurdiorque"],
+					"accusative": ["absurdiōremque"],
+					"genitive": ["absurdiōrisque"],
+					"dative": ["absurdiōrīque"],
+					"ablative": ["absurdiōreque"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsque"],
+					"vocative": ["absurdiōrēsque"],
+					"accusative": ["absurdiōrēsque", "absurdiōrīsque"],
+					"genitive": ["absurdiōrumque"],
+					"dative": ["absurdiōribusque"],
+					"ablative": ["absurdiōribusque"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdiorque"],
+					"vocative": ["absurdiorque"],
+					"accusative": ["absurdiōremque"],
+					"genitive": ["absurdiōrisque"],
+					"dative": ["absurdiōrīque"],
+					"ablative": ["absurdiōreque"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsque"],
+					"vocative": ["absurdiōrēsque"],
+					"accusative": ["absurdiōrēsque", "absurdiōrīsque"],
+					"genitive": ["absurdiōrumque"],
+					"dative": ["absurdiōribusque"],
+					"ablative": ["absurdiōribusque"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdiusque"],
+					"vocative": ["absurdiusque"],
+					"accusative": ["absurdiusque"],
+					"genitive": ["absurdiōrisque"],
+					"dative": ["absurdiōrīque"],
+					"ablative": ["absurdiōreque"]
+				},
+				"plural": {
+					"nominative": ["absurdiōraque"],
+					"vocative": ["absurdiōraque"],
+					"accusative": ["absurdiōraque"],
+					"genitive": ["absurdiōrumque"],
+					"dative": ["absurdiōribusque"],
+					"ablative": ["absurdiōribusque"]
+				}
+			}
+		},
+		"superlative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdissimusque"],
+					"vocative": ["absurdissimeque"],
+					"accusative": ["absurdissimumque"],
+					"genitive": ["absurdissimīque"],
+					"dative": ["absurdissimōque"],
+					"ablative": ["absurdissimōque"]
+				},
+				"plural": {
+					"nominative": ["absurdissimīque"],
+					"vocative": ["absurdissimīque"],
+					"accusative": ["absurdissimōsque"],
+					"genitive": ["absurdissimōrumque"],
+					"dative": ["absurdissimīsque"],
+					"ablative": ["absurdissimīsque"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdissimaque"],
+					"vocative": ["absurdissimaque"],
+					"accusative": ["absurdissimamque"],
+					"genitive": ["absurdissimaeque"],
+					"dative": ["absurdissimaeque"],
+					"ablative": ["absurdissimāque"]
+				},
+				"plural": {
+					"nominative": ["absurdissimaeque"],
+					"vocative": ["absurdissimaeque"],
+					"accusative": ["absurdissimāsque"],
+					"genitive": ["absurdissimārumque"],
+					"dative": ["absurdissimīsque"],
+					"ablative": ["absurdissimīsque"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdissimumque"],
+					"vocative": ["absurdissimumque"],
+					"accusative": ["absurdissimumque"],
+					"genitive": ["absurdissimīque"],
+					"dative": ["absurdissimōque"],
+					"ablative": ["absurdissimōque"]
+				},
+				"plural": {
+					"nominative": ["absurdissimaque"],
+					"vocative": ["absurdissimaque"],
+					"accusative": ["absurdissimaque"],
+					"genitive": ["absurdissimōrumque"],
+					"dative": ["absurdissimīsque"],
+					"ablative": ["absurdissimīsque"]
+				}
+			}
+		}
+	},
+	"ve": {
+		"positive": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdusve"],
+					"vocative": ["absurdeve"],
+					"accusative": ["absurdumve"],
+					"genitive": ["absurdīve"],
+					"dative": ["absurdōve"],
+					"ablative": ["absurdōve"]
+				},
+				"plural": {
+					"nominative": ["absurdīve"],
+					"vocative": ["absurdīve"],
+					"accusative": ["absurdōsve"],
+					"genitive": ["absurdōrumve"],
+					"dative": ["absurdīsve"],
+					"ablative": ["absurdīsve"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdave"],
+					"vocative": ["absurdave"],
+					"accusative": ["absurdamve"],
+					"genitive": ["absurdaeve"],
+					"dative": ["absurdaeve"],
+					"ablative": ["absurdāve"]
+				},
+				"plural": {
+					"nominative": ["absurdaeve"],
+					"vocative": ["absurdaeve"],
+					"accusative": ["absurdāsve"],
+					"genitive": ["absurdārumve"],
+					"dative": ["absurdīsve"],
+					"ablative": ["absurdīsve"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdumve"],
+					"vocative": ["absurdumve"],
+					"accusative": ["absurdumve"],
+					"genitive": ["absurdīve"],
+					"dative": ["absurdōve"],
+					"ablative": ["absurdōve"]
+				},
+				"plural": {
+					"nominative": ["absurdave"],
+					"vocative": ["absurdave"],
+					"accusative": ["absurdave"],
+					"genitive": ["absurdōrumve"],
+					"dative": ["absurdīsve"],
+					"ablative": ["absurdīsve"]
+				}
+			}
+		},
+		"comparative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdiorve"],
+					"vocative": ["absurdiorve"],
+					"accusative": ["absurdiōremve"],
+					"genitive": ["absurdiōrisve"],
+					"dative": ["absurdiōrīve"],
+					"ablative": ["absurdiōreve"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsve"],
+					"vocative": ["absurdiōrēsve"],
+					"accusative": ["absurdiōrēsve", "absurdiōrīsve"],
+					"genitive": ["absurdiōrumve"],
+					"dative": ["absurdiōribusve"],
+					"ablative": ["absurdiōribusve"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdiorve"],
+					"vocative": ["absurdiorve"],
+					"accusative": ["absurdiōremve"],
+					"genitive": ["absurdiōrisve"],
+					"dative": ["absurdiōrīve"],
+					"ablative": ["absurdiōreve"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrēsve"],
+					"vocative": ["absurdiōrēsve"],
+					"accusative": ["absurdiōrēsve", "absurdiōrīsve"],
+					"genitive": ["absurdiōrumve"],
+					"dative": ["absurdiōribusve"],
+					"ablative": ["absurdiōribusve"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdiusve"],
+					"vocative": ["absurdiusve"],
+					"accusative": ["absurdiusve"],
+					"genitive": ["absurdiōrisve"],
+					"dative": ["absurdiōrīve"],
+					"ablative": ["absurdiōreve"]
+				},
+				"plural": {
+					"nominative": ["absurdiōrave"],
+					"vocative": ["absurdiōrave"],
+					"accusative": ["absurdiōrave"],
+					"genitive": ["absurdiōrumve"],
+					"dative": ["absurdiōribusve"],
+					"ablative": ["absurdiōribusve"]
+				}
+			}
+		},
+		"superlative": {
+			"masculine": {
+				"singular": {
+					"nominative": ["absurdissimusve"],
+					"vocative": ["absurdissimeve"],
+					"accusative": ["absurdissimumve"],
+					"genitive": ["absurdissimīve"],
+					"dative": ["absurdissimōve"],
+					"ablative": ["absurdissimōve"]
+				},
+				"plural": {
+					"nominative": ["absurdissimīve"],
+					"vocative": ["absurdissimīve"],
+					"accusative": ["absurdissimōsve"],
+					"genitive": ["absurdissimōrumve"],
+					"dative": ["absurdissimīsve"],
+					"ablative": ["absurdissimīsve"]
+				}
+			},
+			"feminine": {
+				"singular": {
+					"nominative": ["absurdissimave"],
+					"vocative": ["absurdissimave"],
+					"accusative": ["absurdissimamve"],
+					"genitive": ["absurdissimaeve"],
+					"dative": ["absurdissimaeve"],
+					"ablative": ["absurdissimāve"]
+				},
+				"plural": {
+					"nominative": ["absurdissimaeve"],
+					"vocative": ["absurdissimaeve"],
+					"accusative": ["absurdissimāsve"],
+					"genitive": ["absurdissimārumve"],
+					"dative": ["absurdissimīsve"],
+					"ablative": ["absurdissimīsve"]
+				}
+			},
+			"neuter": {
+				"singular": {
+					"nominative": ["absurdissimumve"],
+					"vocative": ["absurdissimumve"],
+					"accusative": ["absurdissimumve"],
+					"genitive": ["absurdissimīve"],
+					"dative": ["absurdissimōve"],
+					"ablative": ["absurdissimōve"]
+				},
+				"plural": {
+					"nominative": ["absurdissimave"],
+					"vocative": ["absurdissimave"],
+					"accusative": ["absurdissimave"],
+					"genitive": ["absurdissimōrumve"],
+					"dative": ["absurdissimīsve"],
+					"ablative": ["absurdissimīsve"]
+				}
+			}
+		}
+	}
+}
+				</code></pre>
+			</details>
+
+
+
+			<h3>The velut Excel file</h3>
 
 			<p>
-				The benefit of running generator.js in Node is that I can process all my Latin words (more than 120 thousand), in about twenty seconds. If I tried in the browser for that quantity of data, my browser would freeze, unsurprisingly! Likewise, Excel would probably crash if I tried to use the “wordsform” sheet to regenerate all the data.
+				The velut website uses a MongoDB database, and this page produces Json data that could go into the MongoDB database.
+				But I privately have a large Excel file for generating and storing the data in velut.
+				This is far from ideal, so I’m trying to replace the Excel file with Json files and JavaScript scripts.
 			</p>
 
 			<h3>Version control</h3>
@@ -95,112 +828,37 @@
 			<p>
 				I track the data-files in Git so I can check whether a change to my code has (inadvertently or deliberately) altered the output.
 				But I don’t track the file that contains all the output — it’s huge.
-				Instead, the Node-only code splits the data into batches of 50,000 words and saves the batches as files, and Git tracks those files.
+				Instead, the Node-only code splits the data into batches of 1,000 lemmata and saves the batches as files, and Git tracks those files.
 			</p>
 
 			<h3>Checking the output in Node</h3>
 
 			<p>
-				I can also use Node to check the output against all the “words” data I previously generated. The code for this check is at <a href="https://github.com/DuncanRitchie/velut-inflector/blob/1af8383b0f15510010ee86467c2c725f3027c9a5/generator.js#L1247">the end of generator.js</a>. When I ran it against all the “words” data I had from Excel, everything matched, except for some cases where I had bugs in the Excel which I have corrected in the JavaScript. These changes of behaviour are listed in the next section.
+				I can also use Node to check the output against the forms I had in Excel.
+				The code for this check is at <a href="https://github.com/DuncanRitchie/velut-inflector/blob/main/inflector.js#L591">the end of inflector.js</a>.
 			</p>
-
-			<h3>Behaviour changes between my Excel and JavaScript code</h3>
-
-			<p>
-				Some changes would have been noticeable because of inaccuracies on the pages on the velut website for these words.
-				For example, <i lang="la">coiēns</i> was scanned as <samp>––</samp> instead of <samp>⏑⏑–</samp>.
-			</p>
-
-			<ul>
-				<li>
-					Present participles of compounds of <i lang="la">eō</i> that have “i” between two vowels (<i lang="la">coiēns</i>, <i lang="la">deiēns</i>, <i lang="la">introiēns</i>) should have the “i” as vocalic, I believe.
-					But in my Excel file, this “i” was treated as consonantal.
-					(Compare with <i lang="la">iēns</i>, where both my Excel formulae and my JavaScript functions correctly handle the initial vowel.)
-				</li>
-
-				<li>
-					<i lang="la">iūsiūrandum</i> has both “i”s consonantal. My Excel formulae had kept the first “i” as a vowel (as if it were <i lang="la">ïūsjūrandum</i> instead of <i lang="la">jūsjūrandum</i>).
-				</li>
-			</ul>
-
-			<p>
-				Other bug-fixes do not change anything displayed on the velut website.
-				But I wanted all the code here to be correct, even when not (yet) used directly.
-			</p>
-
-			<ul>
-				<li>
-					Forms of <i lang="la">coiciō</i> beginning with “coic-” are now treated as if they have “cojic-” at their start.
-					This doesn’t really affect anything — the first syllable is still short.
-					(Contrast with <i lang="la">coniciō</i>, pronounced <i lang="la">conjiciō</i>, with a long first syllable.)
-				</li>
-
-				<li>
-					My Excel formula for <code>RhymeConsonants</code> interpreted “nf” as “mf”. This is because (at least for classical Latin according to velut) you don’t pronounce “-m” at the end of a word, or “-n-” between a vowel and “f” or “s”, but the previous vowel becomes nasalised. The bug was in how the phonetic value of a word got converted back into the consonants as written.
-				</li>
-
-				<li>
-					My Excel formula for <code>IsFitForDactyl</code> was meant to determine whether a word could fit into a dactylic hexameter.
-					But the formula I wrote was too simplistic and it was wrong for many words.
-					The JavaScript version is (to my knowledge) reasonable for all words.
-					The velut website has never used <code>IsFitForDactyl</code> and it doesn’t affect other functions.
-				</li>
-			</ul>
-
-			<aside>
-				(Caveat: Words like <i lang="la">lūcubrās</i> contain a short vowel followed by a “mūta cum liquidā” consonant-pairing.
-				This combination can give a short or a long syllable in Latin poetry.
-				In velut, however, it is always short because only one scansion is generated per word.
-				So <code>Scansion</code> gives <samp>–⏑–</samp> and <code>IsFitForDactyl</code> gives <samp>0</samp> for <i lang="la">lūcubrās</i>, though in reality the word could be scanned as <samp>–––</samp> and fit in a hexameter.)
-			</aside>
-
-			<h3>Behaviour I might change in the future</h3>
-
-			<p>
-				Excel (and my lack of formal training in software development) led to me doing some things with the Inflector that I wouldn’t have done if I hadn’t used Excel to create velut.
-			</p>
-
-			<ul>
-				<li>
-					You might expect the functions <code>IsLemma</code>, <code>IsNonLemma</code>, and <code>IsFitForDactyl</code> to give simple booleans, <samp>true</samp> or <samp>false</samp>.
-					But they give <samp>1</samp> or <samp>0</samp> instead.
-					The word <i lang="la">false</i> is valid in Latin, and I didn’t want Excel converting it to a boolean in whatever columns it might appear.
-					Similarly, <i lang="la">falsē</i> also becomes a boolean, despite the macron.
-					And my phonetic representation of <i lang="la">truae</i> in ecclesiastical pronunciation is <samp>true</samp>.
-					So I decided that I shouldn’t let <samp>TRUE</samp>/<samp>FALSE</samp> appear in the “words” data (in any column, for simplicity’s sake).
-					<br>(Extra technical note: These fields are not used on the velut website. But if they were, they would be treated correctly as boolean. I use Mongoose to connect to the database, and I’ve specified in the Mongoose schema that these fields are boolean, so it would convert from <samp>1</samp>/<samp>0</samp> to <samp>true</samp>/<samp>false</samp> automatically.)
-				</li>
-
-				<li>
-					The <code>Ord</code> function gives a serial number to each word, starting at one.
-					I named it years ago as an abbreviation of “ordinal”.
-					If I were starting from scratch, I’d probably call it “Id”, and start it from zero.
-				</li>
-			</ul>
 
 			<h3>Testing in the browser</h3>
 
 			<p>
-				If you’re not me, you won’t have access to all the input data, nor will you have access to the data from Excel that I compare the output to in Node. But you can <a href="#testing">run some tests</a> yourself in your browser’s console by clicking the “Run tests” button above. These tests run the following:
-			</p>
-			<ul>
-				<li>all my JavaScript functions against some words,</li>
-				<li>the two fiddliest functions (<code>Phonetic</code> and <code>Stress</code>) against a lot of the words that could befuddle them, and</li>
-				<li>a couple more functions against a few words.</li>
-			</ul>
-
-			<h3>My current workflow for managing velut</h3>
-
-			<p>
-				The Inflector is reliable enough that I’ve begun using it for real. The velut website uses the data generated.
+				If you’re not me, you won’t have access to all the input data, nor will you have access to the data from Excel that I compare the output to in Node. But you can <a href="#testing">run some tests</a> yourself in your browser’s console by clicking the “Run tests” button above. These tests run the Inflector code agains some lemmata.
 			</p>
 
+			<!--
+
+			<h3>Behaviour changes between my Excel and JavaScript code</h3>
+
+			<h3>Behaviour I might change in the future</h3>
+
+			 -->
+
+			<h3>My workflow for managing velut</h3>
+
 			<p>
-				Nonetheless, I’m still using the “wordsform” Excel sheet within Excel, because I don’t want to break other parts of the Excel file.
-				Much of my Excel file still relies on me having all the data in Excel — not in the Json format that this page produces.
-				Eventually enough of the Excel file will be obsolete that I can stop storing all my data there in Excel.
-				Only then will I stop using the “wordsform” sheet.
-			</p> -->
+				I’m still creating the Inflector, so I can’t yet use it for real as part of adding vocabulary to velut.
+				At the moment, I’m not editing the data in velut, because changes would have to be done in both Excel and my Json files.
+				But once I’ve finished the Inflector, and then completed a few more tasks, I will be able to deprecate the Excel file.
+			</p>
 
 			<p>
 				It’s all part of my long-term project of converting my Excel file into websites and webpages that are easier to share and maintain. I’m very much in a transition period of using the Excel file for some things and my newer websites/webpages for others. But the Inflector is another step in the process. At the moment, the whole velut project is very convoluted; in the future, it won’t be as bad.
