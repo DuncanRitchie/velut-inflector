@@ -13,7 +13,8 @@ _If you’re not me, you’re unlikely to have much use for the Inflector._
 
 ## Input & output
 
-The input must be a Json array of objects with `Lemma`, `PartOfSpeech` (etc) properties.
+The input must be a Json array of objects with `Lemma` and `PartOfSpeech` properties.
+Some lemmata will need extra fields for the Inflector to yield the correct inflections.
 For example:
 
 ```json
