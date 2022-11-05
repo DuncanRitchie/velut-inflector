@@ -1,15 +1,19 @@
-# Inflector for velut
+# Inflector for velut (not finished yet)
 
 https://www.duncanritchie.co.uk/velut-inflector/
 
-This generates words for my Latin rhyming dictionary, [velut](https://github.com/DuncanRitchie/velut) by applying inflection rules to lemmata data.
+This generates words for my Latin rhyming dictionary, [velut](https://github.com/DuncanRitchie/velut), by applying inflection rules to lemmata data.
 The resultant Json can be downloaded or copied to the clipboard.
 
 It has a webpage for a user-interface for demo purposes.
-When I refresh all the “words” data in velut, I run inflector.js in Node.
+But the aim is that, when I want to refresh all the data in velut, I’ll run inflector.js in Node.
 This contains hardcoded filepaths to read input data from and write output data to.
+I’ll then be able to do further processing on the output.
 
 _If you’re not me, you’re unlikely to have much use for the Inflector._
+_And not even I am using it for real yet, because it’s very much a work in progress._
+
+For more information, see the [About section](https://www.duncanritchie.co.uk/velut-inflector/#about) of the webpage.
 
 ## Input & output
 
@@ -30,7 +34,7 @@ For example:
 
 There is a “Load sample” button to give you more examples.
 
-See the webpage for the [list of fields in the input](](https://www.duncanritchie.co.uk/velut-inflector#input-format)) and an example of the [full object generated for an adjective](https://www.duncanritchie.co.uk/velut-inflector#forms-objects).
+See the webpage for the [list of fields in the input](https://www.duncanritchie.co.uk/velut-inflector#input-format) and an example of the [full object generated for an adjective](https://www.duncanritchie.co.uk/velut-inflector#forms-objects).
 The latter is very long because I generate encliticized forms (ending in -ne, -que, and -ve) as well as unencliticized.
 
 ## Context
@@ -42,7 +46,7 @@ I have a long-term project of converting my Excel file into websites and webpage
 I’m very much in a transition period of using the Excel file for some things and my newer websites/webpages for others.
 But the Inflector is another step in the process.
 
-For more information, see the [About section](https://www.duncanritchie.co.uk/velut-inflector/#about) of the webpage.
+For the checklist of work needed for me to get rid of the Excel file, including work on the Inflector, see my [plan for the de-Excellation of velut](https://github.com/DuncanRitchie/velut/blob/main/plan.md).
 
 ## Quick links
 
