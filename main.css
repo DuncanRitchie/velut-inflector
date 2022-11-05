@@ -1,3 +1,7 @@
-textarea {
+* {
 	tab-size: 2;
+}
+
+q[lang="la"] {
+	quotes: "‘" "’";
 }
