@@ -535,7 +535,7 @@ if (typeof require !== 'undefined') {
 		//// This allows me to track the output in Git without tracking a huge file.
 		const getOutputFileUrlForBatch = (batchNumber) =>
 			`C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo_batch${batchNumber}.json`;
-		const batchSize = 5_000;
+		const batchSize = 1_000;
 		//// The output batches are concatenated into one file, for Git to ignore and me to import to MongoDB.
 		const outputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo.json';
