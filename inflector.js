@@ -153,6 +153,124 @@ const joinStemsToEndings = (stems, endings) => {
 	return stemsArray.flatMap(stem => endingsArray.map(ending => stem + ending));
 }
 
+const generateComparativeForms = (comparativeStems) => {
+	return {
+		masculine: {
+			singular: {
+				nominative: joinStemsToEndings(comparativeStems, 'or'),
+				vocative: joinStemsToEndings(comparativeStems, 'or'),
+				accusative: joinStemsToEndings(comparativeStems, 'ōrem'),
+				genitive: joinStemsToEndings(comparativeStems, 'ōris'),
+				dative: joinStemsToEndings(comparativeStems, 'ōrī'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōre'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
+				vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
+				accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
+				genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
+				dative: joinStemsToEndings(comparativeStems, 'ōribus'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
+			},
+		},
+		feminine: {
+			singular: {
+				nominative: joinStemsToEndings(comparativeStems, 'or'),
+				vocative: joinStemsToEndings(comparativeStems, 'or'),
+				accusative: joinStemsToEndings(comparativeStems, 'ōrem'),
+				genitive: joinStemsToEndings(comparativeStems, 'ōris'),
+				dative: joinStemsToEndings(comparativeStems, 'ōrī'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōre'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
+				vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
+				accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
+				genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
+				dative: joinStemsToEndings(comparativeStems, 'ōribus'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
+			},
+		},
+		neuter: {
+			singular: {
+				nominative: joinStemsToEndings(comparativeStems, 'us'),
+				vocative: joinStemsToEndings(comparativeStems, 'us'),
+				accusative: joinStemsToEndings(comparativeStems, 'us'),
+				genitive: joinStemsToEndings(comparativeStems, 'ōris'),
+				dative: joinStemsToEndings(comparativeStems, 'ōrī'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōre'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(comparativeStems, 'ōra'),
+				vocative: joinStemsToEndings(comparativeStems, 'ōra'),
+				accusative: joinStemsToEndings(comparativeStems, 'ōra'),
+				genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
+				dative: joinStemsToEndings(comparativeStems, 'ōribus'),
+				ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
+			},
+		},
+	};
+}
+
+const generateSuperlativeForms = (superlativeStems) => {
+	return {
+		masculine: {
+			singular: {
+				nominative: joinStemsToEndings(superlativeStems, 'us'),
+				vocative: joinStemsToEndings(superlativeStems, 'e'),
+				accusative: joinStemsToEndings(superlativeStems, 'um'),
+				genitive: joinStemsToEndings(superlativeStems, 'ī'),
+				dative: joinStemsToEndings(superlativeStems, 'ō'),
+				ablative: joinStemsToEndings(superlativeStems, 'ō'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(superlativeStems, 'ī'),
+				vocative: joinStemsToEndings(superlativeStems, 'ī'),
+				accusative: joinStemsToEndings(superlativeStems, 'ōs'),
+				genitive: joinStemsToEndings(superlativeStems, 'ōrum'),
+				dative: joinStemsToEndings(superlativeStems, 'īs'),
+				ablative: joinStemsToEndings(superlativeStems, 'īs'),
+			},
+		},
+		feminine: {
+			singular: {
+				nominative: joinStemsToEndings(superlativeStems, 'a'),
+				vocative: joinStemsToEndings(superlativeStems, 'a'),
+				accusative: joinStemsToEndings(superlativeStems, 'am'),
+				genitive: joinStemsToEndings(superlativeStems, 'ae'),
+				dative: joinStemsToEndings(superlativeStems, 'ae'),
+				ablative: joinStemsToEndings(superlativeStems, 'ā'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(superlativeStems, 'ae'),
+				vocative: joinStemsToEndings(superlativeStems, 'ae'),
+				accusative: joinStemsToEndings(superlativeStems, 'ās'),
+				genitive: joinStemsToEndings(superlativeStems, 'ārum'),
+				dative: joinStemsToEndings(superlativeStems, 'īs'),
+				ablative: joinStemsToEndings(superlativeStems, 'īs'),
+			},
+		},
+		neuter: {
+			singular: {
+				nominative: joinStemsToEndings(superlativeStems, 'um'),
+				vocative: joinStemsToEndings(superlativeStems, 'um'),
+				accusative: joinStemsToEndings(superlativeStems, 'um'),
+				genitive: joinStemsToEndings(superlativeStems, 'ī'),
+				dative: joinStemsToEndings(superlativeStems, 'ō'),
+				ablative: joinStemsToEndings(superlativeStems, 'ō'),
+			},
+			plural: {
+				nominative: joinStemsToEndings(superlativeStems, 'a'),
+				vocative: joinStemsToEndings(superlativeStems, 'a'),
+				accusative: joinStemsToEndings(superlativeStems, 'a'),
+				genitive: joinStemsToEndings(superlativeStems, 'ōrum'),
+				dative: joinStemsToEndings(superlativeStems, 'īs'),
+				ablative: joinStemsToEndings(superlativeStems, 'īs'),
+			},
+		},
+	};
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -243,118 +361,8 @@ const inflectFuncs = {
 						},
 					},
 				},
-				comparative: {
-					masculine: {
-						singular: {
-							nominative: joinStemsToEndings(comparativeStems, 'or'),
-							vocative: joinStemsToEndings(comparativeStems, 'or'),
-							accusative: joinStemsToEndings(comparativeStems, 'ōrem'),
-							genitive: joinStemsToEndings(comparativeStems, 'ōris'),
-							dative: joinStemsToEndings(comparativeStems, 'ōrī'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōre'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-							vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-							accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
-							genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
-							dative: joinStemsToEndings(comparativeStems, 'ōribus'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
-						},
-					},
-					feminine: {
-						singular: {
-							nominative: joinStemsToEndings(comparativeStems, 'or'),
-							vocative: joinStemsToEndings(comparativeStems, 'or'),
-							accusative: joinStemsToEndings(comparativeStems, 'ōrem'),
-							genitive: joinStemsToEndings(comparativeStems, 'ōris'),
-							dative: joinStemsToEndings(comparativeStems, 'ōrī'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōre'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-							vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-							accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
-							genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
-							dative: joinStemsToEndings(comparativeStems, 'ōribus'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
-						},
-					},
-					neuter: {
-						singular: {
-							nominative: joinStemsToEndings(comparativeStems, 'us'),
-							vocative: joinStemsToEndings(comparativeStems, 'us'),
-							accusative: joinStemsToEndings(comparativeStems, 'us'),
-							genitive: joinStemsToEndings(comparativeStems, 'ōris'),
-							dative: joinStemsToEndings(comparativeStems, 'ōrī'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōre'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(comparativeStems, 'ōra'),
-							vocative: joinStemsToEndings(comparativeStems, 'ōra'),
-							accusative: joinStemsToEndings(comparativeStems, 'ōra'),
-							genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
-							dative: joinStemsToEndings(comparativeStems, 'ōribus'),
-							ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
-						},
-					},
-				},
-				superlative: {
-					masculine: {
-						singular: {
-							nominative: joinStemsToEndings(superlativeStems, 'us'),
-							vocative: joinStemsToEndings(superlativeStems, 'e'),
-							accusative: joinStemsToEndings(superlativeStems, 'um'),
-							genitive: joinStemsToEndings(superlativeStems, 'ī'),
-							dative: joinStemsToEndings(superlativeStems, 'ō'),
-							ablative: joinStemsToEndings(superlativeStems, 'ō'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(superlativeStems, 'ī'),
-							vocative: joinStemsToEndings(superlativeStems, 'ī'),
-							accusative: joinStemsToEndings(superlativeStems, 'ōs'),
-							genitive: joinStemsToEndings(superlativeStems, 'ōrum'),
-							dative: joinStemsToEndings(superlativeStems, 'īs'),
-							ablative: joinStemsToEndings(superlativeStems, 'īs'),
-						},
-					},
-					feminine: {
-						singular: {
-							nominative: joinStemsToEndings(superlativeStems, 'a'),
-							vocative: joinStemsToEndings(superlativeStems, 'a'),
-							accusative: joinStemsToEndings(superlativeStems, 'am'),
-							genitive: joinStemsToEndings(superlativeStems, 'ae'),
-							dative: joinStemsToEndings(superlativeStems, 'ae'),
-							ablative: joinStemsToEndings(superlativeStems, 'ā'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(superlativeStems, 'ae'),
-							vocative: joinStemsToEndings(superlativeStems, 'ae'),
-							accusative: joinStemsToEndings(superlativeStems, 'ās'),
-							genitive: joinStemsToEndings(superlativeStems, 'ārum'),
-							dative: joinStemsToEndings(superlativeStems, 'īs'),
-							ablative: joinStemsToEndings(superlativeStems, 'īs'),
-						},
-					},
-					neuter: {
-						singular: {
-							nominative: joinStemsToEndings(superlativeStems, 'um'),
-							vocative: joinStemsToEndings(superlativeStems, 'um'),
-							accusative: joinStemsToEndings(superlativeStems, 'um'),
-							genitive: joinStemsToEndings(superlativeStems, 'ī'),
-							dative: joinStemsToEndings(superlativeStems, 'ō'),
-							ablative: joinStemsToEndings(superlativeStems, 'ō'),
-						},
-						plural: {
-							nominative: joinStemsToEndings(superlativeStems, 'a'),
-							vocative: joinStemsToEndings(superlativeStems, 'a'),
-							accusative: joinStemsToEndings(superlativeStems, 'a'),
-							genitive: joinStemsToEndings(superlativeStems, 'ōrum'),
-							dative: joinStemsToEndings(superlativeStems, 'īs'),
-							ablative: joinStemsToEndings(superlativeStems, 'īs'),
-						},
-					},
-				},
+				comparative: generateComparativeForms(comparativeStems),
+				superlative: generateSuperlativeForms(superlativeStems),
 			};
 			const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms)
 			const withEnclitics = multiplyWithEnclitics(withReplacements);
