@@ -281,12 +281,19 @@ const inflectFuncs = {
 			return multiplyWithEnclitics(rest.Forms);
 		}
 		const lemma = removeBrackets(Lemma);
+
+		if (rest.IsIndeclinable) {
+			const withEnclitics = multiplyWithEnclitics(withReplacements);
+			return deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
+		}
+
 		const declensionsString = JSON.stringify(rest.Declensions)
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]"
 			|| (lemma.endsWith("us") && declensionsString !== "[3]")
+			|| (lemma.endsWith("er") && declensionsString !== "[3]")
 		) {
-			const stem = Lemma.substring(0, lemma.length - 2);
+			const stem = rest.ObliqueStem || Lemma.substring(0, lemma.length - 2);
 			const comparativeStems = rest.ComparativeStems || stem + "i";
 			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
@@ -388,7 +395,17 @@ const inflectFuncs = {
 			}
 			return lemma.substring(0, lemma.length - 2);
 		})();
-		const hasIStem = rest.HasIStem || false;
+		const hasIStem = (() => {
+			if (rest.HasIStem === true || rest.HasIStem === false) {
+				return rest.HasIStem;
+			}
+			if (lemma.endsWith('ilis')) { return true; }
+			if (lemma.endsWith('ālis')) { return true; }
+			if (lemma.endsWith('ns')) { return true; }
+			if (lemma.endsWith('ēnsis')) { return true; }
+			return false;
+		})();
+		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || stem + "i";
 		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
