@@ -280,8 +280,11 @@ const inflectFuncs = {
 		if (rest.Forms) {
 			return multiplyWithEnclitics(rest.Forms);
 		}
+		const declensionsString = JSON.stringify(rest.Declension)
 		//// 1st/2nd-declension adjectives
-		if (Lemma.endsWith("us") && rest.Declension !== 3) {
+		if (declensionsString === "[1,2]"
+			|| (removeBrackets(Lemma).endsWith("us") && declensionsString !== "[3]")
+		) {
 			const stem = Lemma.substring(0, Lemma.length - 2);
 			const comparativeStems = rest.ComparativeStems || stem + "i";
 			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
