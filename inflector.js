@@ -597,6 +597,7 @@ if (typeof require !== 'undefined') {
 				let successCount = 0;
 				let errorCount = 0;
 				let totalLemmata = 0;
+				let incorrectComparatives = 0;
 				// const totalLemmata = outputEntries.length;
 
 				batchFilepaths.forEach((filename) => {
@@ -615,6 +616,20 @@ if (typeof require !== 'undefined') {
 						if (isSuperset(formsAsSet, expectedFormsAsSet)) {
 							successCount++;
 							// console.log('Yay! ' + lemma);
+							const comparativeForm = parsingData.unencliticized?.comparative?.neuter?.singular?.nominative?.[0]
+								?? parsingData.unencliticized?.comparative?.[0];
+							if (comparativeForm) {
+								if (!expectedFormsAsSet.has(comparativeForm)) {
+									const lemmataToNotComplainAboutComparativesFor = [
+										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter"];
+										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
+											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
+											// console.log(`${comparativeForm}`);
+											// console.log(`${lemma}`);
+											incorrectComparatives++;
+										}
+								}
+							}
 						} else {
 							errorCount++;
 							console.error({
@@ -628,6 +643,7 @@ if (typeof require !== 'undefined') {
 					}
 				});
 				const skippedCount = totalLemmata - errorCount - successCount;
+				console.warn(`There were ${incorrectComparatives} lemmata with unwanted comparatives.`);
 				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes and ${skippedCount} skipped) out of ${totalLemmata} lemmata.`);
 
 				console.timeEnd('checkingOutput');
