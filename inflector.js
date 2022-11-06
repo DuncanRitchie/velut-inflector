@@ -616,6 +616,13 @@ if (typeof require !== 'undefined') {
 						if (isSuperset(formsAsSet, expectedFormsAsSet)) {
 							successCount++;
 							// console.log('Yay! ' + lemma);
+							// if (!isEqualSet(formsAsSet, expectedFormsAsSet)) {
+							// 	console.log({
+							// 		missingFromExcel: subtractSet(formsAsSet, expectedFormsAsSet),
+							// 		for: lemma,
+							// 	});
+							// }
+							// console.log({parsingData})
 							const comparativeForm = parsingData.unencliticized?.comparative?.neuter?.singular?.nominative?.[0]
 								?? parsingData.unencliticized?.comparative?.[0];
 							if (comparativeForm) {
