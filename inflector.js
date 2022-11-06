@@ -280,7 +280,7 @@ const inflectFuncs = {
 		if (rest.Forms) {
 			return multiplyWithEnclitics(rest.Forms);
 		}
-		const declensionsString = JSON.stringify(rest.Declension)
+		const declensionsString = JSON.stringify(rest.Declensions)
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]"
 			|| (removeBrackets(Lemma).endsWith("us") && declensionsString !== "[3]")
