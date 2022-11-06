@@ -280,12 +280,13 @@ const inflectFuncs = {
 		if (rest.Forms) {
 			return multiplyWithEnclitics(rest.Forms);
 		}
+		const lemma = removeBrackets(Lemma);
 		const declensionsString = JSON.stringify(rest.Declensions)
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]"
-			|| (removeBrackets(Lemma).endsWith("us") && declensionsString !== "[3]")
+			|| (lemma.endsWith("us") && declensionsString !== "[3]")
 		) {
-			const stem = Lemma.substring(0, Lemma.length - 2);
+			const stem = Lemma.substring(0, lemma.length - 2);
 			const comparativeStems = rest.ComparativeStems || stem + "i";
 			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
@@ -310,7 +311,7 @@ const inflectFuncs = {
 				positive: {
 					masculine: {
 						singular: {
-							nominative: [Lemma],
+							nominative: [lemma],
 							vocative: [stem + 'e'],
 							accusative: [stem + 'um'],
 							genitive: getPositiveMasculineSingularGenitiveForms(),
@@ -376,16 +377,16 @@ const inflectFuncs = {
 			if (rest.ObliqueStem) {
 				return rest.ObliqueStem;
 			}
-			if (Lemma.endsWith('āns')) {
-				return Lemma.replace(/āns$/, 'ant');
+			if (lemma.endsWith('āns')) {
+				return lemma.replace(/āns$/, 'ant');
 			}
-			if (Lemma.endsWith('ēns')) {
-				return Lemma.replace(/ēns$/, 'ent');
+			if (lemma.endsWith('ēns')) {
+				return lemma.replace(/ēns$/, 'ent');
 			}
-			if (Lemma.endsWith('ōns')) {
-				return Lemma.replace(/ōns$/, 'ont');
+			if (lemma.endsWith('ōns')) {
+				return lemma.replace(/ōns$/, 'ont');
 			}
-			return Lemma.substring(0, Lemma.length - 2);
+			return lemma.substring(0, lemma.length - 2);
 		})();
 		const hasIStem = rest.HasIStem || false;
 		const comparativeStems = rest.ComparativeStems || stem + "i";
@@ -395,8 +396,8 @@ const inflectFuncs = {
 			positive: {
 				masculine: {
 					singular: {
-						nominative: [Lemma],
-						vocative: [Lemma],
+						nominative: [lemma],
+						vocative: [lemma],
 						accusative: [stem + 'em'],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
@@ -413,8 +414,8 @@ const inflectFuncs = {
 				},
 				feminine: {
 					singular: {
-						nominative: [Lemma],
-						vocative: [Lemma],
+						nominative: [lemma],
+						vocative: [lemma],
 						accusative: [stem + 'em'],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
@@ -431,9 +432,9 @@ const inflectFuncs = {
 				},
 				neuter: {
 					singular: {
-						nominative: [Lemma],
-						vocative: [Lemma],
-						accusative: [Lemma],
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
 						ablative: [stem + (hasIStem ? 'ī' : 'e')],
