@@ -369,7 +369,74 @@ const inflectFuncs = {
 			return mergeObjects(wantedForms, rest.ExtraForms);
 		}
 		//// 3rd-declension adjectives
-		return {};
+		const stem = rest.ObliqueStem || Lemma.substring(0, Lemma.length - 2);
+		const comparativeStems = rest.ComparativeStems || stem + "i";
+		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
+
+		const allUnencliticizedForms = {
+			positive: {
+				masculine: {
+					singular: {
+						nominative: [Lemma],
+						vocative: [Lemma],
+						accusative: [stem + 'em'],
+						genitive: [stem + 'is'],
+						dative: [stem + 'ī'],
+						ablative: [stem + 'e'],
+					},
+					plural: {
+						nominative: [stem + 'ēs'],
+						vocative: [stem + 'ēs'],
+						accusative: [stem + 'ēs'],
+						genitive: [stem + 'um'],
+						dative: [stem + 'ibus'],
+						ablative: [stem + 'ibus'],
+					},
+				},
+				feminine: {
+					singular: {
+						nominative: [Lemma],
+						vocative: [Lemma],
+						accusative: [stem + 'em'],
+						genitive: [stem + 'is'],
+						dative: [stem + 'ī'],
+						ablative: [stem + 'e'],
+					},
+					plural: {
+						nominative: [stem + 'ēs'],
+						vocative: [stem + 'ēs'],
+						accusative: [stem + 'ēs'],
+						genitive: [stem + 'um'],
+						dative: [stem + 'ibus'],
+						ablative: [stem + 'ibus'],
+					},
+				},
+				neuter: {
+					singular: {
+						nominative: [Lemma],
+						vocative: [Lemma],
+						accusative: [Lemma],
+						genitive: [stem + 'is'],
+						dative: [stem + 'ī'],
+						ablative: [stem + 'e'],
+					},
+					plural: {
+						nominative: [stem + 'a'],
+						vocative: [stem + 'a'],
+						accusative: [stem + 'a'],
+						genitive: [stem + 'um'],
+						dative: [stem + 'ibus'],
+						ablative: [stem + 'ibus'],
+					},
+				},
+			},
+			comparative: generateComparativeForms(comparativeStems),
+			superlative: generateSuperlativeForms(superlativeStems),
+		};
+		const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms)
+		const withEnclitics = multiplyWithEnclitics(withReplacements);
+		const wantedForms = deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
+		return mergeObjects(wantedForms, rest.ExtraForms);
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
 		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
