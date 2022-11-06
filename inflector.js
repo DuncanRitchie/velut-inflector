@@ -370,6 +370,7 @@ const inflectFuncs = {
 		}
 		//// 3rd-declension adjectives
 		const stem = rest.ObliqueStem || Lemma.substring(0, Lemma.length - 2);
+		const hasIStem = rest.HasIStem || false;
 		const comparativeStems = rest.ComparativeStems || stem + "i";
 		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
@@ -382,13 +383,13 @@ const inflectFuncs = {
 						accusative: [stem + 'em'],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
-						ablative: [stem + 'e'],
+						ablative: [stem + (hasIStem ? 'ī' : 'e')],
 					},
 					plural: {
 						nominative: [stem + 'ēs'],
 						vocative: [stem + 'ēs'],
 						accusative: [stem + 'ēs'],
-						genitive: [stem + 'um'],
+						genitive: [stem + (hasIStem ? 'ium' : 'um')],
 						dative: [stem + 'ibus'],
 						ablative: [stem + 'ibus'],
 					},
@@ -400,13 +401,13 @@ const inflectFuncs = {
 						accusative: [stem + 'em'],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
-						ablative: [stem + 'e'],
+						ablative: [stem + (hasIStem ? 'ī' : 'e')],
 					},
 					plural: {
 						nominative: [stem + 'ēs'],
 						vocative: [stem + 'ēs'],
 						accusative: [stem + 'ēs'],
-						genitive: [stem + 'um'],
+						genitive: [stem + (hasIStem ? 'ium' : 'um')],
 						dative: [stem + 'ibus'],
 						ablative: [stem + 'ibus'],
 					},
@@ -418,13 +419,13 @@ const inflectFuncs = {
 						accusative: [Lemma],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
-						ablative: [stem + 'e'],
+						ablative: [stem + (hasIStem ? 'ī' : 'e')],
 					},
 					plural: {
-						nominative: [stem + 'a'],
-						vocative: [stem + 'a'],
-						accusative: [stem + 'a'],
-						genitive: [stem + 'um'],
+						nominative: [stem + (hasIStem ? 'ia' : 'a')],
+						vocative: [stem + (hasIStem ? 'ia' : 'a')],
+						accusative: [stem + (hasIStem ? 'ia' : 'a')],
+						genitive: [stem + (hasIStem ? 'ium' : 'um')],
 						dative: [stem + 'ibus'],
 						ablative: [stem + 'ibus'],
 					},
