@@ -283,9 +283,8 @@ const inflectFuncs = {
 		//// 1st/2nd-declension adjectives
 		if (Lemma.endsWith("us") && rest.Declension !== 3) {
 			const stem = Lemma.substring(0, Lemma.length - 2);
-			const nonPositiveStem = rest.NonPositiveStem || stem;
-			const comparativeStems = rest.ComparativeStems || nonPositiveStem + "i";
-			const superlativeStems = rest.SuperlativeStems || nonPositiveStem + 'issim';
+			const comparativeStems = rest.ComparativeStems || stem + "i";
+			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
 			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
 			const getPositiveMasculineSingularGenitiveForms = () => {
