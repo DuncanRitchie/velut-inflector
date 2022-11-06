@@ -372,7 +372,21 @@ const inflectFuncs = {
 			return mergeObjects(wantedForms, rest.ExtraForms);
 		}
 		//// 3rd-declension adjectives
-		const stem = rest.ObliqueStem || Lemma.substring(0, Lemma.length - 2);
+		const stem = (() => {
+			if (rest.ObliqueStem) {
+				return rest.ObliqueStem;
+			}
+			if (Lemma.endsWith('āns')) {
+				return Lemma.replace(/āns$/, 'ant');
+			}
+			if (Lemma.endsWith('ēns')) {
+				return Lemma.replace(/ēns$/, 'ent');
+			}
+			if (Lemma.endsWith('ōns')) {
+				return Lemma.replace(/ōns$/, 'ont');
+			}
+			return Lemma.substring(0, Lemma.length - 2);
+		})();
 		const hasIStem = rest.HasIStem || false;
 		const comparativeStems = rest.ComparativeStems || stem + "i";
 		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
