@@ -287,7 +287,7 @@ const inflectFuncs = {
 		const lemma = removeBrackets(Lemma);
 
 		if (rest.IsIndeclinable) {
-			const withEnclitics = multiplyWithEnclitics(withReplacements);
+			const withEnclitics = multiplyWithEnclitics({ positive: lemma });
 			return deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
 		}
 
@@ -303,30 +303,33 @@ const inflectFuncs = {
 
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]") {
-			const stem = (() => {
-				if (rest.ObliqueStem) { return rest.ObliqueStem; }
+			const stems = ensureIsArray((() => {
+				if (rest.ObliqueStems) { return rest.ObliqueStems; }
 				if (lemma.endsWith('er')) { return lemma; }
 				if (lemma.endsWith('a')) { return lemma.substring(0, lemma.length - 1); }
 				return lemma.substring(0, lemma.length - 2);
-			})();
-			const comparativeStems = rest.ComparativeStems || stem + "i";
-			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
+			})());
+			const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, "i");
+			const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, 'issim');
 
 			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
 			const getPositiveMasculineSingularGenitiveForms = () => {
-				const uncontracted = stem + 'ī';
-				const contracted = stem.substring(0, stem.length - 1) + 'ī';
-				const contractedWithAcute = contracted
-					.replace(/a(?=[bcdfglmnprstv]ī$)/, 'á')
-					.replace(/e(?=[bcdfglmnprstv]ī$)/, 'é')
-					.replace(/i(?=[bcdfglmnprstv]ī$)/, 'í')
-					.replace(/o(?=[bcdfglmnprstv]ī$)/, 'ó')
-					.replace(/u(?=[bcdfglmnprstv]ī$)/, 'ú')
-					.replace(/y(?=[bcdfglmnprstv]ī$)/, 'ý')
-				if (stem.endsWith('i') || stem.endsWith("ï")) {
-					return [uncontracted, ... new Set([contracted, contractedWithAcute])];
-				}
-				return [uncontracted];
+				const mappedStems = stems.map(stem => {
+					const uncontracted = joinStemsToEndings(stem, 'ī');
+					const contracted = stem.substring(0, stems[0].length - 1) + 'ī';
+					const contractedWithAcute = contracted
+						.replace(/a(?=[bcdfglmnprstv]ī$)/, 'á')
+						.replace(/e(?=[bcdfglmnprstv]ī$)/, 'é')
+						.replace(/i(?=[bcdfglmnprstv]ī$)/, 'í')
+						.replace(/o(?=[bcdfglmnprstv]ī$)/, 'ó')
+						.replace(/u(?=[bcdfglmnprstv]ī$)/, 'ú')
+						.replace(/y(?=[bcdfglmnprstv]ī$)/, 'ý')
+					if (stem.endsWith('i') || stem.endsWith("ï")) {
+						return [uncontracted, [contracted, contractedWithAcute]];
+					}
+					return [uncontracted];
+				});
+				return [... new Set(mappedStems.flat(2))];
 			}
 
 			const allUnencliticizedForms = {
@@ -334,55 +337,55 @@ const inflectFuncs = {
 					masculine: {
 						singular: {
 							nominative: [lemma],
-							vocative: [stem + (stem.endsWith('a') ? 'ë' : 'e')],
-							accusative: [stem + 'um'],
+							vocative: joinStemsToEndings(stems, (stems[0].endsWith('a') ? 'ë' : 'e')),
+							accusative: joinStemsToEndings(stems, 'um'),
 							genitive: getPositiveMasculineSingularGenitiveForms(),
-							dative: [stem + 'ō'],
-							ablative: [stem + 'ō'],
+							dative: joinStemsToEndings(stems, 'ō'),
+							ablative: joinStemsToEndings(stems, 'ō'),
 						},
 						plural: {
-							nominative: [stem + 'ī'],
-							vocative: [stem + 'ī'],
-							accusative: [stem + 'ōs'],
-							genitive: [stem + 'ōrum'],
-							dative: [stem + 'īs'],
-							ablative: [stem + 'īs'],
+							nominative: joinStemsToEndings(stems, 'ī'),
+							vocative: joinStemsToEndings(stems, 'ī'),
+							accusative: joinStemsToEndings(stems, 'ōs'),
+							genitive: joinStemsToEndings(stems, 'ōrum'),
+							dative: joinStemsToEndings(stems, 'īs'),
+							ablative: joinStemsToEndings(stems, 'īs'),
 						},
 					},
 					feminine: {
 						singular: {
-							nominative: [stem + 'a'],
-							vocative: [stem + 'a'],
-							accusative: [stem + 'am'],
-							genitive: [stem + 'ae'],
-							dative: [stem + 'ae'],
-							ablative: [stem + 'ā'],
+							nominative: joinStemsToEndings(stems, 'a'),
+							vocative: joinStemsToEndings(stems, 'a'),
+							accusative: joinStemsToEndings(stems, 'am'),
+							genitive: joinStemsToEndings(stems, 'ae'),
+							dative: joinStemsToEndings(stems, 'ae'),
+							ablative: joinStemsToEndings(stems, 'ā'),
 						},
 						plural: {
-							nominative: [stem + 'ae'],
-							vocative: [stem + 'ae'],
-							accusative: [stem + 'ās'],
-							genitive: [stem + 'ārum'],
-							dative: [stem + 'īs'],
-							ablative: [stem + 'īs'],
+							nominative: joinStemsToEndings(stems, 'ae'),
+							vocative: joinStemsToEndings(stems, 'ae'),
+							accusative: joinStemsToEndings(stems, 'ās'),
+							genitive: joinStemsToEndings(stems, 'ārum'),
+							dative: joinStemsToEndings(stems, 'īs'),
+							ablative: joinStemsToEndings(stems, 'īs'),
 						},
 					},
 					neuter: {
 						singular: {
-							nominative: [stem + 'um'],
-							vocative: [stem + 'um'],
-							accusative: [stem + 'um'],
-							genitive: [stem + 'ī'],
-							dative: [stem + 'ō'],
-							ablative: [stem + 'ō'],
+							nominative: joinStemsToEndings(stems, 'um'),
+							vocative: joinStemsToEndings(stems, 'um'),
+							accusative: joinStemsToEndings(stems, 'um'),
+							genitive: joinStemsToEndings(stems, 'ī'),
+							dative: joinStemsToEndings(stems, 'ō'),
+							ablative: joinStemsToEndings(stems, 'ō'),
 						},
 						plural: {
-							nominative: [stem + 'a'],
-							vocative: [stem + 'a'],
-							accusative: [stem + 'a'],
-							genitive: [stem + 'ōrum'],
-							dative: [stem + 'īs'],
-							ablative: [stem + 'īs'],
+							nominative: joinStemsToEndings(stems, 'a'),
+							vocative: joinStemsToEndings(stems, 'a'),
+							accusative: joinStemsToEndings(stems, 'a'),
+							genitive: joinStemsToEndings(stems, 'ōrum'),
+							dative: joinStemsToEndings(stems, 'īs'),
+							ablative: joinStemsToEndings(stems, 'īs'),
 						},
 					},
 				},
@@ -395,9 +398,9 @@ const inflectFuncs = {
 			return mergeObjects(wantedForms, rest.ExtraForms);
 		}
 		//// 3rd-declension adjectives
-		const stem = (() => {
-			if (rest.ObliqueStem) {
-				return rest.ObliqueStem;
+		const stems = ensureIsArray((() => {
+			if (rest.ObliqueStems) {
+				return rest.ObliqueStems;
 			}
 			if (lemma.endsWith('āns')) {
 				return lemma.replace(/āns$/, 'ant');
@@ -415,7 +418,7 @@ const inflectFuncs = {
 				return lemma.replace(/as$/, 'ad');
 			}
 			return lemma.substring(0, lemma.length - 2);
-		})();
+		})());
 
 		const hasIStem = (() => {
 			if (rest.HasIStem === true || rest.HasIStem === false) {
@@ -428,20 +431,20 @@ const inflectFuncs = {
 			if (lemma.endsWith('ēnsis')) { return true; }
 			if (lemma.endsWith('guis')) { return true; }
 			if (lemma.endsWith('quis')) { return true; }
-			if (stem.endsWith('r')) { return true; }
+			if (stems[0].endsWith('r')) { return true; }
 			return false;
 		})();
 
 		const posAcPlNonNeuterForms = (() => {
 			if (hasIStem) {
-				return [stem + 'ēs', stem + 'īs'];
+				return joinStemsToEndings(stems, ['ēs', 'īs']);
 			}
-			return [stem + 'ēs'];
+			return joinStemsToEndings(stems, 'ēs');
 		})();
 
 		// console.log(`${lemma} ${hasIStem}`);
-		const comparativeStems = rest.ComparativeStems || stem + "i";
-		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
+		const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, 'i');
+		const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, 'issim');
 
 		const allUnencliticizedForms = {
 			positive: {
@@ -449,54 +452,54 @@ const inflectFuncs = {
 					singular: {
 						nominative: [lemma],
 						vocative: [lemma],
-						accusative: [stem + 'em'],
-						genitive: [stem + 'is'],
-						dative: [stem + 'ī'],
-						ablative: [stem + (hasIStem ? 'ī' : 'e')],
+						accusative: joinStemsToEndings(stems, 'em'),
+						genitive: joinStemsToEndings(stems, 'is'),
+						dative: joinStemsToEndings(stems, 'ī'),
+						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
 					},
 					plural: {
-						nominative: [stem + 'ēs'],
-						vocative: [stem + 'ēs'],
+						nominative: joinStemsToEndings(stems, 'ēs'),
+						vocative: joinStemsToEndings(stems, 'ēs'),
 						accusative: posAcPlNonNeuterForms,
-						genitive: [stem + (hasIStem ? 'ium' : 'um')],
-						dative: [stem + 'ibus'],
-						ablative: [stem + 'ibus'],
+						genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
+						dative: joinStemsToEndings(stems, 'ibus'),
+						ablative: joinStemsToEndings(stems, 'ibus'),
 					},
 				},
 				feminine: {
 					singular: {
 						nominative: [lemma],
 						vocative: [lemma],
-						accusative: [stem + 'em'],
-						genitive: [stem + 'is'],
-						dative: [stem + 'ī'],
-						ablative: [stem + (hasIStem ? 'ī' : 'e')],
+						accusative: joinStemsToEndings(stems, 'em'),
+						genitive: joinStemsToEndings(stems, 'is'),
+						dative: joinStemsToEndings(stems, 'ī'),
+						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
 					},
 					plural: {
-						nominative: [stem + 'ēs'],
-						vocative: [stem + 'ēs'],
+						nominative: joinStemsToEndings(stems, 'ēs'),
+						vocative: joinStemsToEndings(stems, 'ēs'),
 						accusative: posAcPlNonNeuterForms,
-						genitive: [stem + (hasIStem ? 'ium' : 'um')],
-						dative: [stem + 'ibus'],
-						ablative: [stem + 'ibus'],
+						genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
+						dative: joinStemsToEndings(stems, 'ibus'),
+						ablative: joinStemsToEndings(stems, 'ibus'),
 					},
 				},
 				neuter: {
 					singular: {
-						nominative: [stem + 'e'],
-						vocative: [stem + 'e'],
-						accusative: [stem + 'e'],
-						genitive: [stem + 'is'],
-						dative: [stem + 'ī'],
-						ablative: [stem + (hasIStem ? 'ī' : 'e')],
+						nominative: joinStemsToEndings(stems, 'e'),
+						vocative: joinStemsToEndings(stems, 'e'),
+						accusative: joinStemsToEndings(stems, 'e'),
+						genitive: joinStemsToEndings(stems, 'is'),
+						dative: joinStemsToEndings(stems, 'ī'),
+						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
 					},
 					plural: {
-						nominative: [stem + (hasIStem ? 'ia' : 'a')],
-						vocative: [stem + (hasIStem ? 'ia' : 'a')],
-						accusative: [stem + (hasIStem ? 'ia' : 'a')],
-						genitive: [stem + (hasIStem ? 'ium' : 'um')],
-						dative: [stem + 'ibus'],
-						ablative: [stem + 'ibus'],
+						nominative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+						vocative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+						accusative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+						genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
+						dative: joinStemsToEndings(stems, 'ibus'),
+						ablative: joinStemsToEndings(stems, 'ibus'),
 					},
 				},
 			},
@@ -516,21 +519,21 @@ const inflectFuncs = {
 			return multiplyWithEnclitics(rest.Forms);
 		}
 		const positive = removeBrackets(Lemma);
-		const stem = rest.ObliqueStem || positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī)$/, "");
+		const stems = rest.ObliqueStems || [positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī)$/, "")];
 
 		if (rest.IsIndeclinable
-			|| positive === stem
-			|| (!rest.ObliqueStem && (positive.endsWith("ātim") || positive.endsWith("ūtim")))
+			|| positive === stems[0]
+			|| (!rest.ObliqueStems && (positive.endsWith("ātim") || positive.endsWith("ūtim")))
 		) {
 			return multiplyWithEnclitics({positive: [positive]});
 		}
 
-		const comparative = stem + "ius";
-		const superlative = (/[bce]r$/.test(stem) ? stem.replace(/e?r$/, "errimē") : stem + "issimē");
+		const comparatives = stems.map(stem => stem + "ius");
+		const superlatives = stems.map(stem => (/[bce]r$/.test(stem) ? stem.replace(/e?r$/, "errimē") : stem + "issimē"));
 		const allForms = {
 			positive: [positive],
-			comparative: [comparative],
-			superlative: [superlative]
+			comparative: comparatives,
+			superlative: superlatives
 		};
 		const wantedForms = deleteUnwantedForms(allForms, rest.ParsingsToExclude);
 		return multiplyWithEnclitics(wantedForms);
@@ -573,7 +576,7 @@ const convertParsingObjectToFormsArray = (parsingObject) =>{
 		return parsingObject;
 	}
 	if (typeof parsingObject === "string") {
-		console.warn(`parsingObject should is a string: ${parsingObject}`)
+		console.warn(`parsingObject is a string: ${parsingObject}`)
 	}
 	return Object.values(parsingObject)
 		// .filter(object => object !== null && object !== undefined)
