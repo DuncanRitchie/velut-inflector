@@ -417,6 +417,9 @@ const inflectFuncs = {
 			if (lemma.endsWith('as')) {
 				return lemma.replace(/as$/, 'ad');
 			}
+			if (lemma.endsWith('x')) {
+				return lemma.replace(/x$/, 'c');
+			}
 			return lemma.substring(0, lemma.length - 2);
 		})());
 
@@ -432,6 +435,7 @@ const inflectFuncs = {
 			if (lemma.endsWith('guis')) { return true; }
 			if (lemma.endsWith('quis')) { return true; }
 			if (stems[0].endsWith('r')) { return true; }
+			if (lemma.endsWith('x')) { return true; }
 			return false;
 		})();
 
