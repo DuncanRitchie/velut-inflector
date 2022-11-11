@@ -147,9 +147,13 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 	return objectWithSamePropertiesMerged;
 }
 
+const ensureIsArray = (possibleArray) => {
+	return Array.isArray(possibleArray) ? possibleArray : [possibleArray];
+}
+
 const joinStemsToEndings = (stems, endings) => {
-	const stemsArray = Array.isArray(stems) ? stems : [stems];
-	const endingsArray = Array.isArray(endings) ? endings : [endings];
+	const stemsArray = ensureIsArray(stems);
+	const endingsArray = ensureIsArray(endings);
 	return stemsArray.flatMap(stem => endingsArray.map(ending => stem + ending));
 }
 
@@ -287,13 +291,24 @@ const inflectFuncs = {
 			return deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
 		}
 
-		const declensionsString = JSON.stringify(rest.Declensions)
+		const declensionsString = rest.Declensions
+			? JSON.stringify(rest.Declensions)
+			: (
+				(lemma.endsWith("us"))
+				|| (lemma.endsWith("üs"))
+				|| (lemma.endsWith("er"))
+				|| (lemma.endsWith("a"))
+			) ? "[1,2]"
+				: "[3]";
+
 		//// 1st/2nd-declension adjectives
-		if (declensionsString === "[1,2]"
-			|| (lemma.endsWith("us") && declensionsString !== "[3]")
-			|| (lemma.endsWith("er") && declensionsString !== "[3]")
-		) {
-			const stem = rest.ObliqueStem || Lemma.substring(0, lemma.length - 2);
+		if (declensionsString === "[1,2]") {
+			const stem = (() => {
+				if (rest.ObliqueStem) { return rest.ObliqueStem; }
+				if (lemma.endsWith('er')) { return lemma; }
+				if (lemma.endsWith('a')) { return lemma.substring(0, lemma.length - 1); }
+				return lemma.substring(0, lemma.length - 2);
+			})();
 			const comparativeStems = rest.ComparativeStems || stem + "i";
 			const superlativeStems = rest.SuperlativeStems || stem + 'issim';
 
@@ -319,7 +334,7 @@ const inflectFuncs = {
 					masculine: {
 						singular: {
 							nominative: [lemma],
-							vocative: [stem + 'e'],
+							vocative: [stem + (stem.endsWith('a') ? 'ë' : 'e')],
 							accusative: [stem + 'um'],
 							genitive: getPositiveMasculineSingularGenitiveForms(),
 							dative: [stem + 'ō'],
@@ -393,18 +408,37 @@ const inflectFuncs = {
 			if (lemma.endsWith('ōns')) {
 				return lemma.replace(/ōns$/, 'ont');
 			}
+			if (lemma.endsWith('r')) {
+				return lemma;
+			}
+			if (lemma.endsWith('as')) {
+				return lemma.replace(/as$/, 'ad');
+			}
 			return lemma.substring(0, lemma.length - 2);
 		})();
+
 		const hasIStem = (() => {
 			if (rest.HasIStem === true || rest.HasIStem === false) {
 				return rest.HasIStem;
 			}
 			if (lemma.endsWith('ilis')) { return true; }
+			if (lemma.endsWith('īlis')) { return true; }
 			if (lemma.endsWith('ālis')) { return true; }
 			if (lemma.endsWith('ns')) { return true; }
 			if (lemma.endsWith('ēnsis')) { return true; }
+			if (lemma.endsWith('guis')) { return true; }
+			if (lemma.endsWith('quis')) { return true; }
+			if (stem.endsWith('r')) { return true; }
 			return false;
 		})();
+
+		const posAcPlNonNeuterForms = (() => {
+			if (hasIStem) {
+				return [stem + 'ēs', stem + 'īs'];
+			}
+			return [stem + 'ēs'];
+		})();
+
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || stem + "i";
 		const superlativeStems = rest.SuperlativeStems || stem + 'issim';
@@ -423,7 +457,7 @@ const inflectFuncs = {
 					plural: {
 						nominative: [stem + 'ēs'],
 						vocative: [stem + 'ēs'],
-						accusative: [stem + 'ēs'],
+						accusative: posAcPlNonNeuterForms,
 						genitive: [stem + (hasIStem ? 'ium' : 'um')],
 						dative: [stem + 'ibus'],
 						ablative: [stem + 'ibus'],
@@ -441,7 +475,7 @@ const inflectFuncs = {
 					plural: {
 						nominative: [stem + 'ēs'],
 						vocative: [stem + 'ēs'],
-						accusative: [stem + 'ēs'],
+						accusative: posAcPlNonNeuterForms,
 						genitive: [stem + (hasIStem ? 'ium' : 'um')],
 						dative: [stem + 'ibus'],
 						ablative: [stem + 'ibus'],
@@ -449,9 +483,9 @@ const inflectFuncs = {
 				},
 				neuter: {
 					singular: {
-						nominative: [lemma],
-						vocative: [lemma],
-						accusative: [lemma],
+						nominative: [stem + 'e'],
+						vocative: [stem + 'e'],
+						accusative: [stem + 'e'],
 						genitive: [stem + 'is'],
 						dative: [stem + 'ī'],
 						ablative: [stem + (hasIStem ? 'ī' : 'e')],
