@@ -298,6 +298,7 @@ const inflectFuncs = {
 				|| (lemma.endsWith("üs"))
 				|| (lemma.endsWith("er"))
 				|| (lemma.endsWith("a"))
+				|| (lemma.endsWith("ī"))
 			) ? "[1,2]"
 				: "[3]";
 
@@ -306,11 +307,11 @@ const inflectFuncs = {
 			const stems = ensureIsArray((() => {
 				if (rest.ObliqueStems) { return rest.ObliqueStems; }
 				if (lemma.endsWith('er')) { return lemma; }
-				if (lemma.endsWith('a')) { return lemma.substring(0, lemma.length - 1); }
+				if (lemma.endsWith('a') | lemma.endsWith('ī')) { return lemma.substring(0, lemma.length - 1); }
 				return lemma.substring(0, lemma.length - 2);
 			})());
 			const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, "i");
-			const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, 'issim');
+			const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, (lemma.endsWith('er') ? 'rim' : 'issim'));
 
 			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
 			const getPositiveMasculineSingularGenitiveForms = () => {
@@ -430,6 +431,8 @@ const inflectFuncs = {
 			if (lemma.endsWith('ilis')) { return true; }
 			if (lemma.endsWith('īlis')) { return true; }
 			if (lemma.endsWith('ālis')) { return true; }
+			if (lemma.endsWith('ēlis')) { return true; }
+			if (lemma.endsWith('ūlis')) { return true; }
 			if (lemma.endsWith('ns')) { return true; }
 			if (lemma.endsWith('ēnsis')) { return true; }
 			if (lemma.endsWith('guis')) { return true; }
@@ -448,7 +451,7 @@ const inflectFuncs = {
 
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, 'i');
-		const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, 'issim');
+		const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, (lemma.endsWith('er') ? 'rim' : 'issim'));
 
 		const allUnencliticizedForms = {
 			positive: {
