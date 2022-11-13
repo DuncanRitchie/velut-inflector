@@ -30,7 +30,7 @@ const multiplyWithEnclitics = (parsingObject) => {
 	const addEnclitic = (object, enclitic) => {
 		try {
 			if (!object) {
-				console.warn(`parsingObject is ${object}`);
+				console.warn(`parsingObject is ${object} in addEnclitic`);
 				return {};
 			}
 			if (Array.isArray(object)) {
@@ -609,7 +609,7 @@ const inflectFuncs = {
 
 const convertParsingObjectToFormsArray = (parsingObject) =>{
 	if (!parsingObject) {
-		console.warn(`parsingObject is ${parsingObject}`);
+		console.warn(`parsingObject is ${parsingObject} in convertParsingObjectToFormsArray`);
 		return [];
 	}
 	if (Array.isArray(parsingObject)) {
@@ -815,7 +815,7 @@ if (typeof require !== 'undefined') {
 							if (comparativeForm) {
 								if (!expectedFormsAsSet.has(comparativeForm)) {
 									const lemmataToNotComplainAboutComparativesFor = [
-										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter"];
+										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns"
 										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
 											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
 											// console.log(`${comparativeForm}`);
