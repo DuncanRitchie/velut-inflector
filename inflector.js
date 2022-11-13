@@ -597,7 +597,13 @@ const inflectFuncs = {
 		return multiplyWithEnclitics([removeBrackets(Lemma)]);
 	},
 	"Pronoun": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		// Pronouns are hardcoded, so there’s not much for the Inflector to do.
+		if (!rest.Forms) {
+			console.warn(`Forms not defined for pronoun ${Lemma}`)
+			return multiplyWithEnclitics({lemma: [Lemma]})
+		}
+		const wantedForms = deleteUnwantedForms(rest.Forms, rest.ParsingsToExclude);
+		return multiplyWithEnclitics(wantedForms);
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
