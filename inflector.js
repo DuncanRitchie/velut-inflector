@@ -67,7 +67,7 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		return formsObject;
 	}
 	if (!formsObject) {
-		console.warn(`formsObject is ${formsObject}`);
+		console.warn(`formsObject is ${formsObject} inside deleteUnwantedForms`);
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
@@ -88,7 +88,7 @@ const mergeObjects = (formsObject, objectToMerge) => {
 		return formsObject;
 	}
 	if (!formsObject) {
-		console.warn(`formsObject is ${formsObject}`);
+		console.warn(`formsObject is ${formsObject} inside mergeObjects`);
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
@@ -120,7 +120,7 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 		return formsObject;
 	}
 	if (!formsObject) {
-		console.warn(`formsObject is ${formsObject}`);
+		console.warn(`formsObject is ${formsObject} inside replaceFieldsInObjects`);
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
@@ -145,6 +145,28 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 			}, objectWithSamePropertiesMerged);
 	}
 	return objectWithSamePropertiesMerged;
+}
+
+// Eg, plērusque is a [1,2]-declension adjective with -que suffixed
+const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
+	if (!lemmaHasQueEnding) {
+		return formsObject;
+	}
+	if (!formsObject) {
+		console.warn(`formsObject is ${formsObject} inside markQueAsUnencliticized`);
+		return formsObject;
+	}
+	if (!formsObject.que) {
+		console.warn(`lemma is marked as having -que ending but no -que forms were generated`);
+		return formsObject;
+	}
+	const newFormsObject = {...formsObject};
+	delete newFormsObject.ne;
+	delete newFormsObject.ve;
+	delete newFormsObject.unencliticized;
+	newFormsObject.unencliticized = newFormsObject.que;
+	delete newFormsObject.que;
+	return newFormsObject;
 }
 
 const ensureIsArray = (possibleArray) => {
@@ -284,7 +306,7 @@ const inflectFuncs = {
 		if (rest.Forms) {
 			return multiplyWithEnclitics(rest.Forms);
 		}
-		const lemma = removeBrackets(Lemma);
+		const lemma = rest.IsLemmaInQue ? removeBrackets(Lemma).replace(/que$/, '') : removeBrackets(Lemma);
 
 		if (rest.IsIndeclinable) {
 			const withEnclitics = multiplyWithEnclitics({ positive: lemma });
@@ -311,7 +333,10 @@ const inflectFuncs = {
 				return lemma.substring(0, lemma.length - 2);
 			})());
 			const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, "i");
-			const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, (lemma.endsWith('er') ? 'rim' : 'issim'));
+			const superlativeStems = rest.SuperlativeStems
+				|| (lemma.endsWith('er')
+					? joinStemsToEndings(lemma, 'rim')
+					: joinStemsToEndings(stems, 'issim'));
 
 			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
 			const getPositiveMasculineSingularGenitiveForms = () => {
@@ -393,10 +418,12 @@ const inflectFuncs = {
 				comparative: generateComparativeForms(comparativeStems),
 				superlative: generateSuperlativeForms(superlativeStems),
 			};
-			const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms)
-			const withEnclitics = multiplyWithEnclitics(withReplacements);
-			const wantedForms = deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
-			return mergeObjects(wantedForms, rest.ExtraForms);
+			const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms);
+			const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
+			const withEnclitics = multiplyWithEnclitics(withExtraForms);
+			const withQueLemmaHandled = markQueAsUnencliticized(withEnclitics, rest.IsLemmaInQue);
+			const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
+			return wantedForms;
 		}
 		//// 3rd-declension adjectives
 		const stems = ensureIsArray((() => {
@@ -451,7 +478,10 @@ const inflectFuncs = {
 
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, 'i');
-		const superlativeStems = rest.SuperlativeStems || joinStemsToEndings(stems, (lemma.endsWith('er') ? 'rim' : 'issim'));
+		const superlativeStems = rest.SuperlativeStems
+		|| (lemma.endsWith('er')
+			? joinStemsToEndings(lemma, 'rim')
+			: joinStemsToEndings(stems, 'issim'));
 
 		const allUnencliticizedForms = {
 			positive: {
@@ -542,8 +572,11 @@ const inflectFuncs = {
 			comparative: comparatives,
 			superlative: superlatives
 		};
-		const wantedForms = deleteUnwantedForms(allForms, rest.ParsingsToExclude);
-		return multiplyWithEnclitics(wantedForms);
+		const withReplacements = replaceFieldsInObjects(allForms, rest.ReplacementForms)
+		const withEnclitics = multiplyWithEnclitics(withReplacements);
+		const withQueLemmaHandled = markQueAsUnencliticized(withEnclitics, rest.IsLemmaInQue)
+		const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
+		return wantedForms;
 	},
 	"Interjection": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms) {
