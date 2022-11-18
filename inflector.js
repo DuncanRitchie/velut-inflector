@@ -590,6 +590,86 @@ const inflectFuncs = {
 		return [removeBrackets(Lemma)];
 	},
 	"Noun": ({Lemma, PartOfSpeech, ...rest}) => {
+		const lemma = removeBrackets(Lemma);
+		const declensions = (() => {
+			if (rest.Declensions) {
+				return rest.Declensions;
+			}
+			if (lemma.endsWith("a")) {
+				return [1];
+			}
+			if (
+				(lemma.endsWith("us"))
+				|| (lemma.endsWith("er"))
+				|| (lemma.endsWith("um"))
+				|| (lemma.endsWith("ī"))
+			) { return [2]; }
+			return [3];
+		})();
+		const genders = (() => {
+			if (rest.Genders) { return rest.Genders; }
+			if (declensions.includes(1)) {
+				return ["feminine"];
+			}
+			if (declensions.includes(2)) {
+				if (lemma.endsWith('um')) {
+					return ["neuter"];
+				}
+				return ["masculine"];
+			}
+			if (lemma.endsWith('n')) {
+				return ["neuter"]
+			}
+			if (lemma.endsWith('ē')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('iō')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('tūdō')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('ās')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('ae')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('or')) {
+				return ["masculine"]
+			}
+			if (lemma.endsWith('x')) {
+				return ["feminine"]
+			}
+			if (lemma.endsWith('l')) {
+				return ["neuter"]
+			}
+			if (lemma.endsWith('le')) {
+				return ["neuter"]
+			}
+			if (lemma.endsWith('os')) {
+				return ["masculine"]
+			}
+			if (lemma.endsWith('ōs')) {
+				return ["masculine"]
+			}
+			if (lemma.endsWith('ar')) {
+				return ["neuter"]
+			}
+			if (rest.Notes) {
+				if (rest.Notes.includes("masculine")) {
+					return ["masculine"];
+				}
+				if (rest.Notes.includes("feminine")) {
+					return ["feminine"];
+				}
+				if (rest.Notes.includes("neuter")) {
+					return ["neuter"];
+				}
+			}
+			console.warn(`Could not determine genders for ${Lemma}`);
+			return [];
+		})();
 		return {};
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
