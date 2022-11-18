@@ -22,7 +22,7 @@ const removeBrackets = (lemma) => {
 	return lemma;
 }
 
-const multiplyWithEnclitics = (parsingObject) => {
+const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 	if (parsingObject.unencliticized) {
 		return parsingObject;
 	}
@@ -34,7 +34,12 @@ const multiplyWithEnclitics = (parsingObject) => {
 				return {};
 			}
 			if (Array.isArray(object)) {
-				return object.map(form => form + enclitic);
+				return object.map(form => {
+					if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
+						return form + 'i' + enclitic;
+					}
+					return form + enclitic;
+				})
 			}
 			if (typeof object === "string") {
 				console.error(`parsingObject is a string: ${object}`);
@@ -603,7 +608,7 @@ const inflectFuncs = {
 			return multiplyWithEnclitics({lemma: [Lemma]})
 		}
 		const wantedForms = deleteUnwantedForms(rest.Forms, rest.ParsingsToExclude);
-		return multiplyWithEnclitics(wantedForms);
+		return multiplyWithEnclitics(wantedForms, true);
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
