@@ -670,6 +670,22 @@ const inflectFuncs = {
 			console.warn(`Could not determine genders for ${Lemma}`);
 			return [];
 		})();
+		if (rest.IsIndeclinable) {
+			const forms = {}
+			genders.forEach(gender => {
+				forms[gender] = ({
+					singular: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accumulated: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma]
+					}
+				});
+			});
+			return multiplyWithEnclitics(forms)
+		}
 		return {};
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
