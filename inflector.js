@@ -603,12 +603,24 @@ const inflectFuncs = {
 	},
 	"Pronoun": ({Lemma, PartOfSpeech, ...rest}) => {
 		// Pronouns are hardcoded, so there’s not much for the Inflector to do.
+		const lemma = removeBrackets(Lemma);
 		if (!rest.Forms) {
 			console.warn(`Forms not defined for pronoun ${Lemma}`)
-			return multiplyWithEnclitics({lemma: [Lemma]})
+			return multiplyWithEnclitics({lemma: [lemma]})
 		}
 		const wantedForms = deleteUnwantedForms(rest.Forms, rest.ParsingsToExclude);
-		return multiplyWithEnclitics(wantedForms, true);
+		if (!wantedForms.unencliticized && (
+			lemma.endsWith('libet')
+			|| lemma.endsWith('met')
+			|| lemma.endsWith('nam')
+			|| lemma.endsWith('piam')
+			|| lemma.endsWith('que')
+			|| lemma.endsWith('vīs'))
+		) {
+			console.warn(`Enclitics have not been disabled for ${lemma}`)
+		}
+		const multiplied = multiplyWithEnclitics(wantedForms, true);
+		return multiplied;
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
