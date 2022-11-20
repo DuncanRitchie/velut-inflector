@@ -696,6 +696,11 @@ const inflectFuncs = {
 			console.warn(`Could not determine genders for ${Lemma}`);
 			return [];
 		})();
+
+		if (rest.Forms) {
+			return multiplyWithEnclitics(rest.Forms);
+		}
+
 		if (rest.IsIndeclinable) {
 			const forms = {}
 			genders.forEach(gender => {
