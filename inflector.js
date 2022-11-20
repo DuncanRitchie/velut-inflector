@@ -595,6 +595,10 @@ const inflectFuncs = {
 			if (rest.Declensions) {
 				return rest.Declensions;
 			}
+			if (Lemma.endsWith("ōrum]")) {
+				console.log(`Assuming 2nd declension for ${Lemma}`)
+				return [2];
+			}
 			if (lemma.endsWith("a")) {
 				return [1];
 			}
@@ -608,16 +612,46 @@ const inflectFuncs = {
 		})();
 		const genders = (() => {
 			if (rest.Genders) { return rest.Genders; }
+
+			if (rest.Notes) {
+				if (rest.Notes.includes("masculine") && rest.Notes.includes("feminine") && rest.Notes.includes("neuter")) {
+					console.log(`Assuming masculine & feminine & neuter for ${Lemma}: ${rest.Notes}`)
+					return ["masculine", "feminine", "neuter"];
+				}
+				if (rest.Notes.includes("masculine") && rest.Notes.includes("feminine")) {
+					console.log(`Assuming masculine & feminine for ${Lemma}: ${rest.Notes}`)
+					return ["masculine", "feminine"];
+				}
+				if (rest.Notes.includes("masculine") && rest.Notes.includes("neuter")) {
+					console.log(`Assuming masculine & neuter for ${Lemma}: ${rest.Notes}`)
+					return ["masculine", "neuter"];
+				}
+				if (rest.Notes.includes("masculine")) {
+					console.log(`Assuming masculine for ${Lemma}: ${rest.Notes}`)
+					return ["masculine"];
+				}
+				if (rest.Notes.includes("feminine")) {
+					console.log(`Assuming feminine for ${Lemma}: ${rest.Notes}`)
+					return ["feminine"];
+				}
+				if (rest.Notes.includes("neuter")) {
+					console.log(`Assuming neuter for ${Lemma}: ${rest.Notes}`)
+					return ["neuter"];
+				}
+			}
+
 			if (declensions.includes(1)) {
 				return ["feminine"];
 			}
 			if (declensions.includes(2)) {
 				if (lemma.endsWith('um')) {
+					console.log(`Assuming neuter for ${Lemma}`)
 					return ["neuter"];
 				}
 				return ["masculine"];
 			}
 			if (lemma.endsWith('n')) {
+				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
 			}
 			if (lemma.endsWith('ē')) {
@@ -642,9 +676,11 @@ const inflectFuncs = {
 				return ["feminine"]
 			}
 			if (lemma.endsWith('l')) {
+				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
 			}
 			if (lemma.endsWith('le')) {
+				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
 			}
 			if (lemma.endsWith('os')) {
@@ -654,18 +690,8 @@ const inflectFuncs = {
 				return ["masculine"]
 			}
 			if (lemma.endsWith('ar')) {
+				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
-			}
-			if (rest.Notes) {
-				if (rest.Notes.includes("masculine")) {
-					return ["masculine"];
-				}
-				if (rest.Notes.includes("feminine")) {
-					return ["feminine"];
-				}
-				if (rest.Notes.includes("neuter")) {
-					return ["neuter"];
-				}
 			}
 			console.warn(`Could not determine genders for ${Lemma}`);
 			return [];
