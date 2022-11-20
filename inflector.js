@@ -677,7 +677,7 @@ const inflectFuncs = {
 					singular: {
 						nominative: [lemma],
 						vocative: [lemma],
-						accumulated: [lemma],
+						accusative: [lemma],
 						genitive: [lemma],
 						dative: [lemma],
 						ablative: [lemma]
