@@ -641,6 +641,7 @@ const inflectFuncs = {
 			}
 
 			if (declensions.includes(1)) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"];
 			}
 			if (declensions.includes(2)) {
@@ -655,24 +656,30 @@ const inflectFuncs = {
 				return ["neuter"]
 			}
 			if (lemma.endsWith('ē')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('iō')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('tūdō')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('ās')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('ae')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('or')) {
 				return ["masculine"]
 			}
 			if (lemma.endsWith('x')) {
+				console.log(`Assuming feminine for ${Lemma}`)
 				return ["feminine"]
 			}
 			if (lemma.endsWith('l')) {
