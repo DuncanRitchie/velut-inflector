@@ -972,7 +972,8 @@ if (typeof require !== 'undefined') {
 							if (comparativeForm) {
 								if (!expectedFormsAsSet.has(comparativeForm)) {
 									const lemmataToNotComplainAboutComparativesFor = [
-										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns"
+										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus"
+									];
 										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
 											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
 											// console.log(`${comparativeForm}`);
