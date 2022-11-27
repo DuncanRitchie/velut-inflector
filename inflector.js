@@ -613,6 +613,7 @@ const inflectFuncs = {
 		const genders = (() => {
 			if (rest.Genders) { return rest.Genders; }
 
+			console.log('Genders not specified for ' + Lemma)
 			if (rest.Notes) {
 				if (rest.Notes.includes("masculine") && rest.Notes.includes("feminine") && rest.Notes.includes("neuter")) {
 					console.log(`Assuming masculine & feminine & neuter for ${Lemma}: ${rest.Notes}`)
@@ -649,6 +650,7 @@ const inflectFuncs = {
 					console.log(`Assuming neuter for ${Lemma}`)
 					return ["neuter"];
 				}
+				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"];
 			}
 			if (lemma.endsWith('n')) {
@@ -676,6 +678,7 @@ const inflectFuncs = {
 				return ["feminine"]
 			}
 			if (lemma.endsWith('or')) {
+				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"]
 			}
 			if (lemma.endsWith('x')) {
@@ -691,9 +694,11 @@ const inflectFuncs = {
 				return ["neuter"]
 			}
 			if (lemma.endsWith('os')) {
+				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"]
 			}
 			if (lemma.endsWith('ōs')) {
+				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"]
 			}
 			if (lemma.endsWith('ar')) {
