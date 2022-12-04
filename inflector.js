@@ -97,6 +97,12 @@ const mergeObjects = (formsObject, objectToMerge) => {
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
+		if (!(Array.isArray(objectToMerge))) {
+			console.warn({
+				message: 'formsObject is array but objectToMerge is not',
+			formsObject, objectToMerge
+		})
+		}
 		return formsObject.concat(objectToMerge);
 	}
 	//// Take `formsObject` & merge properties with the same key in the two objects.
@@ -129,6 +135,9 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
+		if (!Array.isArray(replacementObject)) {
+			console.warn({message: 'formsObject is array but replacementObject is not', formsObject, replacementObject})
+		}
 		return replacementObject;
 	}
 	//// Take `formsObject` & merge properties with the same key in the two objects.
@@ -172,6 +181,17 @@ const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
 	newFormsObject.unencliticized = newFormsObject.que;
 	delete newFormsObject.que;
 	return newFormsObject;
+}
+
+const consoleLogAsJson = (...args) => {
+	if (!Array.isArray(args)) { 'args is not array: ' + JSON.stringify(args)}
+	const object = {};
+	args.forEach(objectToLog => {
+		Object.entries(objectToLog).forEach(([key, value]) => {
+			object[key] = JSON.stringify(value)
+		})
+	})
+	console.log(object);
 }
 
 const ensureIsArray = (possibleArray) => {
@@ -600,12 +620,22 @@ const inflectFuncs = {
 				return [2];
 			}
 			if (lemma.endsWith("a")) {
+				console.log(`Assuming 1st declension for ${Lemma}`)
+				return [1];
+			}
+			if (lemma.endsWith("ē")) {
+				console.log(`Assuming 1st declension for ${Lemma}`)
+				return [1];
+			}
+			if (lemma.endsWith("ae")) {
+				console.log(`Assuming 1st declension for ${Lemma}`)
 				return [1];
 			}
 			if (
 				(lemma.endsWith("us"))
 				|| (lemma.endsWith("er"))
 				|| (lemma.endsWith("um"))
+				|| (lemma.endsWith("os"))
 				|| (lemma.endsWith("ī"))
 			) { return [2]; }
 			return [3];
@@ -729,7 +759,111 @@ const inflectFuncs = {
 			});
 			return multiplyWithEnclitics(forms)
 		}
-		return {};
+
+
+
+		const assumedStem = (() => {
+			const lemmaSuffixesAndOblique = [
+				[/al$/, 'āl'],
+				[/āns$/, 'ant'],
+				[/as$/, 'ad'],
+				[/ās$/, 'āt'],
+				[/(?<=[bp])s$/, ''],
+				[/e$/, ''],
+				[/en$/, 'in'],
+				[/ēns$/, 'ent'],
+				[/(?<!a)es$/, 'it'],
+				[/ēs$/, ''],
+				[/(?<!a)ex$/, 'ic'],
+				[/x$/, 'c'],
+				[/īgō$/, 'īgin'],
+				[/is$/, ''],
+				[/ēdō$/, 'ēdin'],
+				[/tūdō$/, 'tūdin'],
+				[/ō$/, 'ōn'],
+				[/ōn$/, 'on'],
+				[/ōns$/, 'ont'],
+				[/or$/, 'ōr'],
+				[/ōs$/, 'ōt'],
+				[/ys$/, ''],
+			];
+			for (tuple of lemmaSuffixesAndOblique) {
+				const [regex, ending] = tuple;
+				if (regex.test(lemma)) {
+					return lemma.replace(regex, ending);
+				}
+			}
+			return lemma;
+		})()
+
+		const stems = rest.ObliqueStems ?? [assumedStem];
+
+		const hasIStem = (() => {
+			if (rest.HasIStem === true || rest.HasIStem === false) {
+				return rest.HasIStem;
+			}
+			if (lemma.endsWith('ēnsis')) {
+				return true;
+			}
+			if (lemma.endsWith('ns')) {
+				return true;
+			}
+			if (lemma.endsWith('is') && !rest.ObliqueStems) {
+				return true;
+			}
+			return false;
+		})()
+
+		const getThirdDeclensionNonNeuterForms = () => {
+			const posAcPlNonNeuterForms = (() => {
+				if (hasIStem) {
+					return joinStemsToEndings(stems, ['ēs', 'īs']);
+				}
+				return joinStemsToEndings(stems, 'ēs');
+			})();
+
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: joinStemsToEndings(stems, 'em'),
+					genitive: joinStemsToEndings(stems, 'is'),
+					dative: joinStemsToEndings(stems, 'ī'),
+					ablative: joinStemsToEndings(stems, 'e'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ēs'),
+					vocative: joinStemsToEndings(stems, 'ēs'),
+					accusative: posAcPlNonNeuterForms,
+					genitive: joinStemsToEndings(stems, (hasIStem || rest.IsDeclinedLikeAdjective ? 'ium' : 'um')),
+					dative: joinStemsToEndings(stems, 'ibus'),
+					ablative: joinStemsToEndings(stems, 'ibus'),
+				},
+				possiblyIncorrect: joinStemsToEndings(stems, 'īs')
+			}
+		}
+
+		let forms = {};
+
+		if (declensions.includes(3)) {
+			const thirdDeclForms = {};
+			["masculine", "feminine"].map(gender => {
+				if (genders.includes(gender)) {
+					thirdDeclForms[gender] = getThirdDeclensionNonNeuterForms();
+				}
+			})
+			forms = mergeObjects(forms, thirdDeclForms);
+		}
+
+
+		if (JSON.stringify(forms)==='{}') {
+			return {}
+		}
+
+		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
+		const merged = mergeObjects(replaced, rest.ExtraForms)
+		const withEnclitics = multiplyWithEnclitics(merged);
+		return withEnclitics;
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms && Array.isArray(rest.Forms)) {
