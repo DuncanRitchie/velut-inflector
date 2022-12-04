@@ -145,7 +145,7 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 		return replacementObject;
 	}
 	//// Take `formsObject` & merge properties with the same key in the two objects.
-	const objectWithSamePropertiesMerged = Object.entries(formsObject)
+	const objectWithSamePropertiesReplaced = Object.entries(formsObject)
 		.filter(([key, obj]) => obj !== null && obj !== undefined)
 		.map(([key, obj]) => [key, replaceFieldsInObjects(obj, replacementObject[key])])
 		.reduce((accumulated, current) => {
@@ -154,15 +154,15 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 		}, {});
 
 	//// Merge properties in `replacementObject` that are not in `formsObject`.
-	if (Object.keys(replacementObject).find(key => !objectWithSamePropertiesMerged.hasOwnProperty(key))) {
+	if (Object.keys(replacementObject).find(key => !objectWithSamePropertiesReplaced.hasOwnProperty(key))) {
 		return Object.entries(replacementObject)
-			.filter((key, obj) => !objectWithSamePropertiesMerged.hasOwnProperty(key))
+			.filter((key, obj) => !objectWithSamePropertiesReplaced.hasOwnProperty(key))
 			.reduce((accumulated, current) => {
 				accumulated[current[0]] = current[1];
 				return accumulated;
-			}, objectWithSamePropertiesMerged);
+			}, objectWithSamePropertiesReplaced);
 	}
-	return objectWithSamePropertiesMerged;
+	return objectWithSamePropertiesReplaced;
 }
 
 // Eg, plērusque is a [1,2]-declension adjective with -que suffixed
