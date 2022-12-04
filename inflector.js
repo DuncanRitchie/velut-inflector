@@ -88,6 +88,7 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		}, {});
 }
 
+//// This code is horrific but it seems to work.
 const mergeObjects = (formsObject, objectToMerge) => {
 	if (!objectToMerge) {
 		return formsObject;
@@ -116,12 +117,15 @@ const mergeObjects = (formsObject, objectToMerge) => {
 
 	//// Merge properties in `objectToMerge` that are not in `formsObject`.
 	if (Object.keys(objectToMerge).find(key => !objectWithSamePropertiesMerged.hasOwnProperty(key))) {
-		return Object.entries(objectToMerge)
+		const withMoreProps = Object.entries(objectToMerge)
 			.filter((key, obj) => !objectWithSamePropertiesMerged.hasOwnProperty(key))
 			.reduce((accumulated, current) => {
 				accumulated[current[0]] = current[1];
 				return accumulated;
-			}, objectWithSamePropertiesMerged);
+			}, { ...objectWithSamePropertiesMerged });
+
+		const finallyMerged = { ...withMoreProps, ...objectWithSamePropertiesMerged };
+		return finallyMerged;
 	}
 	return objectWithSamePropertiesMerged;
 }
