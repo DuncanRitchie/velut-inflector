@@ -642,6 +642,9 @@ const inflectFuncs = {
 				|| (lemma.endsWith("os"))
 				|| (lemma.endsWith("ī"))
 			) { return [2]; }
+			if (lemma.endsWith("ū")) {
+				return [4];
+			}
 			return [3];
 		})();
 		const genders = (() => {
@@ -769,6 +772,7 @@ const inflectFuncs = {
 		const assumedStem = (() => {
 			const lemmaSuffixesAndOblique = [
 				[/al$/, 'āl'],
+				[/ar$/, 'ār'],
 				[/āns$/, 'ant'],
 				[/as$/, 'ad'],
 				[/ās$/, 'āt'],
@@ -780,6 +784,8 @@ const inflectFuncs = {
 				[/ēs$/, ''],
 				[/(?<!a)ex$/, 'ic'],
 				[/x$/, 'c'],
+				[/ia$/, ''],
+				[/a$/, ''],
 				[/īgō$/, 'īgin'],
 				[/is$/, ''],
 				[/ēdō$/, 'ēdin'],
@@ -806,13 +812,28 @@ const inflectFuncs = {
 			if (rest.HasIStem === true || rest.HasIStem === false) {
 				return rest.HasIStem;
 			}
+			if (rest.ObliqueStems) {
+				return false;
+			}
 			if (lemma.endsWith('ēnsis')) {
 				return true;
 			}
 			if (lemma.endsWith('ns')) {
 				return true;
 			}
-			if (lemma.endsWith('is') && !rest.ObliqueStems) {
+			if (lemma.endsWith('ia')) {
+				return true;
+			}
+			if (lemma.endsWith('is')) {
+				return true;
+			}
+			if (lemma.endsWith('al')) {
+				return true;
+			}
+			if (lemma.endsWith('ar')) {
+				return true;
+			}
+			if (lemma.endsWith('e')) {
 				return true;
 			}
 			return false;
@@ -846,6 +867,26 @@ const inflectFuncs = {
 				possiblyIncorrect: joinStemsToEndings(stems, 'īs')
 			}
 		}
+		const getThirdDeclensionNeuterForms = () => {
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: joinStemsToEndings(stems, 'e'),
+					genitive: joinStemsToEndings(stems, 'is'),
+					dative: joinStemsToEndings(stems, 'ī'),
+					ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+					vocative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+					accusative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
+					genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
+					dative: joinStemsToEndings(stems, 'ibus'),
+					ablative: joinStemsToEndings(stems, 'ibus'),
+				},
+			};
+		}
 
 		let forms = {};
 
@@ -855,7 +896,12 @@ const inflectFuncs = {
 				if (genders.includes(gender)) {
 					thirdDeclForms[gender] = getThirdDeclensionNonNeuterForms();
 				}
-			})
+			});
+			["neuter"].map(gender => {
+				if (genders.includes(gender)) {
+					thirdDeclForms[gender] = getThirdDeclensionNeuterForms();
+				}
+			});
 			forms = mergeObjects(forms, thirdDeclForms);
 		}
 
