@@ -619,6 +619,9 @@ const inflectFuncs = {
 			if (rest.Declensions) {
 				return rest.Declensions;
 			}
+			if (rest.IsIndeclinable) {
+				return [];
+			}
 			if (Lemma.endsWith("ōrum]")) {
 				console.log(`Assuming 2nd declension for ${Lemma}`)
 				return [2];
@@ -751,6 +754,10 @@ const inflectFuncs = {
 		}
 
 		if (rest.IsIndeclinable) {
+			if (rest.Declensions) {
+				console.warn('Both IsIndeclinable and Declensions are truthy for: ' + Lemma);
+			}
+
 			const forms = {}
 			genders.forEach(gender => {
 				forms[gender] = ({
