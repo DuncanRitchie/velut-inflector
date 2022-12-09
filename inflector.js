@@ -933,6 +933,35 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getSecondDeclensionNonNeuterForms = () => {
+			const regularVocSings = joinStemsToEndings(stems, 'e');
+			const vocSings = regularVocSings.map(form => form.replace(/ie$/, 'ī'));
+			const regularGenSings = joinStemsToEndings(stems, 'ī');
+			const genSings = regularGenSings.flatMap(form => {
+				if (form.endsWith('iī')) {
+					return [form, form.replace(/iī$/, 'ī')];
+				}
+				return [form];
+			});
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: vocSings,
+					accusative: joinStemsToEndings(stems, 'um'),
+					genitive: genSings,
+					dative: joinStemsToEndings(stems, 'ō'),
+					ablative: joinStemsToEndings(stems, 'ō'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ī'),
+					vocative: joinStemsToEndings(stems, 'ī'),
+					accusative: joinStemsToEndings(stems, 'ōs'),
+					genitive: joinStemsToEndings(stems, 'ōrum'),
+					dative: joinStemsToEndings(stems, 'īs'),
+					ablative: joinStemsToEndings(stems, 'īs'),
+				},
+			};
+		}
 
 		let forms = {};
 
@@ -963,6 +992,15 @@ const inflectFuncs = {
 				}
 			});
 			forms = mergeObjects(forms, firstDeclForms);
+		}
+		if (declensions.includes(2)) {
+			const secondDeclForms = {};
+			["masculine", "feminine"].map(gender => {
+				if (genders.includes(gender)) {
+					secondDeclForms[gender] = getSecondDeclensionNonNeuterForms();
+				}
+			});
+			forms = mergeObjects(forms, secondDeclForms);
 		}
 
 		if (JSON.stringify(forms)==='{}') {
