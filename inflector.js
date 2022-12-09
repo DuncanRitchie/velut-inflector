@@ -941,8 +941,12 @@ const inflectFuncs = {
 			};
 		}
 		const getSecondDeclensionNonNeuterForms = () => {
-			const regularVocSings = joinStemsToEndings(stems, 'e');
-			const vocSings = regularVocSings.map(form => form.replace(/ie$/, 'ī'));
+			//// Note on vocatives for -ius nouns:
+			//// Proper nouns that end in -ius (& fīlius, genius) should have vocative masculine singular in -ī.
+			//// (Exceptions include some Greek names that have vocative masculine singular in iota epsilon in Greek.)
+			//// Adjectives, and all other nouns, should have vocative masculine singular in -ie.
+			//// (However, before imperial times, -ie forms were avoided, and sometimes -ī forms were used instead.)
+			//// Source: https://ore.exeter.ac.uk/repository/bitstream/handle/10036/65307/DickeyOEgregie.pdf
 			const regularGenSings = joinStemsToEndings(stems, 'ī');
 			const genSings = regularGenSings.flatMap(form => {
 				if (form.endsWith('iī')) {
@@ -953,7 +957,7 @@ const inflectFuncs = {
 			return {
 				singular: {
 					nominative: [lemma],
-					vocative: vocSings,
+					vocative: joinStemsToEndings(stems, 'e'),
 					accusative: joinStemsToEndings(stems, 'um'),
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
@@ -966,6 +970,26 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ōrum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
+				},
+			};
+		}
+		const getFourthDeclensionNonNeuterForms = () => {
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: joinStemsToEndings(stems, 'um'),
+					genitive: joinStemsToEndings(stems, 'ūs'),
+					dative: joinStemsToEndings(stems, 'uī'),
+					ablative: joinStemsToEndings(stems, 'ū'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ūs'),
+					vocative: joinStemsToEndings(stems, 'ūs'),
+					accusative: joinStemsToEndings(stems, 'ūs'),
+					genitive: joinStemsToEndings(stems, 'uum'),
+					dative: joinStemsToEndings(stems, 'ibus'),
+					ablative: joinStemsToEndings(stems, 'ibus'),
 				},
 			};
 		}
@@ -1008,6 +1032,18 @@ const inflectFuncs = {
 				}
 			});
 			forms = mergeObjects(forms, secondDeclForms);
+		}
+		if (declensions.includes(4)) {
+			//// TODO: Remove the nested if-condition when I want forms for 4th-declension nouns other than ‘cornus’ & ‘domus’ to be generated.
+			if (declensions.length > 1) {
+				const fourthDeclForms = {};
+				["masculine", "feminine"].map(gender => {
+					if (genders.includes(gender)) {
+						fourthDeclForms[gender] = getFourthDeclensionNonNeuterForms();
+					}
+				});
+				forms = mergeObjects(forms, fourthDeclForms);
+			}
 		}
 
 		if (JSON.stringify(forms)==='{}') {
