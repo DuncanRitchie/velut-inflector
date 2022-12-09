@@ -973,6 +973,33 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getSecondDeclensionNeuterForms = () => {
+			const regularGenSings = joinStemsToEndings(stems, 'ī');
+			const genSings = regularGenSings.flatMap(form => {
+				if (form.endsWith('iī')) {
+					return [form, form.replace(/iī$/, 'ī')];
+				}
+				return [form];
+			});
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: [lemma],
+					genitive: genSings,
+					dative: joinStemsToEndings(stems, 'ō'),
+					ablative: joinStemsToEndings(stems, 'ō'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'a'),
+					vocative: joinStemsToEndings(stems, 'a'),
+					accusative: joinStemsToEndings(stems, 'a'),
+					genitive: joinStemsToEndings(stems, 'ōrum'),
+					dative: joinStemsToEndings(stems, 'īs'),
+					ablative: joinStemsToEndings(stems, 'īs'),
+				},
+			};
+		}
 		const getFourthDeclensionNonNeuterForms = () => {
 			return {
 				singular: {
@@ -1029,6 +1056,11 @@ const inflectFuncs = {
 			["masculine", "feminine"].map(gender => {
 				if (genders.includes(gender)) {
 					secondDeclForms[gender] = getSecondDeclensionNonNeuterForms();
+				}
+			});
+			["neuter"].map(gender => {
+				if (genders.includes(gender)) {
+					secondDeclForms[gender] = getSecondDeclensionNeuterForms();
 				}
 			});
 			forms = mergeObjects(forms, secondDeclForms);
