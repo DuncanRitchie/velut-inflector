@@ -770,7 +770,18 @@ const inflectFuncs = {
 
 
 		const assumedStem = (() => {
-			const lemmaSuffixesAndOblique = [
+
+			const getAssumedStem = (tuples) => {
+				for (let tuple of tuples) {
+					const [regex, ending] = tuple;
+					if (regex.test(lemma)) {
+						return lemma.replace(regex, ending);
+					}
+				}
+				return lemma;
+			}
+
+			const thirdDeclLemmaSuffixesAndOblique = [
 				[/al$/, 'āl'],
 				[/ar$/, 'ār'],
 				[/āns$/, 'ant'],
@@ -797,13 +808,25 @@ const inflectFuncs = {
 				[/ōs$/, 'ōt'],
 				[/ys$/, ''],
 			];
-			for (tuple of lemmaSuffixesAndOblique) {
-				const [regex, ending] = tuple;
-				if (regex.test(lemma)) {
-					return lemma.replace(regex, ending);
-				}
+			const nonThirdDeclLemmaSuffixesAndOblique = [
+				[/a$/, ''],
+				[/ae$/, ''],
+				[/ās$/, ''],
+				[/ē$/, ''],
+				[/ēs$/, ''],
+				[/ī$/, ''],
+				[/on$/, ''],
+				[/os$/, ''],
+				[/um$/, ''],
+				[/us$/, ''],
+			];
+
+			if (declensions.includes(3)) {
+				return getAssumedStem(thirdDeclLemmaSuffixesAndOblique);
 			}
-			return lemma;
+			else {
+				return getAssumedStem(nonThirdDeclLemmaSuffixesAndOblique);
+			}
 		})()
 
 		const stems = rest.ObliqueStems ?? [assumedStem];
@@ -811,6 +834,9 @@ const inflectFuncs = {
 		const hasIStem = (() => {
 			if (rest.HasIStem === true || rest.HasIStem === false) {
 				return rest.HasIStem;
+			}
+			if (!declensions.includes(3)) {
+				return false;
 			}
 			if (rest.ObliqueStems) {
 				return false;
@@ -887,6 +913,26 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getFirstDeclensionNonNeuterForms = () => {
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: joinStemsToEndings(stems, 'am'),
+					genitive: joinStemsToEndings(stems, 'ae'),
+					dative: joinStemsToEndings(stems, 'ae'),
+					ablative: joinStemsToEndings(stems, 'ā'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ae'),
+					vocative: joinStemsToEndings(stems, 'ae'),
+					accusative: joinStemsToEndings(stems, 'ās'),
+					genitive: joinStemsToEndings(stems, 'ārum'),
+					dative: joinStemsToEndings(stems, 'īs'),
+					ablative: joinStemsToEndings(stems, 'īs'),
+				},
+			};
+		}
 
 		let forms = {};
 
@@ -904,7 +950,20 @@ const inflectFuncs = {
 			});
 			forms = mergeObjects(forms, thirdDeclForms);
 		}
-
+		if (declensions.includes(1)) {
+			const firstDeclForms = {};
+			["masculine", "feminine"].map(gender => {
+				if (genders.includes(gender)) {
+					firstDeclForms[gender] = getFirstDeclensionNonNeuterForms();
+				}
+			});
+			["neuter"].map(gender => {
+				if (genders.includes(gender)) {
+					console.warn('I don’t know how to handle this 1st-declension neuter noun: ' + Lemma)
+				}
+			});
+			forms = mergeObjects(forms, firstDeclForms);
+		}
 
 		if (JSON.stringify(forms)==='{}') {
 			return {}
