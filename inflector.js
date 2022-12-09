@@ -918,10 +918,10 @@ const inflectFuncs = {
 				singular: {
 					nominative: [lemma],
 					vocative: [lemma],
-					accusative: joinStemsToEndings(stems, 'am'),
-					genitive: joinStemsToEndings(stems, 'ae'),
+					accusative: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ēn' : 'am')),
+					genitive: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ēs' : 'ae')),
 					dative: joinStemsToEndings(stems, 'ae'),
-					ablative: joinStemsToEndings(stems, 'ā'),
+					ablative: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ē' : 'ā')),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ae'),
