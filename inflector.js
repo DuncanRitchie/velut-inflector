@@ -1143,7 +1143,8 @@ const inflectFuncs = {
 
 		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
 		const merged = mergeObjects(replaced, rest.ExtraForms)
-		const withEnclitics = multiplyWithEnclitics(merged);
+		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude)
+		const withEnclitics = multiplyWithEnclitics(wantedForms);
 		return withEnclitics;
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
