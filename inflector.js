@@ -1043,6 +1043,26 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getFifthDeclensionNonNeuterForms = () => {
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: joinStemsToEndings(stems, 'em'),
+					genitive: joinStemsToEndings(stems, 'ēī'),
+					dative: joinStemsToEndings(stems, 'ēī'),
+					ablative: joinStemsToEndings(stems, 'ē'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ēs'),
+					vocative: joinStemsToEndings(stems, 'ēs'),
+					accusative: joinStemsToEndings(stems, 'ēs'),
+					genitive: joinStemsToEndings(stems, 'ērum'),
+					dative: joinStemsToEndings(stems, 'ēbus'),
+					ablative: joinStemsToEndings(stems, 'ēbus'),
+				},
+			};
+		}
 
 		let forms = {};
 
@@ -1101,6 +1121,20 @@ const inflectFuncs = {
 				}
 			});
 			forms = mergeObjects(forms, fourthDeclForms);
+		}
+		if (declensions.includes(5)) {
+			const fifthDeclForms = {};
+			["masculine", "feminine"].map(gender => {
+				if (genders.includes(gender)) {
+					fifthDeclForms[gender] = getFifthDeclensionNonNeuterForms();
+				}
+			});
+			["neuter"].map(gender => {
+				if (genders.includes(gender)) {
+					console.warn('I don’t know how to handle this 5th-declension neuter noun: ' + Lemma)
+				}
+			});
+			forms = mergeObjects(forms, fifthDeclForms);
 		}
 
 		if (JSON.stringify(forms)==='{}') {
