@@ -950,6 +950,11 @@ const inflectFuncs = {
 			//// Adjectives, and all other nouns, should have vocative masculine singular in -ie.
 			//// (However, before imperial times, -ie forms were avoided, and sometimes -ī forms were used instead.)
 			//// Source: https://ore.exeter.ac.uk/repository/bitstream/handle/10036/65307/DickeyOEgregie.pdf
+			const nonProperNounVocSings = joinStemsToEndings(stems, 'e');
+			const vocSings = PartOfSpeech === "Proper noun"
+				? nonProperNounVocSings.map(form => form.replace(/ie$/, 'ī'))
+				: nonProperNounVocSings;
+
 			const regularGenSings = joinStemsToEndings(stems, 'ī');
 			const genSings = regularGenSings.flatMap(form => {
 				if (form.endsWith('iī')) {
@@ -957,10 +962,11 @@ const inflectFuncs = {
 				}
 				return [form];
 			});
+
 			return {
 				singular: {
 					nominative: [lemma],
-					vocative: joinStemsToEndings(stems, 'e'),
+					vocative: vocSings,
 					accusative: joinStemsToEndings(stems, 'um'),
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
@@ -1178,7 +1184,10 @@ const inflectFuncs = {
 		return multiplied;
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		//// Proper nouns are declined much the same as other nouns.
+		//// (They differ in their vocative singular if they end in “-ius”,
+		//// but this is handled inside the Noun function.)
+		return inflectFuncs["Noun"]({ Lemma, PartOfSpeech, ...rest });
 	},
 	"Verb": ({Lemma, PartOfSpeech, ...rest}) => {
 		return {};
