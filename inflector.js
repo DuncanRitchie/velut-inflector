@@ -693,6 +693,10 @@ const inflectFuncs = {
 				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"];
 			}
+			if (lemma.endsWith('ōn')) {
+				console.log(`Assuming masculine for ${Lemma}`)
+				return ["masculine"]
+			}
 			if (lemma.endsWith('n')) {
 				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
