@@ -822,10 +822,13 @@ const inflectFuncs = {
 				[/ē$/, ''],
 				[/ēs$/, ''],
 				[/ī$/, ''],
+				[/ō$/, ''],
 				[/on$/, ''],
 				[/os$/, ''],
 				[/um$/, ''],
 				[/us$/, ''],
+				[/ū$/, ''],
+				[/ūs$/, ''],
 			];
 
 			if (declensions.includes(3)) {
@@ -1020,6 +1023,26 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getFourthDeclensionNeuterForms = () => {
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: [lemma],
+					genitive: joinStemsToEndings(stems, 'ūs'),
+					dative: joinStemsToEndings(stems, 'ū'),
+					ablative: joinStemsToEndings(stems, 'ū'),
+				},
+				plural: {
+					nominative: joinStemsToEndings(stems, 'ua'),
+					vocative: joinStemsToEndings(stems, 'ua'),
+					accusative: joinStemsToEndings(stems, 'ua'),
+					genitive: joinStemsToEndings(stems, 'uum'),
+					dative: joinStemsToEndings(stems, 'ibus'),
+					ablative: joinStemsToEndings(stems, 'ibus'),
+				},
+			};
+		}
 
 		let forms = {};
 
@@ -1066,16 +1089,18 @@ const inflectFuncs = {
 			forms = mergeObjects(forms, secondDeclForms);
 		}
 		if (declensions.includes(4)) {
-			//// TODO: Remove the nested if-condition when I want forms for 4th-declension nouns other than ‘cornus’ & ‘domus’ to be generated.
-			if (declensions.length > 1) {
-				const fourthDeclForms = {};
-				["masculine", "feminine"].map(gender => {
-					if (genders.includes(gender)) {
-						fourthDeclForms[gender] = getFourthDeclensionNonNeuterForms();
-					}
-				});
-				forms = mergeObjects(forms, fourthDeclForms);
-			}
+			const fourthDeclForms = {};
+			["masculine", "feminine"].map(gender => {
+				if (genders.includes(gender)) {
+					fourthDeclForms[gender] = getFourthDeclensionNonNeuterForms();
+				}
+			});
+			["neuter"].map(gender => {
+				if (genders.includes(gender)) {
+					fourthDeclForms[gender] = getFourthDeclensionNeuterForms();
+				}
+			});
+			forms = mergeObjects(forms, fourthDeclForms);
 		}
 
 		if (JSON.stringify(forms)==='{}') {
