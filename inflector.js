@@ -36,9 +36,9 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 			if (Array.isArray(object)) {
 				return object.map(form => {
 					if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
-						return form + 'i' + enclitic;
+						return removeAcutes(form) + 'i' + enclitic;
 					}
-					return form + enclitic;
+					return removeAcutes(form) + enclitic;
 				})
 			}
 			if (typeof object === "string") {
@@ -196,6 +196,13 @@ const consoleLogAsJson = (...args) => {
 		})
 	})
 	console.log(object);
+}
+
+const removeAcutes = (string) => {
+	return string
+		.replaceAll('ḗ', 'ē')
+		// More `replaceAll` calls may need to be added here.
+		;
 }
 
 const ensureIsArray = (possibleArray) => {
@@ -638,6 +645,9 @@ const inflectFuncs = {
 				console.log(`Assuming 1st declension for ${Lemma}`)
 				return [1];
 			}
+			if (lemma.endsWith("us")) {
+				console.log('Assuming 2nd declension for ' + Lemma);
+			}
 			if (
 				(lemma.endsWith("us"))
 				|| (lemma.endsWith("er"))
@@ -686,7 +696,7 @@ const inflectFuncs = {
 				return ["feminine"];
 			}
 			if (declensions.includes(2)) {
-				if (lemma.endsWith('um')) {
+				if (lemma.endsWith('um') || lemma.endsWith('on')) {
 					console.log(`Assuming neuter for ${Lemma}`)
 					return ["neuter"];
 				}
@@ -697,7 +707,7 @@ const inflectFuncs = {
 				console.log(`Assuming masculine for ${Lemma}`)
 				return ["masculine"]
 			}
-			if (lemma.endsWith('n')) {
+			if (lemma.endsWith('on')) {
 				console.log(`Assuming neuter for ${Lemma}`)
 				return ["neuter"]
 			}
@@ -928,14 +938,29 @@ const inflectFuncs = {
 			};
 		}
 		const getFirstDeclensionNonNeuterForms = () => {
+			const isGreekFirstDeclension = (() => {
+				if (rest.IsGreekFirstDeclension === true || rest.IsGreekFirstDeclension === false) {
+					return rest.IsGreekFirstDeclension;
+				}
+				return lemma.endsWith('ās') || lemma.endsWith('ē');
+			})();
+			const isGreekFirstDeclensionA = isGreekFirstDeclension && lemma.endsWith('ās');
+			const isGreekFirstDeclensionE = isGreekFirstDeclension && !lemma.endsWith('ās');
+			const accSingEnding = isGreekFirstDeclensionE
+				? 'ēn'
+				: isGreekFirstDeclensionA
+					? 'ān'
+					: 'am';
+			const genSingEnding = isGreekFirstDeclensionE ? 'ēs' : 'ae';
+			const ablSingEnding = isGreekFirstDeclensionE ? 'ē' : 'ā';
 			return {
 				singular: {
 					nominative: [lemma],
 					vocative: [lemma],
-					accusative: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ēn' : 'am')),
-					genitive: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ēs' : 'ae')),
+					accusative: joinStemsToEndings(stems, accSingEnding),
+					genitive: joinStemsToEndings(stems, genSingEnding),
 					dative: joinStemsToEndings(stems, 'ae'),
-					ablative: joinStemsToEndings(stems, (rest.IsGreekFirstDeclension ? 'ē' : 'ā')),
+					ablative: joinStemsToEndings(stems, ablSingEnding),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ae'),
@@ -954,15 +979,16 @@ const inflectFuncs = {
 			//// Adjectives, and all other nouns, should have vocative masculine singular in -ie.
 			//// (However, before imperial times, -ie forms were avoided, and sometimes -ī forms were used instead.)
 			//// Source: https://ore.exeter.ac.uk/repository/bitstream/handle/10036/65307/DickeyOEgregie.pdf
-			const nonProperNounVocSings = joinStemsToEndings(stems, 'e');
+			const nonProperNounVocSings = joinStemsToEndings(stems, 'e')
+				.map(form => form.replace(/ae$/, 'aë').replace(/oe$/, 'oë'));
 			const vocSings = PartOfSpeech === "Proper noun"
-				? nonProperNounVocSings.map(form => form.replace(/ie$/, 'ī'))
+				? nonProperNounVocSings.map(form => form.replace(/[iï]e$/, 'ī'))
 				: nonProperNounVocSings;
 
 			const regularGenSings = joinStemsToEndings(stems, 'ī');
 			const genSings = regularGenSings.flatMap(form => {
-				if (form.endsWith('iī')) {
-					return [form, form.replace(/iī$/, 'ī')];
+				if (form.endsWith('iī') || form.endsWith('ïī')) {
+					return [form, form.replace(/[iï]ī$/, 'ī')];
 				}
 				return [form];
 			});
