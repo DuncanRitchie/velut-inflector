@@ -1422,6 +1422,7 @@ if (typeof require !== 'undefined') {
 
 				let successCount = 0;
 				let errorCount = 0;
+				let noTestDataCount = 0;
 				let totalLemmata = 0;
 				let incorrectComparatives = 0;
 				// const totalLemmata = outputEntries.length;
@@ -1433,8 +1434,24 @@ if (typeof require !== 'undefined') {
 					for ([lemma, parsingData] of outputEntries) {
 						totalLemmata++;
 
-						if (!parsingData) continue;
-						if (Object.keys(parsingData).length === 0) continue;
+						if (!parsingData) {
+							//// parsingData should be an object, which is always truthy.
+							//// (Even an empty object is truthy.)
+							//// So entering this branch would be strange.
+							console.debug(lemma)
+							continue;
+						}
+						if (Object.keys(parsingData).length === 0) {
+							//// The Inflector returns {} for lemmata it doesn’t know
+							//// how to inflect, so there are no forms to compare here.
+							//// These lemmata will be counted as “skipped”.
+							continue;
+						}
+
+						if (expectedOutput[lemma] === undefined) {
+							noTestDataCount++;
+							continue;
+						}
 
 						const formsAsSet = convertParsingObjectToFormsSet(parsingData);
 						const expectedFormsAsSet = convertParsingObjectToFormsSet(expectedOutput[lemma]);
@@ -1476,9 +1493,9 @@ if (typeof require !== 'undefined') {
 						}
 					}
 				});
-				const skippedCount = totalLemmata - errorCount - successCount;
+				const skippedCount = totalLemmata - errorCount - successCount - noTestDataCount;
 				console.warn(`There were ${incorrectComparatives} lemmata with unwanted comparatives.`);
-				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes and ${skippedCount} skipped) out of ${totalLemmata} lemmata.`);
+				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes, ${skippedCount} skipped, and ${noTestDataCount} with no existing forms data to compare) out of ${totalLemmata} lemmata.`);
 
 				console.timeEnd('checkingOutput');
 			};
