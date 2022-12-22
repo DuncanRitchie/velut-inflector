@@ -209,10 +209,26 @@ const ensureIsArray = (possibleArray) => {
 	return Array.isArray(possibleArray) ? possibleArray : [possibleArray];
 }
 
+//// Returns an array with all the values of `stems`
+//// concatenated with all the values of `endings`.
+//// Adds diaereses if needed so that 'Tana' + 'e' => 'Tanaë'
+//// but 'Tana' + 'em' => 'Tanaem'.
+//// (The velut Word Data Generator interprets final vowel+'m' as nasalised
+//// before it interprets 'ae'/'au'/'oe' as a diphthong, which means that
+//// non-diphthong 'ae'/'au'/'oe' doesn’t need the diaeresis if it’s before final 'm'.)
 const joinStemsToEndings = (stems, endings) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
-	return stemsArray.flatMap(stem => endingsArray.map(ending => stem + ending));
+	return stemsArray.flatMap(stem => {
+		return endingsArray.map(ending => {
+			return (stem + '~' + ending)
+				.replace(/a~e(?!m$)/, 'aë')
+				.replace(/a~u(?!m$)/, 'aü')
+				.replace(/o~e(?!m$)/, 'oë')
+				.replace('~', '')
+			;
+		});
+	});
 }
 
 const generateComparativeForms = (comparativeStems) => {
@@ -827,7 +843,7 @@ const inflectFuncs = {
 				[/ōns$/, 'ont'],
 				[/or$/, 'ōr'],
 				[/ōs$/, 'ōt'],
-				[/ys$/, ''],
+				[/ys$/, 'y'],
 			];
 			const nonThirdDeclLemmaSuffixesAndOblique = [
 				[/a$/, ''],
@@ -841,6 +857,7 @@ const inflectFuncs = {
 				[/os$/, ''],
 				[/um$/, ''],
 				[/us$/, ''],
+				[/üs$/, ''],
 				[/ū$/, ''],
 				[/ūs$/, ''],
 			];
@@ -904,7 +921,7 @@ const inflectFuncs = {
 					accusative: joinStemsToEndings(stems, 'em'),
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
-					ablative: joinStemsToEndings(stems, 'e'),
+					ablative: joinStemsToEndings(stems, (hasIStem ? ['e', 'ī'] : 'e')),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ēs'),
