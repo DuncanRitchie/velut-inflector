@@ -614,6 +614,11 @@ const inflectFuncs = {
 			|| positive === stems[0]
 			|| (!rest.ObliqueStems && (positive.endsWith("ātim") || positive.endsWith("ūtim")))
 		) {
+			if (rest.IsIndeclinable) {
+				// For adverbs, `IsIndeclinable: true` is a less correct property than `ParsingsToExclude: ["comparative", "superlative"]`
+				// although the two properties are treated the same.
+				console.warn(`Adverb marked as indeclinable: ${Lemma}`);
+			}
 			return multiplyWithEnclitics({positive: [positive]});
 		}
 
