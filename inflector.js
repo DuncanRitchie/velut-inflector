@@ -1199,9 +1199,17 @@ const inflectFuncs = {
 			return {}
 		}
 
+		const parsingsToExcludeWithLocative = (() => {
+			let parsings = rest.ParsingsToExclude ?? [];
+			if (!rest.HasLocative) {
+				parsings.push("locative");
+			}
+			return parsings;
+		})();
+
 		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
 		const merged = mergeObjects(replaced, rest.ExtraForms)
-		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude)
+		const wantedForms = deleteUnwantedForms(merged, parsingsToExcludeWithLocative);
 		const withEnclitics = multiplyWithEnclitics(wantedForms);
 		return withEnclitics;
 	},
