@@ -187,6 +187,23 @@ const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
 	return newFormsObject;
 }
 
+const deleteEmptyFields = (formsObject) => {
+	if (!formsObject) {
+		console.warn(`formsObject is ${formsObject} inside deleteUnwantedForms`);
+		return {};
+	}
+	if (Array.isArray(formsObject)) {
+		return formsObject;
+	}
+	return Object.entries(formsObject)
+		.filter(([key, obj]) => obj && (obj.length || !Array.isArray(obj)))
+		.map(([key, obj]) => [key, deleteEmptyFields(obj)])
+		.reduce((accumulated, current) => {
+			accumulated[current[0]] = current[1];
+			return accumulated;
+		}, {});
+}
+
 const consoleLogAsJson = (...args) => {
 	if (!Array.isArray(args)) { 'args is not array: ' + JSON.stringify(args)}
 	const object = {};
@@ -788,12 +805,15 @@ const inflectFuncs = {
 			return multiplyWithEnclitics(rest.Forms);
 		}
 
+		let forms = {};
+		const hasLocativePlural = rest.HasLocative && rest.ParsingsToExclude?.includes("singular");
+		const hasLocativeSingular = rest.HasLocative && !hasLocativePlural;
+
 		if (rest.IsIndeclinable) {
 			if (rest.Declensions) {
 				console.warn('Both IsIndeclinable and Declensions are truthy for: ' + Lemma);
 			}
 
-			const forms = {}
 			genders.forEach(gender => {
 				forms[gender] = ({
 					singular: {
@@ -802,11 +822,11 @@ const inflectFuncs = {
 						accusative: [lemma],
 						genitive: [lemma],
 						dative: [lemma],
-						ablative: [lemma]
+						ablative: [lemma],
+						locative: (hasLocativeSingular ? [lemma] : [])
 					}
 				});
 			});
-			return multiplyWithEnclitics(forms)
 		}
 
 
@@ -927,6 +947,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
 					ablative: joinStemsToEndings(stems, (hasIStem ? ['e', 'ī'] : 'e')),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ēs'),
@@ -935,6 +956,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, (hasIStem || rest.IsDeclinedLikeAdjective ? 'ium' : 'um')),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
 				},
 				possiblyIncorrect: joinStemsToEndings(stems, 'īs')
 			}
@@ -948,6 +970,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
 					ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
@@ -956,6 +979,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
 				},
 			};
 		}
@@ -983,6 +1007,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, genSingEnding),
 					dative: joinStemsToEndings(stems, 'ae'),
 					ablative: joinStemsToEndings(stems, ablSingEnding),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ae' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ae'),
@@ -991,6 +1016,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ārum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
 				},
 			};
 		}
@@ -1023,6 +1049,7 @@ const inflectFuncs = {
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
 					ablative: joinStemsToEndings(stems, 'ō'),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ī'),
@@ -1031,6 +1058,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ōrum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
 				},
 			};
 		}
@@ -1050,6 +1078,7 @@ const inflectFuncs = {
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
 					ablative: joinStemsToEndings(stems, 'ō'),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'a'),
@@ -1058,6 +1087,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ōrum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
 				},
 			};
 		}
@@ -1070,6 +1100,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ūs'),
 					dative: joinStemsToEndings(stems, 'uī'),
 					ablative: joinStemsToEndings(stems, 'ū'),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'uī' : [])),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ūs'),
@@ -1078,6 +1109,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'uum'),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
 				},
 			};
 		}
@@ -1090,6 +1122,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ūs'),
 					dative: joinStemsToEndings(stems, 'ū'),
 					ablative: joinStemsToEndings(stems, 'ū'),
+					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ū' : []))
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ua'),
@@ -1098,6 +1131,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'uum'),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
+					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
 				},
 			};
 		}
@@ -1121,8 +1155,6 @@ const inflectFuncs = {
 				},
 			};
 		}
-
-		let forms = {};
 
 		if (declensions.includes(3)) {
 			const thirdDeclForms = {};
@@ -1199,18 +1231,11 @@ const inflectFuncs = {
 			return {}
 		}
 
-		const parsingsToExcludeWithLocative = (() => {
-			let parsings = rest.ParsingsToExclude ?? [];
-			if (!rest.HasLocative) {
-				parsings.push("locative");
-			}
-			return parsings;
-		})();
-
 		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
 		const merged = mergeObjects(replaced, rest.ExtraForms)
-		const wantedForms = deleteUnwantedForms(merged, parsingsToExcludeWithLocative);
-		const withEnclitics = multiplyWithEnclitics(wantedForms);
+		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude);
+		const withoutEmptyFields = deleteEmptyFields(wantedForms)
+		const withEnclitics = multiplyWithEnclitics(withoutEmptyFields);
 		return withEnclitics;
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
