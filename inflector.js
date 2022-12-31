@@ -1229,6 +1229,7 @@ const inflectFuncs = {
 		}
 
 		if (JSON.stringify(forms)==='{}') {
+			console.warn("No forms for " + Lemma)
 			return {}
 		}
 
