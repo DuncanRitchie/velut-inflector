@@ -1270,6 +1270,13 @@ const inflectFuncs = {
 		return multiplied;
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
+
+		//// Proper nouns referring to a town or small(ish) island should have a locative form.
+		if (!rest.HasLocative && (rest.HasLocative !== false) && /city|town|village|seaport|\bport\b|(?<!whose )capital|(?<!large )island\b|isle/i.test(rest.Meanings)) {
+			// console.log("Perhaps a locative should be given for " + Lemma + ": " + rest.Meanings);
+			console.log("Perhaps a locative should be given for " + Lemma);
+		}
+
 		//// Proper nouns are declined much the same as other nouns.
 		//// (They differ in their vocative singular if they end in “-ius”,
 		//// but this is handled inside the Noun function.)
