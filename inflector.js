@@ -196,8 +196,9 @@ const deleteEmptyFields = (formsObject) => {
 		return formsObject;
 	}
 	return Object.entries(formsObject)
-		.filter(([key, obj]) => obj && (obj.length || !Array.isArray(obj)))
+		.filter(([key, obj]) => obj)
 		.map(([key, obj]) => [key, deleteEmptyFields(obj)])
+		.filter(([key, obj]) => Object.values(obj).length)
 		.reduce((accumulated, current) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
