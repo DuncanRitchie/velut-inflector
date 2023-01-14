@@ -205,6 +205,23 @@ const deleteEmptyFields = (formsObject) => {
 		}, {});
 }
 
+//// Returns formsObject but with lambda run on every form.
+const runLambdaOnObject = (formsObject, lambda) => {
+	if (!formsObject) {
+		console.warn(`formsObject is ${formsObject} inside runLambdaOnObject`);
+		return {};
+	}
+	if (Array.isArray(formsObject)) {
+		return formsObject.flatMap(form => lambda(form));
+	}
+	return Object.entries(formsObject)
+		.map(([key, obj]) => [key, runLambdaOnObject(obj, lambda)])
+		.reduce((accumulated, current) => {
+			accumulated[current[0]] = current[1];
+			return accumulated;
+		}, {});
+}
+
 const consoleLogAsJson = (...args) => {
 	if (!Array.isArray(args)) { 'args is not array: ' + JSON.stringify(args)}
 	const object = {};
@@ -1284,7 +1301,190 @@ const inflectFuncs = {
 		return inflectFuncs["Noun"]({ Lemma, PartOfSpeech, ...rest });
 	},
 	"Verb": ({Lemma, PartOfSpeech, ...rest}) => {
-		return {};
+		const lemma = removeBrackets(Lemma);
+		let forms = {};
+
+		if (lemma.endsWith("sum")) {
+			const prefix = lemma.replace(/sum$/, '');
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'sum'),
+								second: joinStemsToEndings(prefix, 'es'),
+								third: joinStemsToEndings(prefix, 'est'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'sumus'),
+								second: joinStemsToEndings(prefix, 'estis'),
+								third: joinStemsToEndings(prefix, 'sunt'),
+							},
+						},
+						imperfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'eram'),
+								second: joinStemsToEndings(prefix, 'erās'),
+								third: joinStemsToEndings(prefix, 'erat'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'erāmus'),
+								second: joinStemsToEndings(prefix, 'erātis'),
+								third: joinStemsToEndings(prefix, 'erant'),
+							},
+						},
+						future: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'erō'),
+								second: joinStemsToEndings(prefix, ['eris', 'ere']),
+								third: joinStemsToEndings(prefix, 'erit'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'erimus'),
+								second: joinStemsToEndings(prefix, 'eritis'),
+								third: joinStemsToEndings(prefix, 'erunt'),
+							},
+						},
+						perfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'fuī'),
+								second: joinStemsToEndings(prefix, 'fuistī'),
+								third: joinStemsToEndings(prefix, 'fuit'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'fuimus'),
+								second: joinStemsToEndings(prefix, 'fuistis'),
+								third: joinStemsToEndings(prefix, ['fuērunt', 'fuēre']),
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'fueram'),
+								second: joinStemsToEndings(prefix, 'fuerās'),
+								third: joinStemsToEndings(prefix, 'fuerat'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'fuerāmus'),
+								second: joinStemsToEndings(prefix, 'fuerātis'),
+								third: joinStemsToEndings(prefix, 'fuerant'),
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'fuerō'),
+								second: joinStemsToEndings(prefix, 'fueris'),
+								third: joinStemsToEndings(prefix, 'fuerit'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'fuerimus'),
+								second: joinStemsToEndings(prefix, 'fueritis'),
+								third: joinStemsToEndings(prefix, 'fuerint'),
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'sim'),
+								second: joinStemsToEndings(prefix, 'sīs'),
+								third: joinStemsToEndings(prefix, 'sit'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'sīmus'),
+								second: joinStemsToEndings(prefix, 'sītis'),
+								third: joinStemsToEndings(prefix, 'sint'),
+							},
+						},
+						imperfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, ['essem', 'forem']),
+								second: joinStemsToEndings(prefix, ['essēs', 'forēs']),
+								third: joinStemsToEndings(prefix, ['esset', 'foret']),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, ['essēmus', 'forēmus']),
+								second: joinStemsToEndings(prefix, ['essētis', 'forētis']),
+								third: joinStemsToEndings(prefix, ['essent', 'forent']),
+							},
+						},
+						perfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'fuerim'),
+								second: joinStemsToEndings(prefix, 'fuerīs'),
+								third: joinStemsToEndings(prefix, 'fuerit'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'fuerīmus'),
+								second: joinStemsToEndings(prefix, 'fuerītis'),
+								third: joinStemsToEndings(prefix, 'fuerint'),
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: joinStemsToEndings(prefix, 'fuissem'),
+								second: joinStemsToEndings(prefix, 'fuissēs'),
+								third: joinStemsToEndings(prefix, 'fuisset'),
+							},
+							plural: {
+								first: joinStemsToEndings(prefix, 'fuissēmus'),
+								second: joinStemsToEndings(prefix, 'fuissētis'),
+								third: joinStemsToEndings(prefix, 'fuissent'),
+							},
+						},
+					},},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: joinStemsToEndings(prefix, 'es'),
+							},
+							plural: {
+								second: joinStemsToEndings(prefix, 'este'),
+							},
+						},
+						future: {
+							singular: {
+								second: joinStemsToEndings(prefix, 'estō'),
+								third: joinStemsToEndings(prefix, 'estō'),
+							},
+							plural: {
+								second: joinStemsToEndings(prefix, 'estōte'),
+								third: joinStemsToEndings(prefix, 'suntō'),
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: joinStemsToEndings(prefix, 'esse'),
+						perfect: joinStemsToEndings(prefix, 'fuisse'),
+						future: joinStemsToEndings(prefix, 'fore'),
+					}
+				},
+				participle: {
+					active: {
+						future: runLambdaOnObject(
+							inflectFuncs['Adjective']({ Lemma: 'futūrus' }).unencliticized.positive,
+							(participle)=>joinStemsToEndings(prefix, participle)
+						),
+					},
+				},
+				incorrect: joinStemsToEndings(prefix, 'erint'),
+			}
+		}
+
+		if (JSON.stringify(forms)==='{}') {
+			return {}
+		}
+
+		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
+		const merged = mergeObjects(replaced, rest.ExtraForms)
+		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude);
+		const withoutEmptyFields = deleteEmptyFields(wantedForms)
+		const withEnclitics = multiplyWithEnclitics(withoutEmptyFields);
+		return withEnclitics;
 	},
 }
 
