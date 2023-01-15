@@ -83,12 +83,19 @@
 				<dd>An integer array for nouns and adjectives; adjectives can have <samp>[1, 2]</samp> or <samp>[3]</samp>.</dd>
 
 				<dt><code>"ExtraForms"</code></dt>
-				<dd>Object of forms to add to whatever the Inflector generates itself.</dd>
+				<dd>
+					Object of forms to add to whatever the Inflector generates itself, before any enclitics are added to the result.
+				</dd>
+
+				<dt><code>"ExtraEncliticizedForms"</code></dt>
+				<dd>
+					Object of forms to add to whatever the Inflector generates itself, after enclitics have been added. Only used for the adjective <q lang="la">tantus</q>, to make <q lang="la">tantōn</q> appear alongside <q lang="la">tantōne</q>.
+				</dd>
 
 				<dt><code>"Forms"</code></dt>
 				<dd>
 					Object of forms to use instead of anything the Inflector would generate itself.
-					But if the object does not have <code>"unencliticized"</code> as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
+					But if the object does not have <code>"unencliticized"</code> (or <code>"ne"</code> or <code>"que"</code> or <code>"ve"</code>) as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
 				</dd>
 
 				<dt><code>"IsDeclinedLikeAdjective"</code></dt>
@@ -125,7 +132,16 @@
 				<dd>String array, eg <samp>["comparative", "superlative"]</samp> for an adjective that does not have these forms.</dd>
 
 				<dt><code>"ReplacementForms"</code></dt>
-				<dd>Object of forms to use instead of the regularly generated forms for the parsings that are specified.</dd>
+				<dd>
+					Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
+				</dd>
+
+				<dt><code>"ReplacementEncliticizedForms"</code></dt>
+				<dd>
+					Object of forms to use instead of the regularly generated forms for the parsings that are specified, after enclitics have been added.
+					Only used for the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
+					(This is to differentiate from the <q lang="la">suāve</q> that is a form of <q lang="la">suāvis</q> with consonantal u.)
+				</dd>
 
 				<dt><code>"SuperlativeStems"</code></dt>
 				<dd>String array of stems for the superlative forms of adjectives and adverbs.</dd>
