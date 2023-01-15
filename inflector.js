@@ -643,9 +643,7 @@ const inflectFuncs = {
 		if (Lemma.startsWith('-')) {
 			return rest.Forms;
 		}
-		return {
-			unencliticized: [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))]
-		};
+		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms) {
