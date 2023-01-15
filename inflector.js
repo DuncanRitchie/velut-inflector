@@ -1709,6 +1709,63 @@ if (typeof require !== 'undefined') {
 							//// The Inflector returns {} for lemmata it doesn’t know
 							//// how to inflect, so there are no forms to compare here.
 							//// These lemmata will be counted as “skipped”.
+							if ([...expectedOutput[lemma]].some(form => form.endsWith('āns'))) {
+								// console.log('Possible first conjugation: ', lemma);
+							}
+							else if (/iō(\[[^\]]+\])?$/.test(lemma) && [...expectedOutput[lemma]].every(form => !form.endsWith('ere')) && [...expectedOutput[lemma]].every(form => !form.endsWith('faciō'))) {
+								// console.log('Possible fourth conjugation: ', lemma);
+							}
+							else if (/eō(\[[^\]]+\])?$/.test(lemma) && [...expectedOutput[lemma]].every(form => !form.endsWith('īre')) && [...expectedOutput[lemma]].every(form => !form.endsWith('iēns'))) {
+								// console.log('Possible second conjugation: ', lemma);
+							}
+							else if (/(?<!grad|gred|mor)ior(\[[^\]]+\])?$/.test(lemma) && [...expectedOutput[lemma]].every(form => !form.endsWith('ere')) && [...expectedOutput[lemma]].every(form => !form.endsWith('iāns'))) {
+								// console.log('Possible fourth conjugation: ', lemma);
+							}
+							else if (/eō(\[[^\]]+\])?$/.test(lemma) && [...expectedOutput[lemma]].every(form => !form.endsWith('īre')) && [...expectedOutput[lemma]].every(form => !form.endsWith('iēns'))) {
+								// console.log('Possible second conjugation: ', lemma);
+							}
+							else if (/eor(\[[^\]]+\])?$/.test(lemma) && [...expectedOutput[lemma]].every(form => !form.endsWith('iēns'))) {
+								// console.log('Possible second conjugation: ', lemma);
+							}
+							else if ([...expectedOutput[lemma]].some(form => form.endsWith('ere'))) {
+								// console.log('Possible third conjugation: ', lemma);
+							}
+							else if (/or(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Deponent: ', lemma);
+							}
+							else if (/(āscō|ēscō|īscō)(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Possible third conjugation (inchoative): ', lemma);
+							}
+							else if (/(faciō)(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Possible third conjugation (faciō): ', lemma);
+							}
+							else if (/(ferō)(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Possible irregular (ferō): ', lemma);
+							}
+							else if (/(eō)(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Possible irregular (eō): ', lemma);
+							}
+							else if (/āre\]$/.test(lemma)) {
+								// console.log('Possible first conjugation: ', lemma);
+							}
+							else if (/ēre\]$/.test(lemma)) {
+								// console.log('Possible second conjugation: ', lemma);
+							}
+							else if (/ere\]$/.test(lemma)) {
+							// 	console.log('Possible third conjugation: ', lemma);
+							}
+							else if (/īre\]$/.test(lemma)) {
+								// console.log('Possible fourth conjugation: ', lemma);
+							}
+							else if (/(ō|t)(\[[^\]]+\])?$/.test(lemma)) {
+								// console.log('Unknown conjugation: ', lemma);
+							}
+							else if (!['inquam', 'coepī', 'meminī', 'ōdī', 'potin', 'laecasīn', 'cum[v]'].includes(lemma)) {
+								console.log('Might not be a verb: ', lemma);
+							}
+							else {
+								// console.log('Unknown conjugation: ', lemma);
+							}
 							continue;
 						}
 
