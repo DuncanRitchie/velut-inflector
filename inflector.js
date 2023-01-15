@@ -23,7 +23,7 @@ const removeBrackets = (lemma) => {
 }
 
 const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
-	if (parsingObject.unencliticized) {
+	if (parsingObject.unencliticized || parsingObject.ne || parsingObject.que || parsingObject.ve) {
 		return parsingObject;
 	}
 
