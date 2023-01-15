@@ -1313,7 +1313,11 @@ const inflectFuncs = {
 		const lemma = removeBrackets(Lemma);
 		let forms = {};
 
-		if (lemma.endsWith("sum")) {
+		if (rest.Forms) {
+			forms = rest.Forms;
+		}
+
+		else if (lemma.endsWith("sum")) {
 			const prefix = lemma.replace(/sum$/, '');
 			forms = {
 				indicative: {
