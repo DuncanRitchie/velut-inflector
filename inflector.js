@@ -510,7 +510,9 @@ const inflectFuncs = {
 			const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms);
 			const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
 			const withEnclitics = multiplyWithEnclitics(withExtraForms);
-			const withQueLemmaHandled = markQueAsUnencliticized(withEnclitics, rest.IsLemmaInQue);
+			const withReplacementEncliticizedForms = replaceFieldsInObjects(withEnclitics, rest.ReplacementEncliticizedForms);
+			const withExtraEncliticizedForms = mergeObjects(withReplacementEncliticizedForms, rest.ExtraEncliticizedForms);
+			const withQueLemmaHandled = markQueAsUnencliticized(withExtraEncliticizedForms, rest.IsLemmaInQue);
 			const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
 			return wantedForms;
 		}
@@ -638,7 +640,12 @@ const inflectFuncs = {
 		return mergeObjects(wantedForms, rest.ExtraForms);
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
-		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
+		if (Lemma.startsWith('-')) {
+			return rest.Forms;
+		}
+		return {
+			unencliticized: [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))]
+		};
 	},
 	"Adverb": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms) {
