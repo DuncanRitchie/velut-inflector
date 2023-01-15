@@ -34,11 +34,13 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 				return {};
 			}
 			if (Array.isArray(object)) {
-				return object.map(form => {
-					if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
-						return removeAcutes(form) + 'i' + enclitic;
-					}
-					return removeAcutes(form) + enclitic;
+				return object
+					.filter(form => /[aeiouyāēīōūȳ]/i.test(form)) // Forms with no vowels (eg ‘st') should not get an enclitic
+					.map(form => {
+						if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
+							return removeAcutes(form) + 'i' + enclitic;
+						}
+						return removeAcutes(form) + enclitic;
 				})
 			}
 			if (typeof object === "string") {
