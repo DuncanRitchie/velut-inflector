@@ -1311,74 +1311,74 @@ const inflectFuncs = {
 					active: {
 						present: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'sum'),
-								second: joinStemsToEndings(prefix, 'es'),
-								third: joinStemsToEndings(prefix, 'est'),
+								first: ['sum'],
+								second: ['es'],
+								third: ['est'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'sumus'),
-								second: joinStemsToEndings(prefix, 'estis'),
-								third: joinStemsToEndings(prefix, 'sunt'),
+								first: ['sumus'],
+								second: ['estis'],
+								third: ['sunt'],
 							},
 						},
 						imperfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'eram'),
-								second: joinStemsToEndings(prefix, 'erās'),
-								third: joinStemsToEndings(prefix, 'erat'),
+								first: ['eram'],
+								second: ['erās'],
+								third: ['erat'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'erāmus'),
-								second: joinStemsToEndings(prefix, 'erātis'),
-								third: joinStemsToEndings(prefix, 'erant'),
+								first: ['erāmus'],
+								second: ['erātis'],
+								third: ['erant'],
 							},
 						},
 						future: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'erō'),
-								second: joinStemsToEndings(prefix, ['eris', 'ere']),
-								third: joinStemsToEndings(prefix, 'erit'),
+								first: ['erō'],
+								second: ['eris', 'ere'],
+								third: ['erit'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'erimus'),
-								second: joinStemsToEndings(prefix, 'eritis'),
-								third: joinStemsToEndings(prefix, 'erunt'),
+								first: ['erimus'],
+								second: ['eritis'],
+								third: ['erunt'],
 							},
 						},
 						perfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'fuī'),
-								second: joinStemsToEndings(prefix, 'fuistī'),
-								third: joinStemsToEndings(prefix, 'fuit'),
+								first: ['fuī'],
+								second: ['fuistī'],
+								third: ['fuit'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'fuimus'),
-								second: joinStemsToEndings(prefix, 'fuistis'),
-								third: joinStemsToEndings(prefix, ['fuērunt', 'fuēre']),
+								first: ['fuimus'],
+								second: ['fuistis'],
+								third: ['fuērunt', 'fuēre'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'fueram'),
-								second: joinStemsToEndings(prefix, 'fuerās'),
-								third: joinStemsToEndings(prefix, 'fuerat'),
+								first: ['fueram'],
+								second: ['fuerās'],
+								third: ['fuerat'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'fuerāmus'),
-								second: joinStemsToEndings(prefix, 'fuerātis'),
-								third: joinStemsToEndings(prefix, 'fuerant'),
+								first: ['fuerāmus'],
+								second: ['fuerātis'],
+								third: ['fuerant'],
 							},
 						},
 						futureperfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'fuerō'),
-								second: joinStemsToEndings(prefix, 'fueris'),
-								third: joinStemsToEndings(prefix, 'fuerit'),
+								first: ['fuerō'],
+								second: ['fueris'],
+								third: ['fuerit'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'fuerimus'),
-								second: joinStemsToEndings(prefix, 'fueritis'),
-								third: joinStemsToEndings(prefix, 'fuerint'),
+								first: ['fuerimus'],
+								second: ['fueritis'],
+								third: ['fuerint'],
 							},
 						},
 					},
@@ -1387,50 +1387,50 @@ const inflectFuncs = {
 					active: {
 						present: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'sim'),
-								second: joinStemsToEndings(prefix, 'sīs'),
-								third: joinStemsToEndings(prefix, 'sit'),
+								first: ['sim'],
+								second: ['sīs'],
+								third: ['sit'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'sīmus'),
-								second: joinStemsToEndings(prefix, 'sītis'),
-								third: joinStemsToEndings(prefix, 'sint'),
+								first: ['sīmus'],
+								second: ['sītis'],
+								third: ['sint'],
 							},
 						},
 						imperfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, ['essem', 'forem']),
-								second: joinStemsToEndings(prefix, ['essēs', 'forēs']),
-								third: joinStemsToEndings(prefix, ['esset', 'foret']),
+								first: ['essem', 'forem'],
+								second: ['essēs', 'forēs'],
+								third: ['esset', 'foret'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, ['essēmus', 'forēmus']),
-								second: joinStemsToEndings(prefix, ['essētis', 'forētis']),
-								third: joinStemsToEndings(prefix, ['essent', 'forent']),
+								first: ['essēmus', 'forēmus'],
+								second: ['essētis', 'forētis'],
+								third: ['essent', 'forent'],
 							},
 						},
 						perfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'fuerim'),
-								second: joinStemsToEndings(prefix, 'fuerīs'),
-								third: joinStemsToEndings(prefix, 'fuerit'),
+								first: ['fuerim'],
+								second: ['fuerīs'],
+								third: ['fuerit'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'fuerīmus'),
-								second: joinStemsToEndings(prefix, 'fuerītis'),
-								third: joinStemsToEndings(prefix, 'fuerint'),
+								first: ['fuerīmus'],
+								second: ['fuerītis'],
+								third: ['fuerint'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: joinStemsToEndings(prefix, 'fuissem'),
-								second: joinStemsToEndings(prefix, 'fuissēs'),
-								third: joinStemsToEndings(prefix, 'fuisset'),
+								first: ['fuissem'],
+								second: ['fuissēs'],
+								third: ['fuisset'],
 							},
 							plural: {
-								first: joinStemsToEndings(prefix, 'fuissēmus'),
-								second: joinStemsToEndings(prefix, 'fuissētis'),
-								third: joinStemsToEndings(prefix, 'fuissent'),
+								first: ['fuissēmus'],
+								second: ['fuissētis'],
+								third: ['fuissent'],
 							},
 						},
 					},},
@@ -1438,41 +1438,52 @@ const inflectFuncs = {
 					active: {
 						present: {
 							singular: {
-								second: joinStemsToEndings(prefix, 'es'),
+								second: ['es'],
 							},
 							plural: {
-								second: joinStemsToEndings(prefix, 'este'),
+								second: ['este'],
 							},
 						},
 						future: {
 							singular: {
-								second: joinStemsToEndings(prefix, 'estō'),
-								third: joinStemsToEndings(prefix, 'estō'),
+								second: ['estō'],
+								third: ['estō'],
 							},
 							plural: {
-								second: joinStemsToEndings(prefix, 'estōte'),
-								third: joinStemsToEndings(prefix, 'suntō'),
+								second: ['estōte'],
+								third: ['suntō'],
 							},
 						},
 					},
 				},
 				infinitive: {
 					active: {
-						present: joinStemsToEndings(prefix, 'esse'),
-						perfect: joinStemsToEndings(prefix, 'fuisse'),
-						future: joinStemsToEndings(prefix, 'fore'),
+						present: ['esse'],
+						perfect: ['fuisse'],
+						future: ['fore'],
 					}
 				},
 				participle: {
 					active: {
-						future: runLambdaOnObject(
-							inflectFuncs['Adjective']({ Lemma: 'futūrus' }).unencliticized.positive,
-							(participle)=>joinStemsToEndings(prefix, participle)
-						),
+						future: inflectFuncs['Adjective']({ Lemma: 'futūrus' })
+							.unencliticized
+							.positive,
 					},
 				},
-				incorrect: joinStemsToEndings(prefix, 'erint'),
+				incorrect: ['erint'],
 			}
+
+			// Attach the prefix to all the forms of ‘sum’.
+			forms = runLambdaOnObject(
+				forms,
+				(form) => joinStemsToEndings(prefix, form)
+					// Forms such as ‘posfore’ & ‘posfutūrum’ should not exist.
+					.filter(form => !form.includes('posfor') && !form.includes('posfut'))
+					// Some prefixes change depending on the next letter.
+					.map(form => form.replace(/^īn(?![fs])/, 'in').replace(/^posess/, 'poss').replace(/^pose/, 'pote').replace(/^posfu/, 'potu').replace(/^prōe/, 'prōde'))
+					// Both ‘abfore’ & ‘āfore’ etc are permissible.
+					.flatMap(form => form.startsWith('abf') ? [form, form.replace(/^abf/, 'āf')] : form)
+			);
 		}
 
 		if (JSON.stringify(forms)==='{}') {
