@@ -1739,7 +1739,7 @@ const inflectFuncs = {
 						perfect: ['tulisse'],
 					},
 					passive: {
-						present: ['ferrī']
+						present: ['ferrī', 'ferrier']
 					}
 				},
 				participle: {
@@ -1779,9 +1779,28 @@ const inflectFuncs = {
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
 					// Some prefixes change depending on the next letter.
-					.map(form => form.replace(/^dis(?=[l])/, 'dī'))
+					.map(form => form
+						.replace(/^af(?=[l])/, 'al')
+						.replace(/^af(?=[t])/, 'at')
+						.replace(/^au(?=[l])/, 'ab')
+						.replace(/^au(?=[t])/, 'abs')
+						.replace(/^cōn(?=[lt])/, 'con')
+						.replace(/^dif(?=[l])/, 'dī')
+						.replace(/^dif(?=[t])/, 'dis')
+						.replace(/^dis(?=[l])/, 'dī')
+						.replace(/^ef(?=[l])/, 'ē')
+						.replace(/^ef(?=[t])/, 'ex')
+						.replace(/^īn(?=[lt])/, 'in')
+						.replace(/^suf(?=[t])/, 'sus')
+						.replace(/^of(?=[lt])/, 'ob')
+						.replace(/^suf(?=[l])/, 'sub')
+						.replace(/^suf(?=[t])/, 'sus')
+					)
 					// // Both ‘trālātus’ & ‘trānslātus’ etc are permissible.
 					.flatMap(form => form.startsWith('trānsl') ? [form, form.replace(/^trānsl/, 'trāl')] : form)
+					.flatMap(form => form.startsWith('conl') ? [form, form.replace(/^con/, 'col')] : form)
+					.flatMap(form => form.startsWith('ret') ? [form, form.replace(/^ret/, 'rett')] : form)
+					.flatMap(form => form.startsWith('tul') ? [form, form.replace(/^tul/, 'tetul')] : form)
 			);
 		}
 
