@@ -1497,6 +1497,294 @@ const inflectFuncs = {
 			);
 		}
 
+		else if (lemma.endsWith("ferō") && !rest.Conjugations?.includes(1)) {
+			const prefix = lemma.replace(/ferō$/, '');
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: ['ferō'],
+								second: ['fers'],
+								third: ['fert'],
+							},
+							plural: {
+								first: ['ferimus'],
+								second: ['fertis'],
+								third: ['ferunt'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ferēbam'],
+								second: ['ferēbās'],
+								third: ['ferēbat'],
+							},
+							plural: {
+								first: ['ferēbāmus'],
+								second: ['ferēbātis'],
+								third: ['ferēbant'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['feram'],
+								second: ['ferēs'],
+								third: ['feret'],
+							},
+							plural: {
+								first: ['ferēmus'],
+								second: ['ferētis'],
+								third: ['ferent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['tulī'],
+								second: ['tulistī'],
+								third: ['tulit'],
+							},
+							plural: {
+								first: ['tulimus'],
+								second: ['tulistis'],
+								third: ['tulērunt', 'tulēre'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['tuleram'],
+								second: ['tulerās'],
+								third: ['tulerat'],
+							},
+							plural: {
+								first: ['tulerāmus'],
+								second: ['tulerātis'],
+								third: ['tulerant'],
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: ['tulerō'],
+								second: ['tuleris'],
+								third: ['tulerit'],
+							},
+							plural: {
+								first: ['tulerimus'],
+								second: ['tuleritis'],
+								third: ['tulerint'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['feror'],
+								second: ['ferris', 'ferre'],
+								third: ['fertur'],
+							},
+							plural: {
+								first: ['ferimur'],
+								second: ['feriminī'],
+								third: ['feruntur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ferēbar'],
+								second: ['ferēbāris', 'ferēbāre'],
+								third: ['ferēbātur'],
+							},
+							plural: {
+								first: ['ferēbāmur'],
+								second: ['ferēbāminī'],
+								third: ['ferēbantur'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['ferar'],
+								second: ['ferēris', 'ferēre'],
+								third: ['ferētur'],
+							},
+							plural: {
+								first: ['ferēmur'],
+								second: ['ferēminī'],
+								third: ['ferentur'],
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: ['feram'],
+								second: ['ferās'],
+								third: ['ferat'],
+							},
+							plural: {
+								first: ['ferāmus'],
+								second: ['ferātis'],
+								third: ['ferant'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ferrem'],
+								second: ['ferrēs'],
+								third: ['ferret'],
+							},
+							plural: {
+								first: ['ferrēmus'],
+								second: ['ferrētis'],
+								third: ['ferrent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['tulerim'],
+								second: ['tulerīs'],
+								third: ['tulerit'],
+							},
+							plural: {
+								first: ['tulerīmus'],
+								second: ['tulerītis'],
+								third: ['tulerint'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['tulissem'],
+								second: ['tulissēs'],
+								third: ['tulisset'],
+							},
+							plural: {
+								first: ['tulissēmus'],
+								second: ['tulissētis'],
+								third: ['tulissent'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['ferar'],
+								second: ['ferāris', 'ferāre'],
+								third: ['ferātur'],
+							},
+							plural: {
+								first: ['ferāmur'],
+								second: ['ferāminī'],
+								third: ['ferantur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ferrer'],
+								second: ['ferrēris', 'ferrēre'],
+								third: ['ferrētur'],
+							},
+							plural: {
+								first: ['ferrēmur'],
+								second: ['ferrēminī'],
+								third: ['ferrentur'],
+							},
+						},
+					},
+				},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: ['fer'],
+							},
+							plural: {
+								second: ['ferte'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['fertō'],
+								third: ['fertō'],
+							},
+							plural: {
+								second: ['fertōte'],
+								third: ['feruntō'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								second: ['ferre'],
+							},
+							plural: {
+								second: ['feriminī'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['fertor'],
+								third: ['fertor'],
+							},
+							plural: {
+								third: ['feruntor'],
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: ['ferre'],
+						perfect: ['tulisse'],
+					},
+					passive: {
+						present: ['ferrī']
+					}
+				},
+				participle: {
+					active: {
+						present: inflectFuncs['Adjective']({ Lemma: 'ferēns' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: 'lātūrus' })
+							.unencliticized
+							.positive,
+					},
+					passive: {
+						past: inflectFuncs['Adjective']({ Lemma: 'lātus' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: 'ferendus' })
+							.unencliticized
+							.positive,
+					},
+				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: 'ferendus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
+				supine: {
+					accusative: ['lātum'],
+					ablative: ['lātū'],
+				}
+			}
+
+			// Attach the prefix to all the forms of ferō.
+			forms = runLambdaOnObject(
+				forms,
+				(form) => joinStemsToEndings(prefix, form)
+					// Some prefixes change depending on the next letter.
+					.map(form => form.replace(/^dis(?=[l])/, 'dī'))
+					// // Both ‘trālātus’ & ‘trānslātus’ etc are permissible.
+					.flatMap(form => form.startsWith('trānsl') ? [form, form.replace(/^trānsl/, 'trāl')] : form)
+			);
+		}
+
 		if (JSON.stringify(forms)==='{}') {
 			return {}
 		}
