@@ -2125,6 +2125,10 @@ const inflectFuncs = {
 			);
 		}
 
+		if (rest.Conjugations?.length > 1) {
+			console.warn(`Verb ${Lemma} may be misconjugated because its conjugations are given as `, rest.Conjugations);
+		}
+
 		if (JSON.stringify(forms)==='{}') {
 			return {}
 		}
