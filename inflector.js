@@ -2125,6 +2125,239 @@ const inflectFuncs = {
 			);
 		}
 
+		else if (rest.Conjugations?.includes(1)) {
+			const isDeponent = lemma.endsWith('or');
+			const presentStem = lemma.replace(/(ō|or)$/, '');
+			const perfectStem = presentStem + 'āv';
+			const supineStem = presentStem + 'āt'
+
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: ['1ō'],
+								second: ['1ās'],
+								third: ['1at'],
+							},
+							plural: {
+								first: ['1āmus'],
+								second: ['1ātis'],
+								third: ['1ant'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1ābam'],
+								second: ['1ābās'],
+								third: ['1ābat'],
+							},
+							plural: {
+								first: ['1ābāmus'],
+								second: ['1ābātis'],
+								third: ['1ābant'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['1ābō'],
+								second: ['1ābis'],
+								third: ['1ābit'],
+							},
+							plural: {
+								first: ['1ābimus'],
+								second: ['1ābitis'],
+								third: ['1ābunt'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['1or'],
+								second: ['1āris', '1āre'],
+								third: ['1ātur'],
+							},
+							plural: {
+								first: ['1āmur'],
+								second: ['1āminī'],
+								third: ['1antur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1ābar'],
+								second: ['1ābāris', '1ābāre'],
+								third: ['1ābātur'],
+							},
+							plural: {
+								first: ['1ābāmur'],
+								second: ['1ābāminī'],
+								third: ['1ābantur'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['1ābor'],
+								second: ['1āberis', '1ābere'],
+								third: ['1ābitur'],
+							},
+							plural: {
+								first: ['1ābimur'],
+								second: ['1ābiminī'],
+								third: ['1ābuntur'],
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: ['1em'],
+								second: ['1ēs'],
+								third: ['1et'],
+							},
+							plural: {
+								first: ['1ēmus'],
+								second: ['1ētis'],
+								third: ['1ent'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1ārem'],
+								second: ['1ārēs'],
+								third: ['1āret'],
+							},
+							plural: {
+								first: ['1ārēmus'],
+								second: ['1ārētis'],
+								third: ['1ārent'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['1er'],
+								second: ['1ēris', '1ēre'],
+								third: ['1ētur'],
+							},
+							plural: {
+								first: ['1ēmur'],
+								second: ['1ēminī'],
+								third: ['1entur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1ārer'],
+								second: ['1ārēris', '1ārēre'],
+								third: ['1ārētur'],
+							},
+							plural: {
+								first: ['1ārēmur'],
+								second: ['1ārēminī'],
+								third: ['1ārentur'],
+							},
+						},
+					},
+				},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: ['1ā'],
+							},
+							plural: {
+								third: ['1āte'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['1ātō'],
+								third: ['1ātō'],
+							},
+							plural: {
+								second: ['1ātōte'],
+								third: ['1āntō'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								second: ['1āre'],
+							},
+							plural: {
+								third: ['1āminī'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['1ātor'],
+								third: ['1ātor'],
+							},
+							plural: {
+								third: ['1āntor'],
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: ['1āre'],
+						past: ['3isse'],
+					},
+					passive: {
+						present: ['1ārī'],
+					},
+				},
+				participle: {
+					active: {
+						present: inflectFuncs['Adjective']({ Lemma: '1āns' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
+							.unencliticized
+							.positive,
+					},
+					passive: {
+						past: inflectFuncs['Adjective']({ Lemma: '4us' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: '1andus' })
+							.unencliticized
+							.positive,
+					},
+				},
+				supine: {
+					accusative: ['4um'],
+					ablative: ['4ū'],
+				}
+			};
+
+			if (rest.HasArchaicInfinitiveInRier) {
+				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ārier'] } } })
+			}
+
+			forms = runLambdaOnObject(forms, form => form.replace('1', presentStem).replace('3', perfectStem).replace('4', supineStem));
+
+			if (isDeponent) {
+				forms.indicative.active = forms.indicative.passive;
+				delete forms.indicative.passive;
+				forms.subjunctive.active = forms.subjunctive.passive;
+				delete forms.subjunctive.passive;
+				forms.infinitive.active = forms.infinitive.passive;
+				delete forms.infinitive.passive;
+				forms.imperative.active = forms.imperative.passive;
+				delete forms.imperative.passive;
+				forms.participle.active.past = forms.participle.passive.past;
+				delete forms.participle.passive.past;
+			}
+		}
+
 		if (rest.Conjugations?.length > 1) {
 			console.warn(`Verb ${Lemma} may be misconjugated because its conjugations are given as `, rest.Conjugations);
 		}
