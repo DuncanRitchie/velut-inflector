@@ -2127,9 +2127,9 @@ const inflectFuncs = {
 
 		else if (rest.Conjugations?.includes(1)) {
 			const isDeponent = lemma.endsWith('or');
-			const presentStem = lemma.replace(/(ō|or)$/, '');
-			const perfectStem = presentStem + 'āv';
-			const supineStem = presentStem + 'āt'
+			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
+			const perfectStem = presentStem + 'āv';            // Replaces 3 in forms below.
+			const supineStem = presentStem + 'āt'              // Replaces 4 in forms below.
 
 			forms = {
 				indicative: {
