@@ -1315,7 +1315,7 @@ const inflectFuncs = {
 			forms = rest.Forms;
 		}
 
-		else if (lemma.endsWith("sum")) {
+		else if (rest.Conjugations?.includes("sum")) {
 			const prefix = lemma.replace(/sum$/, '');
 			forms = {
 				indicative: {
@@ -1497,7 +1497,7 @@ const inflectFuncs = {
 			);
 		}
 
-		else if (lemma.endsWith("ferō") && !rest.Conjugations?.includes(1)) {
+		else if (rest.Conjugations?.includes('ferō')) {
 			const prefix = lemma.replace(/ferō$/, '');
 			forms = {
 				indicative: {
