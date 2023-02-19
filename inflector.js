@@ -1804,6 +1804,226 @@ const inflectFuncs = {
 			);
 		}
 
+		else if (rest.Conjugations?.includes("eō") && lemma === 'eō') {
+			const prefix = lemma.replace(/eō$/, '');
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: ['eō'],
+								second: ['īs'],
+								third: ['it'],
+							},
+							plural: {
+								first: ['īmus'],
+								second: ['ītis'],
+								third: ['eunt'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ībam'],
+								second: ['ībās'],
+								third: ['ībat'],
+							},
+							plural: {
+								first: ['ībāmus'],
+								second: ['ībātis'],
+								third: ['ībant'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['ībō'],
+								second: ['ībis'],
+								third: ['ībit'],
+							},
+							plural: {
+								first: ['ībimus'],
+								second: ['ībitis'],
+								third: ['ībunt'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['īvī', 'iī'],
+								second: ['īvistī', 'iistī', 'īstī'],
+								third: ['īvit', 'iit'],
+							},
+							plural: {
+								first: ['iimus'],
+								second: ['iistis', 'īstis'],
+								third: ['iērunt', 'iēre'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['ieram'],
+								second: ['ierās'],
+								third: ['ierat'],
+							},
+							plural: {
+								first: ['ierāmus'],
+								second: ['ierātis'],
+								third: ['ierant'],
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: ['ierō'],
+								second: ['ieris'],
+								third: ['ierit'],
+							},
+							plural: {
+								first: ['ierimus'],
+								second: ['ieritis'],
+								third: ['ierint'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								third: ['ītur']
+							},
+						},
+						imperfect: {
+							singular: {
+								third: ['ībātur']
+							},
+						},
+						future: {
+							singular: {
+								third: ['ībitur']
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: ['eam'],
+								second: ['eās'],
+								third: ['eat'],
+							},
+							plural: {
+								first: ['eāmus'],
+								second: ['eātis'],
+								third: ['eant'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['īrem'],
+								second: ['īrēs'],
+								third: ['īret'],
+							},
+							plural: {
+								first: ['īrēmus'],
+								second: ['īrētis'],
+								third: ['īrent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['ierim'],
+								second: ['ierīs'],
+								third: ['ierit'],
+							},
+							plural: {
+								first: ['ierīmus'],
+								second: ['ierītis'],
+								third: ['ierint'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['īssem'],
+								second: ['īssēs'],
+								third: ['īsset'],
+							},
+							plural: {
+								first: ['īssēmus'],
+								second: ['īssētis'],
+								third: ['īssent'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								third: ['eātur']
+							},
+						},
+						imperfect: {
+							singular: {
+								third: ['īrētur']
+							},
+						},
+					},
+				},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: ['ī'],
+							},
+							plural: {
+								second: ['īte'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['ītō'],
+								third: ['ītō'],
+							},
+							plural: {
+								second: ['ītōte'],
+								third: ['euntō'],
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: ['īre'],
+						perfect: ['īsse'],
+					},
+					passive: {
+						present: ['īrī', 'īrier']
+					}
+				},
+				participle: {
+					active: {
+						present: inflectFuncs['Adjective']({ Lemma: 'iēns' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: 'itūrus' })
+							.unencliticized
+							.positive,
+					},
+					passive: {
+						future: inflectFuncs['Adjective']({ Lemma: 'eundus' })
+							.unencliticized
+							.positive,
+					}
+				},
+				supine: {
+					accusative: ['itum'],
+					ablative: ['itū'],
+				}
+			}
+
+			// Attach the prefix to all the forms of ‘eō’.
+			forms = runLambdaOnObject(
+				forms,
+				(form) => joinStemsToEndings(prefix, form)
+					.map(form => form.replace(/^ient/, 'eunt'))
+			);
+		}
+
 		if (JSON.stringify(forms)==='{}') {
 			return {}
 		}
