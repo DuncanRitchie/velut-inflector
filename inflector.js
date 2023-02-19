@@ -1804,7 +1804,7 @@ const inflectFuncs = {
 			);
 		}
 
-		else if (rest.Conjugations?.includes("eō") && lemma === 'eō') {
+		else if (rest.Conjugations?.includes("eō")) {
 			const prefix = lemma.replace(/eō$/, '');
 			forms = {
 				indicative: {
@@ -2016,11 +2016,112 @@ const inflectFuncs = {
 				}
 			}
 
+			const transitiveForms = {
+				indicative: {
+					passive: {
+						present: {
+							singular: {
+								first: ['eor'],
+								second: ['īris', 'īre'],
+							},
+							plural: {
+								first: ['īmur'],
+								second: ['īminī'],
+								third: ['euntur']
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['ībār'],
+								second: ['ībāris', 'ībāre'],
+							},
+							plural: {
+								first: ['ībāmur'],
+								second: ['ībāminī'],
+								third: ['ībāntur']
+							},
+						},
+						future: {
+							singular: {
+								first: ['ībor'],
+								second: ['īberis', 'ībere'],
+							},
+							plural: {
+								first: ['ībimur'],
+								second: ['ībiminī'],
+								third: ['ībuntur']
+							},
+						},
+					},
+				},
+				subjunctive: {
+					passive: {
+						present: {
+							singular: {
+								first: ['ear'],
+								second: ['eāris', 'eāre'],
+							},
+							plural: {
+								first: ['eāmur'],
+								second: ['eāminī'],
+								third: ['eantur']
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['īrer'],
+								second: ['īrēris', 'īrēre'],
+							},
+							plural: {
+								first: ['īrēmur'],
+								second: ['īrēminī'],
+								third: ['īrentur']
+							},
+						},
+					},
+				},
+				imperative: {
+					passive: {
+						present: {
+							singular: {
+								second: ['īre']
+							},
+							plural: {
+								second: ['īminī']
+							}
+						},
+						future: {
+							singular: {
+								second: ["ītor"],
+								third: ["ītor"],
+							},
+							plural: {
+								third: ["euntor"]
+							}
+						}
+					},
+				},
+				participle: {
+					passive: {
+						past: inflectFuncs['Adjective']({ Lemma: 'itus' })
+							.unencliticized
+							.positive,
+					}
+				}
+			}
+
+			if (rest.IsIntransitive === false) {
+				forms = mergeObjects(forms, transitiveForms);
+			}
+
 			// Attach the prefix to all the forms of ‘eō’.
 			forms = runLambdaOnObject(
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
-					.map(form => form.replace(/^ient/, 'eunt'))
+					// Correct the oblique stem of present active participles.
+					.map(form => form.replace(/ient/, 'eunt'))
+					// Forms such as ‘abīvī’ should not exist.
+					.filter(form => !form.includes('abīv'))
 			);
 		}
 
