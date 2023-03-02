@@ -2038,7 +2038,7 @@ const inflectFuncs = {
 							plural: {
 								first: ['ībāmur'],
 								second: ['ībāminī'],
-								third: ['ībāntur']
+								third: ['ībantur']
 							},
 						},
 						future: {
@@ -2193,7 +2193,7 @@ const inflectFuncs = {
 							plural: {
 								first: ['3erāmus'],
 								second: ['3erātis'],
-								third: ['3ērant'],
+								third: ['3erant'],
 							},
 						},
 						futureperfect: {
@@ -2205,7 +2205,7 @@ const inflectFuncs = {
 							plural: {
 								first: ['3erimus'],
 								second: ['3eritis'],
-								third: ['3ērint'],
+								third: ['3erint'],
 							},
 						},
 					},
@@ -2283,7 +2283,7 @@ const inflectFuncs = {
 							plural: {
 								first: ['3erīmus'],
 								second: ['3erītis'],
-								third: ['3ērint'],
+								third: ['3erint'],
 							},
 						},
 						pluperfect: {
@@ -2343,7 +2343,7 @@ const inflectFuncs = {
 							},
 							plural: {
 								second: ['1ātōte'],
-								third: ['1āntō'],
+								third: ['1antō'],
 							},
 						},
 					},
@@ -2362,7 +2362,7 @@ const inflectFuncs = {
 								third: ['1ātor'],
 							},
 							plural: {
-								third: ['1āntor'],
+								third: ['1antor'],
 							},
 						},
 					},
