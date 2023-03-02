@@ -2128,7 +2128,8 @@ const inflectFuncs = {
 		else if (rest.Conjugations?.includes(1)) {
 			const isDeponent = lemma.endsWith('or');
 			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
-			const perfectStem = presentStem + 'āv';            // Replaces 3 in forms below.
+			const perfectStems = rest.PerfectStems
+				|| [(presentStem + 'āv')];                       // Replaces 3 in forms below.
 			const supineStem = presentStem + 'āt'              // Replaces 4 in forms below.
 
 			forms = {
@@ -2402,7 +2403,18 @@ const inflectFuncs = {
 				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ārier'] } } })
 			}
 
-			forms = runLambdaOnObject(forms, form => form.replace('1', presentStem).replace('3', perfectStem).replace('4', supineStem));
+			forms = runLambdaOnObject(forms, form => {
+				if (form.startsWith('1')) {
+					return joinStemsToEndings(presentStem, form.substring(1));
+				}
+				if (form.startsWith('3')) {
+					return joinStemsToEndings(perfectStems, form.substring(1));
+				}
+				if (form.startsWith('4')) {
+					return joinStemsToEndings(supineStem, form.substring(1));
+				}
+				return form;
+			});
 
 			if (isDeponent) {
 				forms.indicative.active = forms.indicative.passive;
