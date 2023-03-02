@@ -2127,7 +2127,7 @@ const inflectFuncs = {
 
 		else if (rest.Conjugations?.includes(1)) {
 			const isDeponent = lemma.endsWith('or');
-			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
+			const presentStem = lemma.replace(/(ō|or|at)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 'āv')];                       // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
@@ -2428,6 +2428,10 @@ const inflectFuncs = {
 				delete forms.imperative.passive;
 				forms.participle.active.past = forms.participle.passive.past;
 				delete forms.participle.passive.past;
+			}
+
+			if (rest.IsImpersonal) {
+				forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine', 'passive'])
 			}
 		}
 
