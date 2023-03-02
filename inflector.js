@@ -2130,7 +2130,8 @@ const inflectFuncs = {
 			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 'āv')];                       // Replaces 3 in forms below.
-			const supineStem = presentStem + 'āt'              // Replaces 4 in forms below.
+			const supineStems = rest.SupineStems
+			  || [(presentStem + 'āt')]                        // Replaces 4 in forms below.
 
 			forms = {
 				indicative: {
@@ -2411,7 +2412,7 @@ const inflectFuncs = {
 					return joinStemsToEndings(perfectStems, form.substring(1));
 				}
 				if (form.startsWith('4')) {
-					return joinStemsToEndings(supineStem, form.substring(1));
+					return joinStemsToEndings(supineStems, form.substring(1));
 				}
 				return form;
 			});
