@@ -2170,6 +2170,42 @@ const inflectFuncs = {
 								third: ['1ābunt'],
 							},
 						},
+						perfect: {
+							singular: {
+								first: ['3ī'],
+								second: ['3istī'],
+								third: ['3it'],
+							},
+							plural: {
+								first: ['3imus'],
+								second: ['3istis'],
+								third: ['3ērunt', '3ēre'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['3eram'],
+								second: ['3erās'],
+								third: ['3erat'],
+							},
+							plural: {
+								first: ['3erāmus'],
+								second: ['3erātis'],
+								third: ['3ērant'],
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: ['3erō'],
+								second: ['3eris'],
+								third: ['3erit'],
+							},
+							plural: {
+								first: ['3erimus'],
+								second: ['3eritis'],
+								third: ['3ērint'],
+							},
+						},
 					},
 					passive: {
 						present: {
@@ -2234,6 +2270,30 @@ const inflectFuncs = {
 								first: ['1ārēmus'],
 								second: ['1ārētis'],
 								third: ['1ārent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['3erim'],
+								second: ['3erīs'],
+								third: ['3erit'],
+							},
+							plural: {
+								first: ['3erīmus'],
+								second: ['3erītis'],
+								third: ['3ērint'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['3issem'],
+								second: ['3issēs'],
+								third: ['3isset'],
+							},
+							plural: {
+								first: ['3issēmus'],
+								second: ['3issētis'],
+								third: ['3issent'],
 							},
 						},
 					},
