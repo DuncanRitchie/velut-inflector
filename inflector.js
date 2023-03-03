@@ -146,6 +146,9 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 		}
 		return replacementObject;
 	}
+	else if (Array.isArray(replacementObject)) {
+		return replacementObject;
+	}
 	//// Take `formsObject` & merge properties with the same key in the two objects.
 	const objectWithSamePropertiesReplaced = Object.entries(formsObject)
 		.filter(([key, obj]) => obj !== null && obj !== undefined)
@@ -385,6 +388,88 @@ const generateSuperlativeForms = (superlativeStems) => {
 		},
 	};
 }
+
+// This should be passed into replaceFieldsInForms for intransitive verbs,
+// to clear out passive non-impersonal forms.
+const emptyFieldsForIntransitiveVerbs = {
+	indicative: {
+		passive: {
+			present: {
+				singular: {
+					first: [],
+					second: [],
+				},
+				plural: [],
+			},
+			imperfect: {
+				singular: {
+					first: [],
+					second: [],
+				},
+				plural: [],
+			},
+			future: {
+				singular: {
+					first: [],
+					second: [],
+				},
+				plural: [],
+			},
+		},
+	},
+	subjunctive: {
+		passive: {
+			present: {
+				singular: {
+					first: [],
+					second: [],
+				},
+				plural: [],
+			},
+			imperfect: {
+				singular: {
+					first: [],
+					second: [],
+				},
+				plural: [],
+			},
+		},
+	},
+	imperative: {
+		passive: {
+			present: {
+				singular: {
+					second: [],
+				},
+				plural: [],
+			},
+			future: {
+				singular: {
+					second: [],
+				},
+				plural: [],
+			},
+		},
+	},
+	participle: {
+		passive: {
+			past: {
+				masculine: [],
+				feminine: [],
+				neuter: {
+					plural: [],
+				},
+			},
+			future: {
+				masculine: [],
+				feminine: [],
+				neuter: {
+					plural: [],
+				},
+			},
+		},
+	},
+};
 
 ////
 //// Functions for building the output Json:
@@ -2432,6 +2517,10 @@ const inflectFuncs = {
 
 			if (rest.IsImpersonal) {
 				forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine', 'passive'])
+			}
+
+			if (rest.IsIntransitive) {
+				forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 			}
 		}
 
