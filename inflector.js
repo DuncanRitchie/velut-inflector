@@ -471,6 +471,19 @@ const emptyFieldsForIntransitiveVerbs = {
 	},
 };
 
+// This function should be called at the end of each inflection function.
+function applyFieldsToForms(allUnencliticizedForms, rest) {
+	const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms);
+	const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
+	const withEnclitics = multiplyWithEnclitics(withExtraForms);
+	const withReplacementEncliticizedForms = replaceFieldsInObjects(withEnclitics, rest.ReplacementEncliticizedForms);
+	const withExtraEncliticizedForms = mergeObjects(withReplacementEncliticizedForms, rest.ExtraEncliticizedForms);
+	const withQueLemmaHandled = markQueAsUnencliticized(withExtraEncliticizedForms, rest.IsLemmaInQue);
+	const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
+	const withoutEmptyFields = deleteEmptyFields(wantedForms);
+	return withoutEmptyFields;
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -592,14 +605,7 @@ const inflectFuncs = {
 				comparative: generateComparativeForms(comparativeStems),
 				superlative: generateSuperlativeForms(superlativeStems),
 			};
-			const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms);
-			const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
-			const withEnclitics = multiplyWithEnclitics(withExtraForms);
-			const withReplacementEncliticizedForms = replaceFieldsInObjects(withEnclitics, rest.ReplacementEncliticizedForms);
-			const withExtraEncliticizedForms = mergeObjects(withReplacementEncliticizedForms, rest.ExtraEncliticizedForms);
-			const withQueLemmaHandled = markQueAsUnencliticized(withExtraEncliticizedForms, rest.IsLemmaInQue);
-			const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
-			return wantedForms;
+			return applyFieldsToForms(allUnencliticizedForms, rest);
 		}
 		//// 3rd-declension adjectives
 		const stems = ensureIsArray((() => {
@@ -719,10 +725,7 @@ const inflectFuncs = {
 			comparative: generateComparativeForms(comparativeStems),
 			superlative: generateSuperlativeForms(superlativeStems),
 		};
-		const withReplacements = replaceFieldsInObjects(allUnencliticizedForms, rest.ReplacementForms)
-		const withEnclitics = multiplyWithEnclitics(withReplacements);
-		const wantedForms = deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
-		return mergeObjects(wantedForms, rest.ExtraForms);
+		return applyFieldsToForms(allUnencliticizedForms, rest);
 	},
 	"Conjunction": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (Lemma.startsWith('-')) {
@@ -1342,12 +1345,7 @@ const inflectFuncs = {
 			return {}
 		}
 
-		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
-		const merged = mergeObjects(replaced, rest.ExtraForms)
-		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude);
-		const withoutEmptyFields = deleteEmptyFields(wantedForms)
-		const withEnclitics = multiplyWithEnclitics(withoutEmptyFields);
-		return withEnclitics;
+		return applyFieldsToForms(forms, rest);
 	},
 	"Preposition": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms && Array.isArray(rest.Forms)) {
@@ -2532,12 +2530,7 @@ const inflectFuncs = {
 			return {}
 		}
 
-		const replaced = replaceFieldsInObjects(forms, rest.ReplacementForms);
-		const merged = mergeObjects(replaced, rest.ExtraForms)
-		const wantedForms = deleteUnwantedForms(merged, rest.ParsingsToExclude);
-		const withoutEmptyFields = deleteEmptyFields(wantedForms)
-		const withEnclitics = multiplyWithEnclitics(withoutEmptyFields);
-		return withEnclitics;
+		return applyFieldsToForms(forms, rest);
 	},
 }
 
