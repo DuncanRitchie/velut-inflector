@@ -2208,7 +2208,7 @@ const inflectFuncs = {
 			);
 		}
 
-		else if (rest.Conjugations?.includes(1)) {
+		else if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes("dō")) {
 			const isDeponent = lemma.endsWith('or');
 			const presentStem = lemma.replace(/(ō|or|at)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
@@ -2519,6 +2519,12 @@ const inflectFuncs = {
 
 			if (rest.IsIntransitive) {
 				forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
+			}
+
+			if (rest.Conjugations.includes("dō")) {
+				// Perfect stem should be “ded”.
+				// “a” in endings should be short (except in ‘dā’, ‘dās’, ‘dāns’)
+				forms = runLambdaOnObject(forms, form => form.replace(/dāv(?=[^d]+$)/, 'ded').replace(/dā(?!ns)(?!s)(?=.)(?=[^d]+$)/, 'da'));
 			}
 		}
 
