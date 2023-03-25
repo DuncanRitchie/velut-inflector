@@ -2511,7 +2511,7 @@ const inflectFuncs = {
 		if (rest.Conjugations?.includes(2)) {
 			const presentStem = lemma.replace(/e(ō|or)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
-				|| [(presentStem + 'ēv')];                       // Replaces 3 in forms below.
+				|| [(presentStem + 'u')];                        // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
 			  || [(presentStem + 'ēt')]                        // Replaces 4 in forms below.
 
