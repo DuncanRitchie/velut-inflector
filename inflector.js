@@ -2513,7 +2513,7 @@ const inflectFuncs = {
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 'u')];                        // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
-			  || [(presentStem + 'ēt')]                        // Replaces 4 in forms below.
+			  || [(presentStem + 'it')]                        // Replaces 4 in forms below.
 
 			forms = {
 				indicative: {
