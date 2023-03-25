@@ -2832,6 +2832,9 @@ const inflectFuncs = {
 			delete forms.infinitive.passive;
 			delete forms.imperative.passive;
 			delete forms.participle.passive.future;
+			delete forms.participle.passive.past.masculine;
+			delete forms.participle.passive.past.feminine;
+			delete forms.participle.passive.past.neuter.plural;
 		}
 
 		// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
