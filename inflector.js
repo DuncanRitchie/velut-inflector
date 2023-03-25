@@ -2201,8 +2201,8 @@ const inflectFuncs = {
 			forms = runLambdaOnObject(
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
-					// Correct the oblique stem of present active participles.
-					.map(form => form.replace(/ient/, 'eunt'))
+					// Correct the oblique stem of present active participles & diaeresize any intervocalic i (eg for ‘anteïit’).
+					.map(form => form.replace(/ient/, 'eunt').replace(/(?<=e)i(?=[ēi])/, 'ï'))
 					// Forms such as ‘abīvī’ should not exist.
 					.filter(form => !form.includes('abīv'))
 			);
@@ -2826,7 +2826,12 @@ const inflectFuncs = {
 		}
 
 		if (rest.IsImpersonal) {
-			forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine', 'passive'])
+			forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine'])
+			delete forms.indicative.passive;
+			delete forms.subjunctive.passive;
+			delete forms.infinitive.passive;
+			delete forms.imperative.passive;
+			delete forms.participle.passive.future;
 		}
 
 		// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
