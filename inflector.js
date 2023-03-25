@@ -2509,7 +2509,7 @@ const inflectFuncs = {
 		}
 
 		if (rest.Conjugations?.includes(2)) {
-			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
+			const presentStem = lemma.replace(/e(ō|or)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 'ēv')];                       // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
@@ -2520,7 +2520,7 @@ const inflectFuncs = {
 					active: {
 						present: {
 							singular: {
-								first: ['1ō'],
+								first: ['1eō'],
 								second: ['1ēs'],
 								third: ['1et'],
 							},
@@ -2594,7 +2594,7 @@ const inflectFuncs = {
 					passive: {
 						present: {
 							singular: {
-								first: ['1or'],
+								first: ['1eor'],
 								second: ['1ēris', '1ēre'],
 								third: ['1ētur'],
 							},
