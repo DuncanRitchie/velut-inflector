@@ -2208,8 +2208,9 @@ const inflectFuncs = {
 			);
 		}
 
-		else if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes("dō")) {
-			const isDeponent = lemma.endsWith('or');
+		const isDeponent = lemma.endsWith('or');
+
+		if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes("dō")) {
 			const presentStem = lemma.replace(/(ō|or|at)$/, '');  // Replaces 1 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 'āv')];                       // Replaces 3 in forms below.
@@ -2500,30 +2501,9 @@ const inflectFuncs = {
 				return form;
 			});
 
-			if (isDeponent) {
-				forms.indicative.active = forms.indicative.passive;
-				delete forms.indicative.passive;
-				forms.subjunctive.active = forms.subjunctive.passive;
-				delete forms.subjunctive.passive;
-				forms.infinitive.active = forms.infinitive.passive;
-				delete forms.infinitive.passive;
-				forms.imperative.active = forms.imperative.passive;
-				delete forms.imperative.passive;
-				forms.participle.active.past = forms.participle.passive.past;
-				delete forms.participle.passive.past;
-			}
-
-			if (rest.IsImpersonal) {
-				forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine', 'passive'])
-			}
-
-			if (rest.IsIntransitive) {
-				forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
-			}
-
 			if (rest.Conjugations.includes("dō")) {
 				// Perfect stem should be “ded”.
-				// “a” in endings should be short (except in ‘dā’, ‘dās’, ‘dāns’)
+				// “a” in endings should be short (except in ‘dā’, ‘dās’, ‘dāns’).
 				forms = runLambdaOnObject(forms, form => form.replace(/dāv(?=[^d]+$)/, 'ded').replace(/dā(?!ns)(?!s)(?=.)(?=[^d]+$)/, 'da'));
 			}
 		}
@@ -2533,7 +2513,33 @@ const inflectFuncs = {
 		}
 
 		if (JSON.stringify(forms)==='{}') {
+
+			if (!rest.Conjugations || !rest.Conjugations.length) {
+				console.debug('Conjugations not specified for', Lemma);
+			}
 			return {}
+		}
+
+		if (isDeponent) {
+			forms.indicative.active = forms.indicative.passive;
+			delete forms.indicative.passive;
+			forms.subjunctive.active = forms.subjunctive.passive;
+			delete forms.subjunctive.passive;
+			forms.infinitive.active = forms.infinitive.passive;
+			delete forms.infinitive.passive;
+			forms.imperative.active = forms.imperative.passive;
+			delete forms.imperative.passive;
+			forms.participle.active.past = forms.participle.passive.past;
+			delete forms.participle.passive.past;
+		}
+
+		if (rest.IsImpersonal) {
+			forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine', 'passive'])
+		}
+
+		// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
+		if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
+			forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 		}
 
 		return applyFieldsToForms(forms, rest);
