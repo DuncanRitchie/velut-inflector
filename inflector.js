@@ -2201,8 +2201,9 @@ const inflectFuncs = {
 			forms = runLambdaOnObject(
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
-					// Correct the oblique stem of present active participles & diaeresize any intervocalic i (eg for ‘anteïit’).
-					.map(form => form.replace(/ient/, 'eunt').replace(/(?<=e)i(?=[ēi])/, 'ï'))
+					// Correct the oblique stem of present active participles.
+					.map(form => form.replace(/ient/, 'eunt')
+					)
 					// Forms such as ‘abīvī’ should not exist.
 					.filter(form => !form.includes('abīv'))
 			);
