@@ -2825,6 +2825,23 @@ const inflectFuncs = {
 			delete forms.participle.passive.past;
 		}
 
+		if (rest.IsSemiDeponent) {
+			delete forms.indicative.active.perfect;
+			delete forms.indicative.active.pluperfect;
+			delete forms.indicative.active.futureperfect;
+			delete forms.subjunctive.active.perfect;
+			delete forms.subjunctive.active.pluperfect;
+			delete forms.infinitive.active.past;
+
+			delete forms.indicative.passive;
+			delete forms.subjunctive.passive;
+			delete forms.imperative.passive;
+			delete forms.infinitive.passive;
+
+			forms.participle.active.past = forms.participle.passive.past;
+			delete forms.participle.passive.past;
+		}
+
 		if (rest.IsImpersonal) {
 			forms = deleteUnwantedForms(forms, ['first', 'second', 'plural', 'supine'])
 			delete forms.indicative.passive;
