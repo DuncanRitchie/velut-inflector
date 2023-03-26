@@ -2202,8 +2202,7 @@ const inflectFuncs = {
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
 					// Correct the oblique stem of present active participles.
-					.map(form => form.replace(/ient/, 'eunt')
-					)
+					.map(form => form.replace(/ient/, 'eunt'))
 					// Forms such as ‘abīvī’ should not exist.
 					.filter(form => !form.includes('abīv'))
 			);
