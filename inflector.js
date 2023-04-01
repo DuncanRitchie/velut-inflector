@@ -3150,6 +3150,12 @@ const inflectFuncs = {
 		if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
 			forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 		}
+		if (lemma.endsWith('scō')
+			&& rest.IsIntransitive !== true
+			&& rest.IsIntransitive !== false
+		) {
+			console.warn(`IsIntransitive is not set for ${lemma}`);
+		}
 
 		return applyFieldsToForms(forms, rest);
 	},
