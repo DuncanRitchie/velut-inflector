@@ -2802,6 +2802,7 @@ const inflectFuncs = {
 
 		if (rest.Conjugations?.includes(3)) {
 			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
+			const presentInfinitiveStem = presentStem.replace(/i$/, '');  // Replaces 2 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 's')];                        // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
@@ -2813,12 +2814,12 @@ const inflectFuncs = {
 						present: {
 							singular: {
 								first: ['1ō'],
-								second: ['1is'],
-								third: ['1it'],
+								second: ['2is'],
+								third: ['2it'],
 							},
 							plural: {
-								first: ['1imus'],
-								second: ['1itis'],
+								first: ['2imus'],
+								second: ['2itis'],
 								third: ['1unt'],
 							},
 						},
@@ -2887,12 +2888,12 @@ const inflectFuncs = {
 						present: {
 							singular: {
 								first: ['1or'],
-								second: ['1eris', '1ere'],
-								third: ['1itur'],
+								second: ['2eris', '2ere'],
+								third: ['2itur'],
 							},
 							plural: {
-								first: ['1imur'],
-								second: ['1iminī'],
+								first: ['2imur'],
+								second: ['2iminī'],
 								third: ['1untur'],
 							},
 						},
@@ -2938,14 +2939,14 @@ const inflectFuncs = {
 						},
 						imperfect: {
 							singular: {
-								first: ['1erem'],
-								second: ['1erēs'],
-								third: ['1eret'],
+								first: ['2erem'],
+								second: ['2erēs'],
+								third: ['2eret'],
 							},
 							plural: {
-								first: ['1erēmus'],
-								second: ['1erētis'],
-								third: ['1erent'],
+								first: ['2erēmus'],
+								second: ['2erētis'],
+								third: ['2erent'],
 							},
 						},
 						perfect: {
@@ -2988,14 +2989,14 @@ const inflectFuncs = {
 						},
 						imperfect: {
 							singular: {
-								first: ['1erer'],
-								second: ['1erēris', '1erēre'],
-								third: ['1erētur'],
+								first: ['2erer'],
+								second: ['2erēris', '2erēre'],
+								third: ['2erētur'],
 							},
 							plural: {
-								first: ['1erēmur'],
-								second: ['1erēminī'],
-								third: ['1erentur'],
+								first: ['2erēmur'],
+								second: ['2erēminī'],
+								third: ['2erentur'],
 							},
 						},
 					},
@@ -3004,19 +3005,19 @@ const inflectFuncs = {
 					active: {
 						present: {
 							singular: {
-								second: ['1e'],
+								second: ['2e'],
 							},
 							plural: {
-								third: ['1ite'],
+								third: ['2ite'],
 							},
 						},
 						future: {
 							singular: {
-								second: ['1itō'],
-								third: ['1itō'],
+								second: ['2itō'],
+								third: ['2itō'],
 							},
 							plural: {
-								second: ['1itōte'],
+								second: ['2itōte'],
 								third: ['1untō'],
 							},
 						},
@@ -3024,16 +3025,16 @@ const inflectFuncs = {
 					passive: {
 						present: {
 							singular: {
-								second: ['1ere'],
+								second: ['2ere'],
 							},
 							plural: {
-								third: ['1iminī'],
+								third: ['2iminī'],
 							},
 						},
 						future: {
 							singular: {
-								second: ['1itor'],
-								third: ['1itor'],
+								second: ['2itor'],
+								third: ['2itor'],
 							},
 							plural: {
 								third: ['1untor'],
@@ -3043,11 +3044,11 @@ const inflectFuncs = {
 				},
 				infinitive: {
 					active: {
-						present: ['1ere'],
+						present: ['2ere'],
 						past: ['3isse'],
 					},
 					passive: {
-						present: ['1ī'],
+						present: ['2ī'],
 					},
 				},
 				participle: {
@@ -3077,6 +3078,9 @@ const inflectFuncs = {
 			forms = runLambdaOnObject(forms, form => {
 				if (form.startsWith('1')) {
 					return joinStemsToEndings(presentStem, form.substring(1));
+				}
+				if (form.startsWith('2')) {
+					return joinStemsToEndings(presentInfinitiveStem, form.substring(1));
 				}
 				if (form.startsWith('3')) {
 					return joinStemsToEndings(perfectStems, form.substring(1));
