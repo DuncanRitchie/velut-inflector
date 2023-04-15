@@ -2801,6 +2801,13 @@ const inflectFuncs = {
 		}
 
 		if (rest.Conjugations?.includes(3)) {
+			if (!rest.SupineStems) {
+				console.warn('SupineStems not set for ' + Lemma);
+			}
+			if (!rest.PerfectStems && !isDeponent && !rest.IsSemiDeponent) {
+				console.warn('PerfectStems not set for ' + Lemma);
+			}
+
 			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
 			const presentInfinitiveStem = presentStem.replace(/i$/, '');  // Replaces 2 in forms below.
 			const perfectStems = rest.PerfectStems
