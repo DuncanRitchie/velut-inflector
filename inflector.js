@@ -2484,7 +2484,7 @@ const inflectFuncs = {
 				}
 			};
 
-			if (rest.HasArchaicInfinitiveInRier) {
+			if (rest.HasArchaicInfinitiveInIer) {
 				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ārier'] } } })
 			}
 
@@ -2782,7 +2782,7 @@ const inflectFuncs = {
 				}
 			};
 
-			if (rest.HasArchaicInfinitiveInRier) {
+			if (rest.HasArchaicInfinitiveInIer) {
 				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ērier'] } } })
 			}
 
