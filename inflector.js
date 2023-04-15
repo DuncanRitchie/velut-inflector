@@ -2115,7 +2115,7 @@ const inflectFuncs = {
 						},
 						imperfect: {
 							singular: {
-								first: ['ībār'],
+								first: ['ībar'],
 								second: ['ībāris', 'ībāre'],
 							},
 							plural: {
@@ -3081,6 +3081,10 @@ const inflectFuncs = {
 					ablative: ['4ū'],
 				}
 			};
+
+			if (rest.HasArchaicInfinitiveInIer) {
+				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ier'] } } })
+			}
 
 			forms = runLambdaOnObject(forms, form => {
 				if (form.startsWith('1')) {
