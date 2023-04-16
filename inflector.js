@@ -2808,12 +2808,14 @@ const inflectFuncs = {
 				console.warn('PerfectStems not set for ' + Lemma);
 			}
 
-			const presentStem = lemma.replace(/(ō|or|it)$/, '');  // Replaces 1 in forms below.
+			const presentStem = lemma.replace(/(ō|or|it)$/, '');          // Replaces 1 in forms below.
 			const presentInfinitiveStem = presentStem.replace(/i$/, '');  // Replaces 2 in forms below.
 			const perfectStems = rest.PerfectStems
-				|| [(presentStem + 's')];                        // Replaces 3 in forms below.
+				|| [(presentStem + 's')];                                   // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
-			  || [(presentStem + 't')]                         // Replaces 4 in forms below.
+			  || [(presentStem + 't')]                                    // Replaces 4 in forms below.
+			const futureActiveParticipleStems
+				= rest.FutureActiveParticipleStems || supineStems           // Replaces 5 in forms below.
 
 			forms = {
 				indicative: {
@@ -3063,7 +3065,7 @@ const inflectFuncs = {
 						present: inflectFuncs['Adjective']({ Lemma: '1ēns' })
 							.unencliticized
 							.positive,
-						future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
+						future: inflectFuncs['Adjective']({ Lemma: '5ūrus' })
 							.unencliticized
 							.positive,
 					},
@@ -3098,6 +3100,9 @@ const inflectFuncs = {
 				}
 				if (form.startsWith('4')) {
 					return joinStemsToEndings(supineStems, form.substring(1));
+				}
+				if (form.startsWith('5')) {
+					return joinStemsToEndings(futureActiveParticipleStems, form.substring(1));
 				}
 				return form;
 			});

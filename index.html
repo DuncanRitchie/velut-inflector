@@ -110,6 +110,12 @@
 					But if the object does not have <code>"unencliticized"</code> (or <code>"ne"</code> or <code>"que"</code> or <code>"ve"</code>) as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
 				</dd>
 
+				<dt><code>"FutureActiveParticipleStems"</code></dt>
+				<dd>
+					String array of stems for the future active participle forms of verbs, eg <samp>["morit"]</samp> for <q lang="la">morior</q> (so the participle forms are <q lang="la">moritūrus</q> etc).
+					If this is not specified, the supine stems are used — either the value of <code>"SupineStems"</code> or a regularly-generated fallback.
+				</dd>
+
 				<dt><code>"HasArchaicInfinitiveInIer"</code></dt>
 				<dd>
 					Boolean for whether a verb should have a present passive (or active if deponent) infinitive ending with “-ier”, potentially in addition to one in “-ī”.
