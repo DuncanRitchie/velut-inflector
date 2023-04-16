@@ -1888,7 +1888,7 @@ const inflectFuncs = {
 		}
 
 		else if (rest.Conjugations?.includes("eō")) {
-			const prefix = lemma.replace(/eō$/, '');
+			const prefix = lemma.replace(/[eë]ō$/, '');
 			forms = {
 				indicative: {
 					active: {
