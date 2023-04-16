@@ -2808,7 +2808,7 @@ const inflectFuncs = {
 				console.warn('PerfectStems not set for ' + Lemma);
 			}
 
-			const presentStem = lemma.replace(/(ō|or)$/, '');  // Replaces 1 in forms below.
+			const presentStem = lemma.replace(/(ō|or|it)$/, '');  // Replaces 1 in forms below.
 			const presentInfinitiveStem = presentStem.replace(/i$/, '');  // Replaces 2 in forms below.
 			const perfectStems = rest.PerfectStems
 				|| [(presentStem + 's')];                        // Replaces 3 in forms below.
