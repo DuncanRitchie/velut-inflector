@@ -1581,7 +1581,7 @@ const inflectFuncs = {
 		}
 
 		else if (rest.Conjugations?.includes('ferō')) {
-			const prefix = lemma.replace(/ferō$/, '');
+			const prefix = lemma.replace(/fer(ō|or|t)$/, '');
 			forms = {
 				indicative: {
 					active: {
