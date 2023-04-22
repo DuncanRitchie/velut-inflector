@@ -117,6 +117,14 @@
 					If this is not specified (or the verb is not of the third or fourth conjugation), the supine stems are used — either the value of <code>"SupineStems"</code> or a regularly-generated fallback.
 				</dd>
 
+				<dt><code>"GerundVowels"</code></dt>
+				<dd>
+					String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the third conjugation.
+					For example, the array is <samp>["u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerundus</q> etc.
+					If this is not specified (or the verb is not of the third conjugation), the default is <samp>["e"]</samp>.
+					The only lemma that needs this is <q lang="la">gerō</q>.
+				</dd>
+
 				<dt><code>"HasArchaicInfinitiveInIer"</code></dt>
 				<dd>
 					Boolean for whether a verb should have a present passive (or active if deponent) infinitive ending with “-ier”, potentially in addition to one in “-ī”.

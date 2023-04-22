@@ -2816,6 +2816,9 @@ const inflectFuncs = {
 			  || [(presentStem + 't')]                                    // Replaces 4 in forms below.
 			const futureActiveParticipleStems
 				= rest.FutureActiveParticipleStems || supineStems           // Replaces 5 in forms below.
+			const gerundVowels = rest.GerundVowels || ['e'];
+			const gerundStemsAsFarAsVowel
+				= joinStemsToEndings(presentStem, gerundVowels);            // Eg "geru" for "gerundum"; replaces 6 in forms below.
 
 			forms = {
 				indicative: {
@@ -3073,7 +3076,7 @@ const inflectFuncs = {
 						past: inflectFuncs['Adjective']({ Lemma: '4us' })
 							.unencliticized
 							.positive,
-						future: inflectFuncs['Adjective']({ Lemma: '1endus' })
+						future: inflectFuncs['Adjective']({ Lemma: '6ndus' })
 							.unencliticized
 							.positive,
 					},
@@ -3103,6 +3106,9 @@ const inflectFuncs = {
 				}
 				if (form.startsWith('5')) {
 					return joinStemsToEndings(futureActiveParticipleStems, form.substring(1));
+				}
+				if (form.startsWith('6')) {
+					return joinStemsToEndings(gerundStemsAsFarAsVowel, form.substring(1));
 				}
 				return form;
 			});
