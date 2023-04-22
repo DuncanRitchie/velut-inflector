@@ -1398,7 +1398,8 @@ const inflectFuncs = {
 			forms = rest.Forms;
 		}
 
-		else if (rest.Conjugations?.includes("sum")) {
+		else {
+			if (rest.Conjugations?.includes("sum")) {
 			const prefix = lemma.replace(/sum$/, '');
 			forms = {
 				indicative: {
@@ -3178,6 +3179,7 @@ const inflectFuncs = {
 		) {
 			console.warn(`IsIntransitive is not set for ${lemma}`);
 		}
+	}
 
 		return applyFieldsToForms(forms, rest);
 	},
