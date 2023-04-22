@@ -3089,7 +3089,7 @@ const inflectFuncs = {
 			};
 
 			if (rest.HasArchaicInfinitiveInIer) {
-				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1ier'] } } })
+				forms = mergeObjects(forms, { infinitive: { passive: { present: ['2ier'] } } })
 			}
 
 			forms = runLambdaOnObject(forms, form => {
