@@ -3121,6 +3121,11 @@ const inflectFuncs = {
 				|| [(presentStem + 'īv')];                        // Replaces 3 in forms below.
 			const supineStems = rest.SupineStems
 			  || [(presentStem + 'īt')]                         // Replaces 4 in forms below.
+			const futureActiveParticipleStems
+				= rest.FutureActiveParticipleStems || supineStems           // Replaces 5 in forms below.
+			const gerundVowels = rest.GerundVowels || ['e'];
+			const gerundStemsAsFarAsVowel
+				= joinStemsToEndings(presentStem + 'i', gerundVowels);      // Eg "oriu" for "oriundum"; replaces 6 in forms below.
 
 			forms = {
 				indicative: {
@@ -3370,7 +3375,7 @@ const inflectFuncs = {
 						present: inflectFuncs['Adjective']({ Lemma: '1iēns' })
 							.unencliticized
 							.positive,
-						future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
+						future: inflectFuncs['Adjective']({ Lemma: '5ūrus' })
 							.unencliticized
 							.positive,
 					},
@@ -3378,7 +3383,7 @@ const inflectFuncs = {
 						past: inflectFuncs['Adjective']({ Lemma: '4us' })
 							.unencliticized
 							.positive,
-						future: inflectFuncs['Adjective']({ Lemma: '1iendus' })
+						future: inflectFuncs['Adjective']({ Lemma: '6ndus' })
 							.unencliticized
 							.positive,
 					},
@@ -3402,6 +3407,12 @@ const inflectFuncs = {
 				}
 				if (form.startsWith('4')) {
 					return joinStemsToEndings(supineStems, form.substring(1));
+				}
+				if (form.startsWith('5')) {
+					return joinStemsToEndings(futureActiveParticipleStems, form.substring(1));
+				}
+				if (form.startsWith('6')) {
+					return joinStemsToEndings(gerundStemsAsFarAsVowel, form.substring(1));
 				}
 				return form;
 			});
