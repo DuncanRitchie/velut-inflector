@@ -3389,6 +3389,10 @@ const inflectFuncs = {
 				}
 			};
 
+			if (rest.HasArchaicInfinitiveInIer) {
+				forms = mergeObjects(forms, { infinitive: { passive: { present: ['1īrier'] } } })
+			}
+
 			forms = runLambdaOnObject(forms, form => {
 				if (form.startsWith('1')) {
 					return joinStemsToEndings(presentStem, form.substring(1));
