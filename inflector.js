@@ -3115,6 +3115,294 @@ const inflectFuncs = {
 			});
 		}
 
+		if (rest.Conjugations?.includes(4)) {
+			const presentStem = lemma.replace(/i(ō|or)$/, '');  // Replaces 1 in forms below.
+			const perfectStems = rest.PerfectStems
+				|| [(presentStem + 'īv')];                        // Replaces 3 in forms below.
+			const supineStems = rest.SupineStems
+			  || [(presentStem + 'īt')]                         // Replaces 4 in forms below.
+
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: ['1iō'],
+								second: ['1īs'],
+								third: ['1it'],
+							},
+							plural: {
+								first: ['1īmus'],
+								second: ['1ītis'],
+								third: ['1iunt'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1iēbam'],
+								second: ['1iēbās'],
+								third: ['1iēbat'],
+							},
+							plural: {
+								first: ['1iēbāmus'],
+								second: ['1iēbātis'],
+								third: ['1iēbant'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['1iam'],
+								second: ['1iēs'],
+								third: ['1iet'],
+							},
+							plural: {
+								first: ['1iēmus'],
+								second: ['1iētis'],
+								third: ['1ient'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['3ī'],
+								second: ['3istī'],
+								third: ['3it'],
+							},
+							plural: {
+								first: ['3imus'],
+								second: ['3istis'],
+								third: ['3ērunt', '3ēre'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['3eram'],
+								second: ['3erās'],
+								third: ['3erat'],
+							},
+							plural: {
+								first: ['3erāmus'],
+								second: ['3erātis'],
+								third: ['3erant'],
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: ['3erō'],
+								second: ['3eris'],
+								third: ['3erit'],
+							},
+							plural: {
+								first: ['3erimus'],
+								second: ['3eritis'],
+								third: ['3erint'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['1ior'],
+								second: ['1īris', '1īre'],
+								third: ['1ītur'],
+							},
+							plural: {
+								first: ['1īmur'],
+								second: ['1īminī'],
+								third: ['1iuntur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1iēbar'],
+								second: ['1iēbāris'],
+								third: ['1iēbātur'],
+							},
+							plural: {
+								first: ['1iēbāmur'],
+								second: ['1iēbāminī'],
+								third: ['1iēbantur'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['1iar'],
+								second: ['1iēris'],
+								third: ['1iētur'],
+							},
+							plural: {
+								first: ['1iēmur'],
+								second: ['1iēminī'],
+								third: ['1ientur'],
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: ['1iam'],
+								second: ['1iās'],
+								third: ['1iat'],
+							},
+							plural: {
+								first: ['1iāmus'],
+								second: ['1iātis'],
+								third: ['1iant'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1īrem'],
+								second: ['1īrēs'],
+								third: ['1īret'],
+							},
+							plural: {
+								first: ['1īrēmus'],
+								second: ['1īrētis'],
+								third: ['1īrent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['3erim'],
+								second: ['3erīs'],
+								third: ['3erit'],
+							},
+							plural: {
+								first: ['3erīmus'],
+								second: ['3erītis'],
+								third: ['3erint'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['3issem'],
+								second: ['3issēs'],
+								third: ['3isset'],
+							},
+							plural: {
+								first: ['3issēmus'],
+								second: ['3issētis'],
+								third: ['3issent'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								first: ['1iar'],
+								second: ['1iāris'],
+								third: ['1iātur'],
+							},
+							plural: {
+								first: ['1iāmur'],
+								second: ['1iāminī'],
+								third: ['1iantur'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['1īrer'],
+								second: ['1īrēris'],
+								third: ['1īrētur'],
+							},
+							plural: {
+								first: ['1īrēmur'],
+								second: ['1īrēminī'],
+								third: ['1īrentur'],
+							},
+						},
+					},
+				},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: ['1ī'],
+							},
+							plural: {
+								third: ['1īte'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['1ītō'],
+								third: ['1ītō'],
+							},
+							plural: {
+								second: ['1ītōte'],
+								third: ['1iuntō'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								second: ['1īre'],
+							},
+							plural: {
+								third: ['1īminī'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['1ītor'],
+								third: ['1ītor'],
+							},
+							plural: {
+								third: ['1iuntor'],
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: ['1īre'],
+						past: ['3isse'],
+					},
+					passive: {
+						present: ['1īrī'],
+					},
+				},
+				participle: {
+					active: {
+						present: inflectFuncs['Adjective']({ Lemma: '1iēns' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
+							.unencliticized
+							.positive,
+					},
+					passive: {
+						past: inflectFuncs['Adjective']({ Lemma: '4us' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: '1iendus' })
+							.unencliticized
+							.positive,
+					},
+				},
+				supine: {
+					accusative: ['4um'],
+					ablative: ['4ū'],
+				}
+			};
+
+			forms = runLambdaOnObject(forms, form => {
+				if (form.startsWith('1')) {
+					return joinStemsToEndings(presentStem, form.substring(1));
+				}
+				if (form.startsWith('3')) {
+					return joinStemsToEndings(perfectStems, form.substring(1));
+				}
+				if (form.startsWith('4')) {
+					return joinStemsToEndings(supineStems, form.substring(1));
+				}
+				return form;
+			});
+		}
+
 		if (rest.Conjugations?.length > 1) {
 			console.warn(`Verb ${Lemma} may be misconjugated because its conjugations are given as `, rest.Conjugations);
 		}
