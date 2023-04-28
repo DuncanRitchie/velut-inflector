@@ -2368,7 +2368,7 @@ const inflectFuncs = {
 						},
 						imperfect: {
 							singular: {
-								third: ['fīeret']
+								third: ['fīeret', 'fieret']
 							},
 						},
 					},
@@ -2401,7 +2401,7 @@ const inflectFuncs = {
 						perfect: ['fēcisse'],
 					},
 					passive: {
-						present: ['fīerī']
+						present: ['fierī', 'fīerī']
 					}
 				},
 				participle: {
@@ -2478,13 +2478,13 @@ const inflectFuncs = {
 						},
 						imperfect: {
 							singular: {
-								first: ['fīerem'],
-								second: ['fīerēs'],
+								first: ['fīerem', 'fierem'],
+								second: ['fīerēs', 'fierēs'],
 							},
 							plural: {
-								first: ['fīerēmus'],
-								second: ['fīerētis'],
-								third: ['fīerent']
+								first: ['fīerēmus', 'fierēmus'],
+								second: ['fīerētis', 'fierētis'],
+								third: ['fīerent', 'fierent']
 							},
 						},
 					},
@@ -2501,11 +2501,12 @@ const inflectFuncs = {
 						},
 						future: {
 							singular: {
-								second: ["fītō"],
-								third: ["fītō"],
+								second: ['fītō'],
+								third: ['fītō'],
 							},
 							plural: {
-								third: ["fīuntō"]
+								second: ['fītōte'],
+								third: ['fīuntō']
 							}
 						}
 					},
