@@ -2209,6 +2209,329 @@ const inflectFuncs = {
 			);
 		}
 
+		else if (rest.Conjugations?.includes("faciō")) {
+			if (!lemma.endsWith('faciō') && !lemma.endsWith('ficiō')) {
+				console.warn('Doesn’t end with faciō or ficiō: ' + Lemma);
+			}
+			const prefix = lemma.replace(/f[ai]ciō$/, '');
+			const hasReducedVowel = lemma.endsWith('ficiō');
+			forms = {
+				indicative: {
+					active: {
+						present: {
+							singular: {
+								first: ['faciō'],
+								second: ['facis'],
+								third: ['facit'],
+							},
+							plural: {
+								first: ['facimus'],
+								second: ['facitis'],
+								third: ['faciunt'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['faciēbam'],
+								second: ['faciēbās'],
+								third: ['faciēbat'],
+							},
+							plural: {
+								first: ['faciēbāmus'],
+								second: ['faciēbātis'],
+								third: ['faciēbant'],
+							},
+						},
+						future: {
+							singular: {
+								first: ['faciam'],
+								second: ['faciēs'],
+								third: ['faciet'],
+							},
+							plural: {
+								first: ['faciēmus'],
+								second: ['faciētis'],
+								third: ['facient'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['fēcī'],
+								second: ['fēcistī'],
+								third: ['fēcit'],
+							},
+							plural: {
+								first: ['fēcimus'],
+								second: ['fēcistis'],
+								third: ['fēcērunt', 'fēcēre'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['fēceram'],
+								second: ['fēcerās'],
+								third: ['fēcerat'],
+							},
+							plural: {
+								first: ['fēcerāmus'],
+								second: ['fēcerātis'],
+								third: ['fēcerant'],
+							},
+						},
+						futureperfect: {
+							singular: {
+								first: ['fēcerō'],
+								second: ['fēceris'],
+								third: ['fēcerit'],
+							},
+							plural: {
+								first: ['fēcerimus'],
+								second: ['fēceritis'],
+								third: ['fēcerint'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								third: ['fit']
+							},
+						},
+						imperfect: {
+							singular: {
+								third: ['fīēbat']
+							},
+						},
+						future: {
+							singular: {
+								third: ['fīet']
+							},
+						},
+					},
+				},
+				subjunctive: {
+					active: {
+						present: {
+							singular: {
+								first: ['faciam'],
+								second: ['faciās'],
+								third: ['faciat'],
+							},
+							plural: {
+								first: ['faciāmus'],
+								second: ['faciātis'],
+								third: ['faciant'],
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['facerem'],
+								second: ['facerēs'],
+								third: ['faceret'],
+							},
+							plural: {
+								first: ['facerēmus'],
+								second: ['facerētis'],
+								third: ['facerent'],
+							},
+						},
+						perfect: {
+							singular: {
+								first: ['fēcerim'],
+								second: ['fēcerīs'],
+								third: ['fēcerit'],
+							},
+							plural: {
+								first: ['fēcerīmus'],
+								second: ['fēcerītis'],
+								third: ['fēcerint'],
+							},
+						},
+						pluperfect: {
+							singular: {
+								first: ['fēcissem'],
+								second: ['fēcissēs'],
+								third: ['fēcisset'],
+							},
+							plural: {
+								first: ['fēcissēmus'],
+								second: ['fēcissētis'],
+								third: ['fēcissent'],
+							},
+						},
+					},
+					passive: {
+						present: {
+							singular: {
+								third: ['fīat']
+							},
+						},
+						imperfect: {
+							singular: {
+								third: ['fīeret']
+							},
+						},
+					},
+				},
+				imperative: {
+					active: {
+						present: {
+							singular: {
+								second: ['face'],
+							},
+							plural: {
+								second: ['facite'],
+							},
+						},
+						future: {
+							singular: {
+								second: ['facitō'],
+								third: ['facitō'],
+							},
+							plural: {
+								second: ['facitōte'],
+								third: ['faciuntō'],
+							},
+						},
+					},
+				},
+				infinitive: {
+					active: {
+						present: ['facere'],
+						perfect: ['fēcisse'],
+					},
+					passive: {
+						present: ['fīerī']
+					}
+				},
+				participle: {
+					active: {
+						present: inflectFuncs['Adjective']({ Lemma: 'faciēns' })
+							.unencliticized
+							.positive,
+						future: inflectFuncs['Adjective']({ Lemma: 'factūrus' })
+							.unencliticized
+							.positive,
+					},
+					passive: {
+						future: inflectFuncs['Adjective']({ Lemma: 'faciendus' })
+							.unencliticized
+							.positive,
+					}
+				},
+				supine: {
+					accusative: ['factum'],
+					ablative: ['factū'],
+				}
+			}
+
+			const transitiveForms = {
+				indicative: {
+					passive: {
+						present: {
+							singular: {
+								first: ['fīō'],
+								second: ['fīs'],
+							},
+							plural: {
+								first: ['fīmus'],
+								second: ['fītis'],
+								third: ['fīunt']
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['fīēbam'],
+								second: ['fīēbās'],
+							},
+							plural: {
+								first: ['fīēbāmus'],
+								second: ['fīēbātis'],
+								third: ['fīēbant']
+							},
+						},
+						future: {
+							singular: {
+								first: ['fīam'],
+								second: ['fīēs'],
+							},
+							plural: {
+								first: ['fīēmus'],
+								second: ['fīētis'],
+								third: ['fīent']
+							},
+						},
+					},
+				},
+				subjunctive: {
+					passive: {
+						present: {
+							singular: {
+								first: ['fīam'],
+								second: ['fīās'],
+							},
+							plural: {
+								first: ['fīāmus'],
+								second: ['fīātis'],
+								third: ['fīant']
+							},
+						},
+						imperfect: {
+							singular: {
+								first: ['fīerem'],
+								second: ['fīerēs'],
+							},
+							plural: {
+								first: ['fīerēmus'],
+								second: ['fīerētis'],
+								third: ['fīerent']
+							},
+						},
+					},
+				},
+				imperative: {
+					passive: {
+						present: {
+							singular: {
+								second: ['fī']
+							},
+							plural: {
+								second: ['fīte']
+							}
+						},
+						future: {
+							singular: {
+								second: ["fītō"],
+								third: ["fītō"],
+							},
+							plural: {
+								third: ["fīuntō"]
+							}
+						}
+					},
+				},
+				participle: {
+					passive: {
+						past: inflectFuncs['Adjective']({ Lemma: 'factus' })
+							.unencliticized
+							.positive,
+					}
+				}
+			}
+
+			if (!rest.IsIntransitive) {
+				forms = mergeObjects(forms, transitiveForms);
+			}
+
+			// Attach the prefix to all the forms of ‘faciō’.
+			forms = runLambdaOnObject(
+				forms,
+				(form) => joinStemsToEndings(prefix, form)
+					// Correct the stem vowel for verbs like ‘perficiō’.
+					.map(form => hasReducedVowel ? form.replace(/fact/, 'fect').replace(/fac/, 'fic') : form)
+			);
+		}
+
 		const isDeponent = lemma.endsWith('or');
 
 		if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes("dō")) {
