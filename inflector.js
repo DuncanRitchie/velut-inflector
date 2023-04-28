@@ -3219,7 +3219,7 @@ const inflectFuncs = {
 						imperfect: {
 							singular: {
 								first: ['1iēbar'],
-								second: ['1iēbāris'],
+								second: ['1iēbāris', '1iēbāre'],
 								third: ['1iēbātur'],
 							},
 							plural: {
@@ -3231,7 +3231,7 @@ const inflectFuncs = {
 						future: {
 							singular: {
 								first: ['1iar'],
-								second: ['1iēris'],
+								second: ['1iēris', '1iēre'],
 								third: ['1iētur'],
 							},
 							plural: {
@@ -3297,7 +3297,7 @@ const inflectFuncs = {
 						present: {
 							singular: {
 								first: ['1iar'],
-								second: ['1iāris'],
+								second: ['1iāris', '1iāre'],
 								third: ['1iātur'],
 							},
 							plural: {
@@ -3309,7 +3309,7 @@ const inflectFuncs = {
 						imperfect: {
 							singular: {
 								first: ['1īrer'],
-								second: ['1īrēris'],
+								second: ['1īrēris', '1īrēre'],
 								third: ['1īrētur'],
 							},
 							plural: {
