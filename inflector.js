@@ -2528,8 +2528,8 @@ const inflectFuncs = {
 			forms = runLambdaOnObject(
 				forms,
 				(form) => joinStemsToEndings(prefix, form)
-					// Correct the stem vowel for verbs like ‘perficiō’.
-					.map(form => hasReducedVowel ? form.replace(/fact/, 'fect').replace(/fac/, 'fic') : form)
+					// Correct the stem vowel for verbs like ‘perficiō’, but keep ‘calficiō/calfactum’.
+					.map(form => hasReducedVowel ? form.replace(/(?<!cale?)fact/, 'fect').replace(/fac(?!t)/, 'fic') : form)
 			);
 		}
 
