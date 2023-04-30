@@ -81,7 +81,6 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		return formsObject;
 	}
 	return Object.entries(formsObject)
-		.filter(([key, obj]) => obj !== null && obj !== undefined)
 		.filter(([key, obj]) => !unwantedParsings.includes(key))
 		.map(([key, obj]) => [key, deleteUnwantedForms(obj, unwantedParsings)])
 		.reduce((accumulated, current) => {
@@ -804,7 +803,7 @@ const inflectFuncs = {
 				|| (lemma.endsWith("os"))
 				|| (lemma.endsWith("ī"))
 			) {
-				console.log('Assuming 2nd declension for ' + Lemma);
+				// console.log('Assuming 2nd declension for ' + Lemma);
 				return [2];
 			}
 			if (lemma.endsWith("ū")) {
@@ -1402,6 +1401,10 @@ const inflectFuncs = {
 		}
 
 		else {
+			if (!rest.Conjugations || !rest.Conjugations.length) {
+				console.warn('No Conjugations given for ' + Lemma)
+			}
+
 			if (rest.Conjugations?.includes("sum")) {
 			const prefix = lemma.replace(/sum$/, '');
 			forms = {
@@ -3814,6 +3817,10 @@ const inflectFuncs = {
 		}
 	}
 
+	//  if (rest["20230115"] && rest.Conjugations?.includes(1)) {
+	// 	console.log(`Conjugations ${rest.Conjugations} for ${Lemma}`);
+	//  }
+
 		return applyFieldsToForms(forms, rest);
 	},
 }
@@ -4163,6 +4170,7 @@ if (typeof require !== 'undefined') {
 								missing: subtractSet(expectedFormsAsSet, formsAsSet),
 								for: lemma,
 							});
+							// console.error(lemma)
 						}
 					}
 				});
