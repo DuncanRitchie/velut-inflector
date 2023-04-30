@@ -796,17 +796,19 @@ const inflectFuncs = {
 				console.log(`Assuming 1st declension for ${Lemma}`)
 				return [1];
 			}
-			if (lemma.endsWith("us")) {
-				console.log('Assuming 2nd declension for ' + Lemma);
-			}
 			if (
 				(lemma.endsWith("us"))
+				|| (lemma.endsWith("üs"))
 				|| (lemma.endsWith("er"))
 				|| (lemma.endsWith("um"))
 				|| (lemma.endsWith("os"))
 				|| (lemma.endsWith("ī"))
-			) { return [2]; }
+			) {
+				console.log('Assuming 2nd declension for ' + Lemma);
+				return [2];
+			}
 			if (lemma.endsWith("ū")) {
+				console.log('Assuming 4th declension for ' + Lemma);
 				return [4];
 			}
 			return [3];
@@ -815,6 +817,7 @@ const inflectFuncs = {
 			if (rest.Genders) { return rest.Genders; }
 
 			console.log('Genders not specified for ' + Lemma)
+
 			if (rest.Notes) {
 				if (rest.Notes.includes("masculine") && rest.Notes.includes("feminine") && rest.Notes.includes("neuter")) {
 					console.log(`Assuming masculine & feminine & neuter for ${Lemma}: ${rest.Notes}`)
@@ -3751,6 +3754,8 @@ const inflectFuncs = {
 			if (!rest.Conjugations || !rest.Conjugations.length) {
 				console.debug('Conjugations not specified for', Lemma);
 			}
+
+			console.warn("No forms for " + Lemma)
 			return {}
 		}
 
@@ -4115,6 +4120,7 @@ if (typeof require !== 'undefined') {
 						}
 
 						if (expectedOutput[lemma] === undefined) {
+							console.warn('No expected output for ' + lemma);
 							noTestDataCount++;
 							continue;
 						}
@@ -4131,18 +4137,19 @@ if (typeof require !== 'undefined') {
 							// 		for: lemma,
 							// 	});
 							// }
-							// console.log({parsingData})
+							// const parsingDataAsJson = JSON.stringify(parsingData)
+							// console.log({parsingDataAsJson})
+
 							const comparativeForm = parsingData.unencliticized?.comparative?.neuter?.singular?.nominative?.[0]
 								?? parsingData.unencliticized?.comparative?.[0];
 							if (comparativeForm) {
 								if (!expectedFormsAsSet.has(comparativeForm)) {
 									const lemmataToNotComplainAboutComparativesFor = [
-										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus"
+										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus", "frequenter"
 									];
 										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
 											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
 											// console.log(`${comparativeForm}`);
-											// console.log(`${lemma}`);
 											incorrectComparatives++;
 										}
 								}
@@ -4155,7 +4162,6 @@ if (typeof require !== 'undefined') {
 								missing: subtractSet(expectedFormsAsSet, formsAsSet),
 								for: lemma,
 							});
-							// }
 						}
 					}
 				});
