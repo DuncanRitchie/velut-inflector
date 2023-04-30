@@ -3803,6 +3803,7 @@ const inflectFuncs = {
 
 		// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 		if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
+			forms.participle.active.past = forms.participle.passive.past;
 			forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 		}
 		if (lemma.endsWith('scō')
