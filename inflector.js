@@ -3674,7 +3674,7 @@ const inflectFuncs = {
 								second: ['1īre'],
 							},
 							plural: {
-								third: ['1īminī'],
+								second: ['1īminī'],
 							},
 						},
 						future: {
