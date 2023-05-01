@@ -468,6 +468,9 @@ const emptyFieldsForIntransitiveVerbs = {
 			},
 		},
 	},
+	supine: {
+		ablative: []
+	}
 };
 
 // This function should be called at the end of each inflection function.
