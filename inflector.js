@@ -1067,13 +1067,6 @@ const inflectFuncs = {
 		})()
 
 		const getThirdDeclensionNonNeuterForms = () => {
-			const posAcPlNonNeuterForms = (() => {
-				if (hasIStem) {
-					return joinStemsToEndings(stems, ['ēs', 'īs']);
-				}
-				return joinStemsToEndings(stems, 'ēs');
-			})();
-
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1082,16 +1075,16 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
 					ablative: joinStemsToEndings(stems, 'e'),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ī') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ēs'),
 					vocative: joinStemsToEndings(stems, 'ēs'),
-					accusative: posAcPlNonNeuterForms,
+					accusative: joinStemsToEndings(stems, (hasIStem ? ['ēs', 'īs'] : 'ēs')),
 					genitive: joinStemsToEndings(stems, (hasIStem || rest.IsDeclinedLikeAdjective ? 'ium' : 'um')),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : []),
 				},
 			}
 		}
@@ -1104,7 +1097,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
 					ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ī') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
@@ -1113,7 +1106,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : []),
 				},
 			};
 		}
@@ -1141,7 +1134,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, genSingEnding),
 					dative: joinStemsToEndings(stems, 'ae'),
 					ablative: joinStemsToEndings(stems, ablSingEnding),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ae' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ae') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ae'),
@@ -1150,7 +1143,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ārum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'īs') : []),
 				},
 			};
 		}
@@ -1183,7 +1176,7 @@ const inflectFuncs = {
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
 					ablative: joinStemsToEndings(stems, 'ō'),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ī') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ī'),
@@ -1192,7 +1185,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ōrum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'īs') : []),
 				},
 			};
 		}
@@ -1212,7 +1205,7 @@ const inflectFuncs = {
 					genitive: genSings,
 					dative: joinStemsToEndings(stems, 'ō'),
 					ablative: joinStemsToEndings(stems, 'ō'),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ī' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ī') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'a'),
@@ -1221,7 +1214,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ōrum'),
 					dative: joinStemsToEndings(stems, 'īs'),
 					ablative: joinStemsToEndings(stems, 'īs'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'īs' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'īs') : []),
 				},
 			};
 		}
@@ -1234,7 +1227,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ūs'),
 					dative: joinStemsToEndings(stems, 'uī'),
 					ablative: joinStemsToEndings(stems, 'ū'),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'uī' : [])),
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'uī') : []),
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ūs'),
@@ -1243,7 +1236,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'uum'),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : []),
 				},
 			};
 		}
@@ -1256,7 +1249,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'ūs'),
 					dative: joinStemsToEndings(stems, 'ū'),
 					ablative: joinStemsToEndings(stems, 'ū'),
-					locative: joinStemsToEndings(stems, (hasLocativeSingular ? 'ū' : []))
+					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ū') : [])
 				},
 				plural: {
 					nominative: joinStemsToEndings(stems, 'ua'),
@@ -1265,7 +1258,7 @@ const inflectFuncs = {
 					genitive: joinStemsToEndings(stems, 'uum'),
 					dative: joinStemsToEndings(stems, 'ibus'),
 					ablative: joinStemsToEndings(stems, 'ibus'),
-					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
+					locative: (hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : []),
 				},
 			};
 		}
