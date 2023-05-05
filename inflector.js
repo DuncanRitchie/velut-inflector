@@ -1046,6 +1046,23 @@ const inflectFuncs = {
 			if (lemma.endsWith('e')) {
 				return true;
 			}
+
+			//// Parisyllabic nouns probably have i-stem, but this should be confirmed.
+			//// Pluralia tantum cannot be deemed parisyllabic because there’s no nominative singular.
+			//// Singularia tantum have no plural forms that could be affected by the i-stem.
+			const hasBothSingularAndPlural =
+				!rest.ParsingsToExclude?.includes('singular') &&
+				!rest.ParsingsToExclude?.includes('plural');
+
+			const isParisyllabic = hasBothSingularAndPlural && stems.some(stem => {
+				return lemma === stem + 'is' || lemma === stem + 'ēs';
+			});
+
+			if (isParisyllabic) {
+				console.warn('Assuming HasIStem === true for ' + Lemma);
+				return true;
+			}
+
 			return false;
 		})()
 
@@ -1076,7 +1093,6 @@ const inflectFuncs = {
 					ablative: joinStemsToEndings(stems, 'ibus'),
 					locative: joinStemsToEndings(stems, (hasLocativePlural ? 'ibus' : [])),
 				},
-				possiblyIncorrect: joinStemsToEndings(stems, 'īs')
 			}
 		}
 		const getThirdDeclensionNeuterForms = () => {
