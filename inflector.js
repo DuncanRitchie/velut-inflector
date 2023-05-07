@@ -706,22 +706,8 @@ const inflectFuncs = {
 			if (stems[0].endsWith('r')) { return true; }
 			if (lemma.endsWith('x')) { return true; }
 
-			//// Parisyllabic adjectives have i-stem.
-			//// Pluralia tantum cannot be deemed parisyllabic because there’s no nominative singular.
-			//// Singularia tantum have no plural forms that could be affected by the i-stem.
-			const hasBothSingularAndPlural =
-				!rest.ParsingsToExclude?.includes('singular') &&
-				!rest.ParsingsToExclude?.includes('plural');
-
-			const isParisyllabic = hasBothSingularAndPlural && stems.some(stem => {
-				return lemma === stem + 'is' || lemma === stem + 'ēs';
-			});
-
-			if (isParisyllabic) {
-				return true;
-			}
-
 			//// Let’s assume that Greek adjectives don’t have i-stem.
+			//// (I don’t know!)
 			if (rest.Transliterations) {
 				return false;
 			}
