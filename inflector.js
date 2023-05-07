@@ -570,6 +570,11 @@ const inflectFuncs = {
 
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]") {
+
+			if (lemma.match(/[^q][eiu]us$/) && !rest.ParsingsToExclude) {
+				console.warn("Please define ParsingsToExclude because adjectives in -eus, -ius, -uus generally don’t have comparative/superlative: " + Lemma);
+			}
+
 			const stems = ensureIsArray((() => {
 				if (rest.ObliqueStems) { return rest.ObliqueStems; }
 				if (lemma.endsWith('er')) { return lemma; }
