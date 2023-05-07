@@ -705,7 +705,28 @@ const inflectFuncs = {
 			if (lemma.endsWith('quis')) { return true; }
 			if (stems[0].endsWith('r')) { return true; }
 			if (lemma.endsWith('x')) { return true; }
-			return false;
+
+			//// Parisyllabic adjectives have i-stem.
+			//// Pluralia tantum cannot be deemed parisyllabic because there’s no nominative singular.
+			//// Singularia tantum have no plural forms that could be affected by the i-stem.
+			const hasBothSingularAndPlural =
+				!rest.ParsingsToExclude?.includes('singular') &&
+				!rest.ParsingsToExclude?.includes('plural');
+
+			const isParisyllabic = hasBothSingularAndPlural && stems.some(stem => {
+				return lemma === stem + 'is' || lemma === stem + 'ēs';
+			});
+
+			if (isParisyllabic) {
+				return true;
+			}
+
+			//// Let’s assume that Greek adjectives don’t have i-stem.
+			if (rest.Transliterations) {
+				return false;
+			}
+			//// Adjectives should have i-stem by default, unlike nouns.
+			return true;
 		})();
 
 		const posAcPlNonNeuterForms = (() => {
@@ -4220,7 +4241,7 @@ if (typeof require !== 'undefined') {
 							if (comparativeForm) {
 								if (!expectedFormsAsSet.has(comparativeForm)) {
 									const lemmataToNotComplainAboutComparativesFor = [
-										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus", "frequenter"
+										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus", "frequenter", "mānsuēs", "vetus"
 									];
 										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
 											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
