@@ -498,8 +498,63 @@ const inflectFuncs = {
 		const lemma = rest.IsLemmaInQue ? removeBrackets(Lemma).replace(/que$/, '') : removeBrackets(Lemma);
 
 		if (rest.IsIndeclinable) {
-			const withEnclitics = multiplyWithEnclitics({ positive: lemma });
-			return deleteUnwantedForms(withEnclitics, rest.ParsingsToExclude);
+			const forms = { positive: {
+				masculine: {
+					singular: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+					plural: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+				},
+				feminine: {
+					singular: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+					plural: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+				},
+				neuter: {
+					singular: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+					plural: {
+						nominative: [lemma],
+						vocative: [lemma],
+						accusative: [lemma],
+						genitive: [lemma],
+						dative: [lemma],
+						ablative: [lemma],
+					},
+				},
+			} };
+			return applyFieldsToForms(forms, rest);
 		}
 
 		const declensionsString = rest.Declensions
