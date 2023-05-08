@@ -1141,7 +1141,7 @@ const inflectFuncs = {
 					accusative: joinStemsToEndings(stems, 'em'),
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
-					ablative: joinStemsToEndings(stems, 'e'),
+					ablative: joinStemsToEndings(stems, rest.IsDeclinedLikeAdjective ? 'ī' : 'e'),
 					locative: (hasLocativeSingular ? joinStemsToEndings(stems, 'ī') : []),
 				},
 				plural: {
