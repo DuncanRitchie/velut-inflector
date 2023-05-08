@@ -4251,6 +4251,29 @@ if (typeof require !== 'undefined') {
 							});
 							// console.error(lemma)
 						}
+
+						//// If I had added incorrect forms to velut in Excel,
+						//// I’ve used the ExtraEncliticizedForms field in the input Json
+						//// to add an "incorrect" array of those forms to the output object.
+						//// This is to ensure that all forms that were in Excel are
+						//// output by the Inflector, while also ensuring incorrect forms
+						//// can be easily filtered out.
+						//// The following if/else-block tests whether these forms appear
+						//// elsewhere in the output object — they shouldn’t.
+						if (parsingData.incorrect) {
+							const incorrectFormsSet = convertParsingObjectToFormsSet(parsingData.incorrect);
+							delete parsingData.incorrect;
+							const correctFormsSet = convertParsingObjectToFormsSet(parsingData);
+							const formsBothCorrectAndNotIncorrect = subtractSet(correctFormsSet, incorrectFormsSet);
+							if (isEqualSet(correctFormsSet, formsBothCorrectAndNotIncorrect)) {
+								// console.log("Success — no incorrect forms are considered correct for " + lemma);
+							} else {
+								const formsBothCorrectAndIncorrect = subtractSet(correctFormsSet, formsBothCorrectAndNotIncorrect);
+								console.warn("Warning — incorrect forms are considered correct for " + lemma)
+								console.debug(formsBothCorrectAndIncorrect);
+								consoleLogAsJson(parsingData);
+							}
+						}
 					}
 				});
 				const skippedCount = totalLemmata - errorCount - successCount - noTestDataCount;
