@@ -1,4 +1,4 @@
-# Inflector for velut (not finished yet)
+# Inflector for velut
 
 https://www.duncanritchie.co.uk/velut-inflector/
 
@@ -11,7 +11,8 @@ This contains hardcoded filepaths to read input data from and write output data 
 I’ll then be able to do further processing on the output.
 
 _If you’re not me, you’re unlikely to have much use for the Inflector._
-_And not even I am using it for real yet, because it’s very much a work in progress._
+_And not even I am using it on the velut website yet, because it might generate more forms than I want._
+_But that’s probably not so much a fault in the Inflector as a fault in my input data, which I will rectify._
 
 For more information, see the [About section](https://www.duncanritchie.co.uk/velut-inflector/#about) of the webpage.
 
