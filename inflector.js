@@ -722,13 +722,6 @@ const inflectFuncs = {
 
 		const isOneTermination = lemma.endsWith('ns') || lemma.endsWith('r') || lemma.endsWith('x');
 
-		const posAcPlNonNeuterForms = (() => {
-			if (hasIStem) {
-				return joinStemsToEndings(stems, ['ēs', 'īs']);
-			}
-			return joinStemsToEndings(stems, 'ēs');
-		})();
-
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, 'i');
 		const superlativeStems = rest.SuperlativeStems
@@ -750,7 +743,7 @@ const inflectFuncs = {
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
 						vocative: joinStemsToEndings(stems, 'ēs'),
-						accusative: posAcPlNonNeuterForms,
+						accusative: joinStemsToEndings(stems, hasIStem ? ['ēs', 'īs'] : 'ēs' ),
 						genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
 						dative: joinStemsToEndings(stems, 'ibus'),
 						ablative: joinStemsToEndings(stems, 'ibus'),
@@ -768,7 +761,7 @@ const inflectFuncs = {
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
 						vocative: joinStemsToEndings(stems, 'ēs'),
-						accusative: posAcPlNonNeuterForms,
+						accusative: joinStemsToEndings(stems, hasIStem ? ['ēs', 'īs'] : 'ēs' ),
 						genitive: joinStemsToEndings(stems, (hasIStem ? 'ium' : 'um')),
 						dative: joinStemsToEndings(stems, 'ibus'),
 						ablative: joinStemsToEndings(stems, 'ibus'),
