@@ -118,7 +118,19 @@ const sampleDataJson =
 		}
 	}
 ]
-const sampleData = JSON.stringify(sampleDataJson, null, '\t');
+
+function prettyPrintJson(text) {
+	return JSON
+		.stringify(text, null, '\t')
+		.replace(/(?<=": \[)\n\s*/g, '')      // Delete newline at start of array
+		.replace(/(?<="|\d)\n\s*(?=\])/g, '') // Delete newline at end of array
+		.replace(/\n\s+(?=[^:{}]+\n)/g, ' ')  // Delete newlines between array items
+	;
+}
+
+const sampleData = prettyPrintJson(sampleDataJson);
+
+
 
 
 //// Functions used in `generateJson`:
@@ -160,7 +172,7 @@ const generateJson = () => {
 }
 
 const displayOutput = () => {
-	textareaOutput.value = JSON.stringify(outputAsObject, null, '\t');
+	textareaOutput.value = prettyPrintJson(outputAsObject);
 }
 
 const copyToClipboard = () => {
