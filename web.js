@@ -18,172 +18,105 @@ textareaOutput.value = '';
 const sampleDataJson =
 [
 	{
+		"Lemma": "vocābulum",
+		"PartOfSpeech": "Noun",
+		"Meanings": "word",
+		"Genders": ["neuter"]
+	},
+	{
+		"Lemma": "excellēns",
+		"PartOfSpeech": "Adjective",
+		"Meanings": "excellent; distinguished"
+	},
+	{
+		"Lemma": "excellō",
+		"PartOfSpeech": "Verb",
+		"Meanings": "excel; be distinguished; ‘excelsus’ = distinguished",
+		"Conjugations": [3],
+		"PerfectStems": ["excellu"],
+		"SupineStems": ["excels"]
+	},
+	{
+		"Lemma": "Latīnus[adj]",
+		"PartOfSpeech": "Adjective",
+		"Meanings": "Latin",
+		"ParsingsToExclude": ["comparative", "superlative"]
+	},
+	{
+		"Lemma": "Latīnus[prn]",
+		"PartOfSpeech": "Proper noun",
+		"Meanings": "king who welcomed Aeneas to Latium; Latinus Silvius fourth king of Alba Longa",
+		"Genders": ["masculine"]
+	},
+	{
+		"Lemma": "ūtilis",
+		"PartOfSpeech": "Adjective",
+		"Meanings": "useful",
+	},
+	{
+		"Lemma": "tabula",
+		"PartOfSpeech": "Noun",
+		"Meanings": "board; tablet",
+		"Declensions": [1],
+		"Genders": ["feminine"]
+	},
+	{
 		"Lemma": "ā",
 		"PartOfSpeech": "Noun",
-		"Meanings": "letter Aa"
+		"Meanings": "letter Aa",
+		"Genders": ["neuter"],
+		"IsIndeclinable": true
 	},
 	{
 		"Lemma": "ab",
 		"PartOfSpeech": "Preposition",
-		"Meanings": "from; by; since"
+		"Meanings": "from; by; since",
+		"Forms": {"unencliticized": ["ā", "ab", "abs"], "ne": ["āne"], "que": ["āque", "absque"], "ve": ["āve"] }
 	},
 	{
 		"Lemma": "abarceō",
 		"PartOfSpeech": "Verb",
-		"Meanings": "keep away"
+		"Meanings": "keep away",
+		"Conjugations": [2]
 	},
 	{
 		"Lemma": "abavia",
 		"PartOfSpeech": "Noun",
-		"Meanings": "great-great-grandmother"
+		"Meanings": "great-great-grandmother",
+		"Declensions": [1],
+		"Genders": ["feminine"]
 	},
 	{
 		"Lemma": "abavus",
 		"PartOfSpeech": "Noun",
-		"Meanings": "great-great-grandfather"
+		"Meanings": "great-great-grandfather",
+		"Genders": ["masculine"]
 	},
 	{
 		"Lemma": "abdicō",
 		"PartOfSpeech": "Verb",
-		"Meanings": "deny; abdicate; renounce"
+		"Meanings": "deny; abdicate; renounce",
+		"Conjugations": [1]
 	},
 	{
 		"Lemma": "abdīcō",
 		"PartOfSpeech": "Verb",
-		"Meanings": "deny (an omen or right)"
-	},
-	{
-		"Lemma": "atque",
-		"PartOfSpeech": "Conjunction",
-		"Meanings": "and; compared to",
-		"Forms": ["ac", "atque"]
-	},
-	{
-		"Lemma": "ex",
-		"PartOfSpeech": "Preposition",
-		"Meanings": "out of",
-		"Forms": ["ē"]
-	},
-	{
-		"Lemma": "inter",
-		"PartOfSpeech": "Preposition",
-		"Meanings": "between; among; ‘interior’ = farther inside; ‘intimus’ = farthest inside",
-		"Forms": {
-			"positive": ["inter"],
-			"comparative": {
-				"masculine": {
-					"singular": {
-						"nominative": ["interior"],
-						"vocative": ["interior"],
-						"accusative": ["interiōrem"],
-						"genitive": ["interiōris"],
-						"dative": ["interiōrī"],
-						"ablative": ["interiōre"]
-					},
-					"plural": {
-						"nominative": ["interiōrēs"],
-						"vocative": ["interiōrēs"],
-						"accusative": ["interiōrēs"],
-						"genitive": ["interiōrum"],
-						"dative": ["interiōribus"],
-						"ablative": ["interiōribus"]
-					}
-				},
-				"feminine": {
-					"singular": {
-						"nominative": ["interior"],
-						"vocative": ["interior"],
-						"accusative": ["interiōrem"],
-						"genitive": ["interiōris"],
-						"dative": ["interiōrī"],
-						"ablative": ["interiōre"]
-					},
-					"plural": {
-						"nominative": ["interiōrēs"],
-						"vocative": ["interiōrēs"],
-						"accusative": ["interiōrēs"],
-						"genitive": ["interiōrum"],
-						"dative": ["interiōribus"],
-						"ablative": ["interiōribus"]
-					}
-				},
-				"neuter": {
-					"singular": {
-						"nominative": ["interius"],
-						"vocative": ["interius"],
-						"accusative": ["interius"],
-						"genitive": ["interiōris"],
-						"dative": ["interiōrī"],
-						"ablative": ["interiōre"]
-					},
-					"plural": {
-						"nominative": ["interiōra"],
-						"vocative": ["interiōra"],
-						"accusative": ["interiōra"],
-						"genitive": ["interiōrum"],
-						"dative": ["interiōribus"],
-						"ablative": ["interiōribus"]
+		"Meanings": "deny (an omen or right)",
+		"Conjugations": [3],
+		"PerfectStems": ["abdīx"],
+		"SupineStems": ["abdict"],
+		"ReplacementForms": {
+			"imperative": {
+				"active": {
+					"present": {
+						"singular": {
+							"second": ["abdīc"]
+						}
 					}
 				}
 			}
-		},
-	"superlative": {
-		"masculine": {
-			"singular": {
-				"nominative": ["intimus"],
-				"vocative": ["intime"],
-				"accusative": ["intimum"],
-				"genitive": ["intimī"],
-				"dative": ["intimō"],
-				"ablative": ["intimō"]
-			},
-			"plural": {
-				"nominative": ["intimī"],
-				"vocative": ["intimī"],
-				"accusative": ["intimōs"],
-				"genitive": ["intimōrum"],
-				"dative": ["intimīs"],
-				"ablative": ["intimīs"]
-			}
-		},
-		"feminine": {
-			"singular": {
-				"nominative": ["intima"],
-				"vocative": ["intima"],
-				"accusative": ["intimam"],
-				"genitive": ["intimae"],
-				"dative": ["intimae"],
-				"ablative": ["intimā"]
-			},
-			"plural": {
-				"nominative": ["intimae"],
-				"vocative": ["intimae"],
-				"accusative": ["intimās"],
-				"genitive": ["intimārum"],
-				"dative": ["intimīs"],
-				"ablative": ["intimīs"]
-			}
-		},
-		"neuter": {
-			"singular": {
-				"nominative": ["intimum"],
-				"vocative": ["intimum"],
-				"accusative": ["intimum"],
-				"genitive": ["intimī"],
-				"dative": ["intimō"],
-				"ablative": ["intimō"]
-			},
-			"plural": {
-				"nominative": ["intima"],
-				"vocative": ["intima"],
-				"accusative": ["intima"],
-				"genitive": ["intimōrum"],
-				"dative": ["intimīs"],
-				"ablative": ["intimīs"]
-			}
 		}
 	}
-}
 ]
 const sampleData = JSON.stringify(sampleDataJson, null, '\t');
 
