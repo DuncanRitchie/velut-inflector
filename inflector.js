@@ -720,6 +720,8 @@ const inflectFuncs = {
 			return true;
 		})();
 
+		const isOneTermination = lemma.endsWith('ns') || lemma.endsWith('r') || lemma.endsWith('x');
+
 		const posAcPlNonNeuterForms = (() => {
 			if (hasIStem) {
 				return joinStemsToEndings(stems, ['ēs', 'īs']);
@@ -743,7 +745,7 @@ const inflectFuncs = {
 						accusative: joinStemsToEndings(stems, 'em'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
+						ablative: joinStemsToEndings(stems, (hasIStem && !isOneTermination ? 'ī' : 'e')),
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
@@ -761,7 +763,7 @@ const inflectFuncs = {
 						accusative: joinStemsToEndings(stems, 'em'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
+						ablative: joinStemsToEndings(stems, (hasIStem && !isOneTermination ? 'ī' : 'e')),
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
@@ -774,12 +776,12 @@ const inflectFuncs = {
 				},
 				neuter: {
 					singular: {
-						nominative: joinStemsToEndings(stems, 'e'),
-						vocative: joinStemsToEndings(stems, 'e'),
-						accusative: joinStemsToEndings(stems, 'e'),
+						nominative: isOneTermination ? [lemma] : joinStemsToEndings(stems, 'e'),
+						vocative: isOneTermination ? [lemma] : joinStemsToEndings(stems, 'e'),
+						accusative: isOneTermination ? [lemma] : joinStemsToEndings(stems, 'e'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(stems, (hasIStem ? 'ī' : 'e')),
+						ablative: joinStemsToEndings(stems, (hasIStem && !isOneTermination ? 'ī' : 'e')),
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, (hasIStem ? 'ia' : 'a')),
