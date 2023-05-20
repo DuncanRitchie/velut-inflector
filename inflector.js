@@ -4006,18 +4006,23 @@ if (typeof require !== 'undefined') {
 
 	const runAllWords = () => {
 
-		//// Input data look like "vocābulōrum\tvocābulum\rexcellentium\texcellēns excellō\r"
+		//// Input data are an array of lemma objects.
 		const inputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-nongenerated-fields.json';
 		const inputLemmata = require(inputFileUrl);
 		//// Output data are generated in batches & each batch is written to a file.
 		//// This allows me to track the output in Git without tracking a huge file.
 		const getOutputFileUrlForBatch = (batchNumber) =>
+		// 	`C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_with-ambiguous-stress_mongo_batch${batchNumber}.json`;
+		// const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
 			`C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo_batch${batchNumber}.json`;
 		const batchSize = 1_000;
-		//// The output batches are concatenated into one file, for Git to ignore and me to import to MongoDB.
+		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
 		const outputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo.json';
+		//// The output from the Inflector is also merged into the input lemmata data, for Git to ignore and me to import to MongoDB.
+		const combinedOutputFileUrl =
+			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-with-words-from-inflector_mongo.json';
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
 		const expectedOutputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-from-collator_mongo.json';
@@ -4065,6 +4070,47 @@ if (typeof require !== 'undefined') {
 				fs.writeFileSync(outputFileUrl, JSON.stringify(combinedOutput));
 
 				console.timeEnd('concatenatingOutput');
+			}
+
+			const mergeWithLemmataJson = () => {
+				console.time('mergeWithLemmataJson');
+
+				const combinedLemmataDataAsObject = {};
+
+				//// Add data from input lemmata data.
+				inputLemmata.forEach((lemmaObject, index) => {
+					if (combinedLemmataDataAsObject[lemmaObject.Lemma]) {
+						console.warn('Combined lemma data already has ' + lemmaObject.Lemma);
+					}
+					else {
+						lemmaObject.Ord = index;
+						combinedLemmataDataAsObject[lemmaObject.Lemma] = lemmaObject;
+					}
+				});
+
+				//// Add data from output of inflector to a "Forms" field in each lemma.
+				//// (This overrides any "Forms" field the lemma already has.)
+				batchFilepaths.forEach((filename) => {
+					const outputBatch = require(filename);
+					const outputEntries = Object.entries(outputBatch);
+
+					for ([lemma, parsingData] of outputEntries) {
+						combinedLemmataDataAsObject[lemma].Forms = parsingData;
+					}
+				})
+
+				let combinedLemmataDataForMongo = "";
+
+				//// Convert to the format for mongoimport, so [{},{}] becomes {}{}
+				Object.entries(combinedLemmataDataAsObject).forEach(([_, lemmaObject]) => {
+					//// The \n isn’t necessary but I like it.
+					combinedLemmataDataForMongo += JSON.stringify(lemmaObject) + '\n';
+				});
+
+				//// Write to disk.
+				fs.writeFileSync(combinedOutputFileUrl, combinedLemmataDataForMongo);
+
+				console.timeEnd('mergeWithLemmataJson');
 			}
 
 			const checkAgainstExpected = () => {
@@ -4279,7 +4325,8 @@ if (typeof require !== 'undefined') {
 			};
 
 			generateOutputAndSaveInBatches();
-			concatenateBatches();
+			// concatenateBatches();
+			mergeWithLemmataJson();
 			checkAgainstExpected();
 
 		} catch (err) {
