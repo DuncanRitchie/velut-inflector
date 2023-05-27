@@ -2174,6 +2174,14 @@ const inflectFuncs = {
 							.positive,
 					}
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: 'eundus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['itum'],
 					ablative: ['itū'],
@@ -2499,6 +2507,14 @@ const inflectFuncs = {
 							.positive,
 					}
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: 'faciendus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['factum'],
 					ablative: ['factū'],
@@ -2883,6 +2899,14 @@ const inflectFuncs = {
 							.positive,
 					},
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: '1andus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['4um'],
 					ablative: ['4ū'],
@@ -3181,6 +3205,14 @@ const inflectFuncs = {
 							.positive,
 					},
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: '1endus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['4um'],
 					ablative: ['4ū'],
@@ -3486,6 +3518,14 @@ const inflectFuncs = {
 							.positive,
 					},
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: '6ndus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['4um'],
 					ablative: ['4ū'],
@@ -3792,6 +3832,14 @@ const inflectFuncs = {
 							.positive,
 					},
 				},
+				gerund: inflectFuncs['Adjective']({
+					Lemma: '6ndus',
+					ParsingsToExclude: ["nominative", "vocative"],
+				})
+					.unencliticized
+					.positive
+					.neuter
+					.singular,
 				supine: {
 					accusative: ['4um'],
 					ablative: ['4ū'],
