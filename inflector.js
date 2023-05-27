@@ -4079,12 +4079,14 @@ if (typeof require !== 'undefined') {
 
 				//// Add data from input lemmata data.
 				inputLemmata.forEach((lemmaObject, index) => {
+					//// Ignore duplicate lemmata.
 					if (combinedLemmataDataAsObject[lemmaObject.Lemma]) {
 						console.warn('Combined lemma data already has ' + lemmaObject.Lemma);
 					}
 					else {
-						lemmaObject.Ord = index;
-						combinedLemmataDataAsObject[lemmaObject.Lemma] = lemmaObject;
+						const { Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root } = lemmaObject;
+						const Index = index;
+						combinedLemmataDataAsObject[lemmaObject.Lemma] = { Index, Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root };
 					}
 				});
 
