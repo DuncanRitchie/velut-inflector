@@ -720,7 +720,7 @@ const inflectFuncs = {
 			return true;
 		})();
 
-		const isOneTermination = lemma.endsWith('ns') || lemma.endsWith('r') || lemma.endsWith('x');
+		const isOneTermination = stems.some(stem => lemma !== stem + 'is' && lemma !== stem + 'ēs');
 
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems = rest.ComparativeStems || joinStemsToEndings(stems, 'i');
