@@ -823,11 +823,7 @@ const inflectFuncs = {
 			comparative: comparatives,
 			superlative: superlatives
 		};
-		const withReplacements = replaceFieldsInObjects(allForms, rest.ReplacementForms)
-		const withEnclitics = multiplyWithEnclitics(withReplacements);
-		const withQueLemmaHandled = markQueAsUnencliticized(withEnclitics, rest.IsLemmaInQue)
-		const wantedForms = deleteUnwantedForms(withQueLemmaHandled, rest.ParsingsToExclude);
-		return wantedForms;
+		return applyFieldsToForms(allForms, rest);
 	},
 	"Interjection": ({Lemma, PartOfSpeech, ...rest}) => {
 		if (rest.Forms) {
