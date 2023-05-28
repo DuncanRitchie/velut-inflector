@@ -4125,6 +4125,10 @@ if (typeof require !== 'undefined') {
 
 				const combinedLemmataDataAsObject = {};
 
+				// This func works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
+				// From https://stackoverflow.com/a/37511463
+				const removeDiacritics = text => `${text}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 				//// Add data from input lemmata data.
 				inputLemmata.forEach((lemmaObject, index) => {
 					//// Ignore duplicate lemmata.
@@ -4134,7 +4138,13 @@ if (typeof require !== 'undefined') {
 					else {
 						const { Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root } = lemmaObject;
 						const Index = index;
-						combinedLemmataDataAsObject[lemmaObject.Lemma] = { Index, Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root };
+						// The velut website uses NoMacra & NoMacraLowerCase when sorting lemmata.
+						const NoMacra = removeDiacritics(Lemma);
+						const NoMacraLowerCase = NoMacra.toLowerCase();
+
+						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
+							Index, Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root, NoMacra, NoMacraLowerCase
+						};
 					}
 				});
 
