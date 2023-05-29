@@ -4121,6 +4121,9 @@ if (typeof require !== 'undefined') {
 
 				const combinedLemmataDataAsObject = {};
 
+				const partOfSpeechCountsLemmata = {};
+				const partOfSpeechCountsForms = {};
+
 				// This func works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
 				// From https://stackoverflow.com/a/37511463
 				const removeDiacritics = text => `${text}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -4141,6 +4144,9 @@ if (typeof require !== 'undefined') {
 						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
 							Index, Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root, NoMacra, NoMacraLowerCase
 						};
+
+						partOfSpeechCountsLemmata[PartOfSpeech]
+							= (partOfSpeechCountsLemmata[PartOfSpeech] ?? 0) + 1;
 					}
 				});
 
@@ -4152,6 +4158,9 @@ if (typeof require !== 'undefined') {
 
 					for ([lemma, parsingData] of outputEntries) {
 						combinedLemmataDataAsObject[lemma].Forms = parsingData;
+						const inputLemma = inputLemmata.find(lemmaObject => lemmaObject.Lemma === lemma);
+						partOfSpeechCountsForms[inputLemma.PartOfSpeech]
+							= (partOfSpeechCountsForms[inputLemma.PartOfSpeech] ?? 0) + convertParsingObjectToFormsSet(parsingData).size;
 					}
 				})
 
