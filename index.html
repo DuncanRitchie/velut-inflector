@@ -83,7 +83,11 @@
 
 			<dl>
 				<dt><code>"ComparativeStems"</code></dt>
-				<dd>String array of stems for the comparative forms of adjectives and adverbs.</dd>
+				<dd>
+					<p>
+						String array of stems for the comparative forms of adjectives and adverbs.
+					</p>
+				</dd>
 
 				<dt><code>"Conjugations"</code></dt>
 				<dd>
@@ -104,11 +108,17 @@
 				</dd>
 
 				<dt><code>"Declensions"</code></dt>
-				<dd>An integer array for nouns and adjectives; adjectives can have <samp>[1, 2]</samp> or <samp>[3]</samp>.</dd>
+				<dd>
+					<p>
+						An integer array for nouns and adjectives; adjectives can have <samp>[1, 2]</samp> or <samp>[3]</samp>.
+					</p>
+				</dd>
 
 				<dt><code>"ExtraForms"</code></dt>
 				<dd>
-					Object of forms to add to whatever the Inflector generates itself, before any enclitics are added to the result.
+					<p>
+						Object of forms to add to whatever the Inflector generates itself, before any enclitics are added to the result.
+					</p>
 				</dd>
 
 				<dt><code>"ExtraEncliticizedForms"</code></dt>
@@ -128,102 +138,152 @@
 
 				<dt><code>"Forms"</code></dt>
 				<dd>
-					Object of forms to use instead of anything the Inflector would generate itself.
-					But if the object does not have <code>"unencliticized"</code> (or <code>"ne"</code> or <code>"que"</code> or <code>"ve"</code>) as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
+					<p>
+						Object of forms to use instead of anything the Inflector would generate itself.
+						But if the object does not have <code>"unencliticized"</code> (or <code>"ne"</code> or <code>"que"</code> or <code>"ve"</code>) as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
+					</p>
 				</dd>
 
 				<dt><code>"FutureActiveParticipleStems"</code></dt>
 				<dd>
-					String array of stems for the future active participle forms of verbs of the third or fourth conjugation.
-					For example, the array is <samp>["morit"]</samp> for <q lang="la">morior</q>, so the participle forms are <q lang="la">moritūrus</q> etc.
-					If this is not specified (or the verb is not of the third or fourth conjugation), the supine stems are used — either the value of <code>"SupineStems"</code> or a regularly-generated fallback.
+					<p>
+						String array of stems for the future active participle forms of verbs of the third or fourth conjugation.
+						For example, the array is <samp>["morit"]</samp> for <q lang="la">morior</q>, so the participle forms are <q lang="la">moritūrus</q> etc.
+						If this is not specified (or the verb is not of the third or fourth conjugation), the supine stems are used — either the value of <code>"SupineStems"</code> or a regularly-generated fallback.
+					</p>
 				</dd>
 
 				<dt><code>"GerundVowels"</code></dt>
 				<dd>
-					String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the third or fourth conjugation.
-					For example, the array is <samp>["u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerundus</q> etc.
-					If this is not specified (or the verb is not of the third or fourth conjugation), the default is <samp>["e"]</samp>.
-					The only lemmata that need this are <q lang="la">gerō</q> and <q lang="la">orior</q>.
+					<p>
+						String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the third or fourth conjugation.
+						For example, the array is <samp>["u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerundus</q> etc.
+						If this is not specified (or the verb is not of the third or fourth conjugation), the default is <samp>["e"]</samp>.
+						The only lemmata that need this are <q lang="la">gerō</q> and <q lang="la">orior</q>.
+					</p>
 				</dd>
 
 				<dt><code>"HasArchaicInfinitiveInIer"</code></dt>
 				<dd>
-					Boolean for whether a verb should have a present passive (or active if deponent) infinitive ending with “-ier”, potentially in addition to one in “-ī”.
+					<p>
+						Boolean for whether a verb should have a present passive (or active if deponent) infinitive ending with “-ier”, potentially in addition to one in “-ī”.
+					</p>
 				</dd>
 
 				<dt><code>"HasIStem"</code></dt>
-				<dd>Boolean for whether a 3rd-declension adjective should follow the “i-stem” paradigm.</dd>
+				<dd>
+					<p>
+						Boolean for whether a 3rd-declension adjective should follow the “i-stem” paradigm.
+					</p>
+				</dd>
 
 				<dt><code>"HasLocative"</code></dt>
-				<dd>Boolean for whether a noun (proper or otherwise) should get a locative form.</dd>
+				<dd>
+					<p>
+						Boolean for whether a noun (proper or otherwise) should get a locative form.
+					</p>
+				</dd>
 
 				<dt><code>"IsDeclinedLikeAdjective"</code></dt>
 				<dd>
-					Boolean that is true for 3rd-declension nouns that are declined like an adjective with ablative singular in “-ī” and genitive plural in “-ium”.
+					<p>
+						Boolean that is true for 3rd-declension nouns that are declined like an adjective with ablative singular in “-ī” and genitive plural in “-ium”.
+					</p>
 				</dd>
 
 				<dt><code>"IsGreekFirstDeclension"</code></dt>
 				<dd>
-					Boolean that is true for 1st-declension nouns that have their accusative singular in “-ēn”, genitive singular in “-ēs”, and ablative singular in “-ē”.
+					<p>
+						Boolean that is true for 1st-declension nouns that have their accusative singular in “-ēn”, genitive singular in “-ēs”, and ablative singular in “-ē”.
+					</p>
 				</dd>
 
 				<dt><code>"IsImpersonal"</code></dt>
 				<dd>
-					Boolean that is true for verbs that only have third-person singular forms (besides infinitives etc), such as <q lang="la">grandinat</q> and <q lang="la">oportet</q>.
+					<p>
+						Boolean that is true for verbs that only have third-person singular forms (besides infinitives etc), such as <q lang="la">grandinat</q> and <q lang="la">oportet</q>.
+					</p>
 				</dd>
 
 				<dt><code>"IsIntransitive"</code></dt>
 				<dd>
-					Boolean that is true for non-deponent verbs whose only passive forms are impersonal (third-person singular), such as <q lang="la">eō</q>.
+					<p>
+						Boolean that is true for non-deponent verbs whose only passive forms are impersonal (third-person singular), such as <q lang="la">eō</q>.
+					</p>
 				</dd>
 
 				<dt><code>"IsLemmaInQue"</code></dt>
 				<dd>
-					Boolean for whether the lemma’s forms end in grammatical endings followed by “-que”, such as <q lang="la">plērusque</q> and <q lang="la">uterque</q>. Such lemmata have no encliticized forms: the “-que” suffix does not mean “and”.
+					<p>
+						Boolean for whether the lemma’s forms end in grammatical endings followed by “-que”, such as <q lang="la">plērusque</q> and <q lang="la">uterque</q>. Such lemmata have no encliticized forms: the “-que” suffix does not mean “and”.
+					</p>
 				</dd>
 
 				<dt><code>"IsIndeclinable"</code></dt>
-				<dd>Boolean.</dd>
+				<dd>
+					<p>
+						Boolean.
+					</p>
+				</dd>
 
 				<dt><code>"IsSemiDeponent"</code></dt>
 				<dd>
-					Boolean that is true for verbs such as <q lang="la">gaudeō</q> that are non-deponent in present-system tenses (present, imperfect, future) and deponent in perfect-system tenses (perfect, pluperfect, future perfect).
-					These verbs have no passive forms except gerundives.
+					<p>
+						Boolean that is true for verbs such as <q lang="la">gaudeō</q> that are non-deponent in present-system tenses (present, imperfect, future) and deponent in perfect-system tenses (perfect, pluperfect, future perfect).
+						These verbs have no passive forms except gerundives.
+					</p>
 				</dd>
 
 				<dt><code>"ObliqueStems"</code></dt>
 				<dd>
-					String array, for 3rd-declension nouns and adjectives, eg <samp>["āctiōn"]</samp> for <q lang="la">āctiō’</q> or <samp>["veter"]</samp> for <q lang="la">vetus</q>.
-					For adverbs, this should probably be replaced with <code>"ComparativeStems"</code>, <code>"SuperlativeStems"</code>, etc.
+					<p>
+						String array, for 3rd-declension nouns and adjectives, eg <samp>["āctiōn"]</samp> for <q lang="la">āctiō’</q> or <samp>["veter"]</samp> for <q lang="la">vetus</q>.
+						For adverbs, this should probably be replaced with <code>"ComparativeStems"</code>, <code>"SuperlativeStems"</code>, etc.
+					</p>
 				</dd>
 
 				<dt><code>"ParsingsToExclude"</code></dt>
-				<dd>String array, eg <samp>["comparative", "superlative"]</samp> for an adjective that does not have these forms.</dd>
+				<dd>
+					<p>
+						String array, eg <samp>["comparative", "superlative"]</samp> for an adjective that does not have these forms.
+					</p>
+				</dd>
 
 				<dt><code>"PerfectStems"</code></dt>
 				<dd>
-					String array of stems for the perfect forms of verbs, eg <samp>["sonu"]</samp> for <q lang="la">sonō</q> (so the perfect forms are <q lang="la">sonuī</q> etc, not the regular <q lang="la">sonāvī</q>).
+					<p>
+						String array of stems for the perfect forms of verbs, eg <samp>["sonu"]</samp> for <q lang="la">sonō</q> (so the perfect forms are <q lang="la">sonuī</q> etc, not the regular <q lang="la">sonāvī</q>).
+					</p>
 				</dd>
 
 				<dt><code>"ReplacementForms"</code></dt>
 				<dd>
-					Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
+					<p>
+						Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
+					</p>
 				</dd>
 
 				<dt><code>"ReplacementEncliticizedForms"</code></dt>
 				<dd>
-					Object of forms to use instead of the regularly generated forms for the parsings that are specified, after enclitics have been added.
-					Only used for the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
-					(This is to differentiate from the <q lang="la">suāve</q> that is a form of <q lang="la">suāvis</q> with consonantal u.)
+					<p>
+						Object of forms to use instead of the regularly generated forms for the parsings that are specified, after enclitics have been added.
+						Only used for the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
+						(This is to differentiate from the <q lang="la">suāve</q> that is a form of <q lang="la">suāvis</q> with consonantal u.)
+					</p>
 				</dd>
 
 				<dt><code>"SuperlativeStems"</code></dt>
-				<dd>String array of stems for the superlative forms of adjectives and adverbs.</dd>
+				<dd>
+					<p>
+						String array of stems for the superlative forms of adjectives and adverbs.
+					</p>
+				</dd>
 
 				<dt><code>"SupineStems"</code></dt>
 				<dd>
-					String array of stems for the supine and past participle forms of verbs, eg <samp>["sonit"]</samp> for <q lang="la">sonō</q> (so the participle forms are <q lang="la">sonitus</q> etc, not the regular <q lang="la">sonātus</q>).
+					<p>
+						String array of stems for the supine and past participle forms of verbs, eg <samp>["sonit"]</samp> for <q lang="la">sonō</q> (so the participle forms are <q lang="la">sonitus</q> etc, not the regular <q lang="la">sonātus</q>).
+					</p>
 				</dd>
 			</dl>
 
