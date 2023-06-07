@@ -114,13 +114,6 @@
 					</p>
 				</dd>
 
-				<dt><code>"ExtraForms"</code></dt>
-				<dd>
-					<p>
-						Object of forms to add to whatever the Inflector generates itself, before any enclitics are added to the result.
-					</p>
-				</dd>
-
 				<dt><code>"ExtraEncliticizedForms"</code></dt>
 				<dd>
 					<p>
@@ -133,6 +126,13 @@
 					<p>
 						Otherwise, this field is used for some irregular contractions of words in “-ne”.
 						For example, it’s used on the adjective <q lang="la">tantus</q>, to make <q lang="la">tantōn</q> appear alongside <q lang="la">tantōne</q>.
+					</p>
+				</dd>
+
+				<dt><code>"ExtraForms"</code></dt>
+				<dd>
+					<p>
+						Object of forms to add to whatever the Inflector generates itself, before any enclitics are added to the result.
 					</p>
 				</dd>
 
@@ -205,6 +205,13 @@
 					</p>
 				</dd>
 
+				<dt><code>"IsIndeclinable"</code></dt>
+				<dd>
+					<p>
+						Boolean.
+					</p>
+				</dd>
+
 				<dt><code>"IsIntransitive"</code></dt>
 				<dd>
 					<p>
@@ -216,13 +223,6 @@
 				<dd>
 					<p>
 						Boolean for whether the lemma’s forms end in grammatical endings followed by “-que”, such as <q lang="la">plērusque</q> and <q lang="la">uterque</q>. Such lemmata have no encliticized forms: the “-que” suffix does not mean “and”.
-					</p>
-				</dd>
-
-				<dt><code>"IsIndeclinable"</code></dt>
-				<dd>
-					<p>
-						Boolean.
 					</p>
 				</dd>
 
@@ -256,19 +256,19 @@
 					</p>
 				</dd>
 
-				<dt><code>"ReplacementForms"</code></dt>
-				<dd>
-					<p>
-						Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
-					</p>
-				</dd>
-
 				<dt><code>"ReplacementEncliticizedForms"</code></dt>
 				<dd>
 					<p>
 						Object of forms to use instead of the regularly generated forms for the parsings that are specified, after enclitics have been added.
 						Only used for the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
 						(This is to differentiate from the <q lang="la">suāve</q> that is a form of <q lang="la">suāvis</q> with consonantal u.)
+					</p>
+				</dd>
+
+				<dt><code>"ReplacementForms"</code></dt>
+				<dd>
+					<p>
+						Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
 					</p>
 				</dd>
 
