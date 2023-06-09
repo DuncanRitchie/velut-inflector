@@ -1447,7 +1447,7 @@ const inflectFuncs = {
 			console.warn(`Enclitics have not been disabled for ${lemma}`)
 		}
 		const multiplied = multiplyWithEnclitics(wantedForms, true);
-		return multiplied;
+		return applyFieldsToForms(multiplied, rest);
 	},
 	"Proper noun": ({Lemma, PartOfSpeech, ...rest}) => {
 
