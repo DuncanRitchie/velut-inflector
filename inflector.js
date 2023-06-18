@@ -1063,6 +1063,9 @@ const inflectFuncs = {
 				[/ūs$/, ''],
 			];
 
+			if (rest.IsGreekThirdDeclensionInOmega) {
+				return lemma.replace(/ō$/, '');
+			}
 			if (declensions.includes(3)) {
 				return getAssumedStem(thirdDeclLemmaSuffixesAndOblique);
 			}
@@ -1320,6 +1323,19 @@ const inflectFuncs = {
 				},
 			};
 		}
+		const getFourthDeclensionGreekForms = () => {
+			// Eg Clīō, Ēchō, Sapphō
+			return {
+				singular: {
+					nominative: [lemma],
+					vocative: [lemma],
+					accusative: [lemma],
+					genitive: joinStemsToEndings(stems, 'ūs'),
+					dative: [lemma],
+					ablative: [lemma],
+				},
+			};
+		}
 		const getFifthDeclensionNonNeuterForms = () => {
 			return {
 				singular: {
@@ -1341,7 +1357,7 @@ const inflectFuncs = {
 			};
 		}
 
-		if (declensions.includes(3)) {
+		if (declensions.includes(3) && !rest.IsGreekThirdDeclensionInOmega) {
 			const thirdDeclForms = {};
 			["masculine", "feminine"].map(gender => {
 				if (genders.includes(gender)) {
@@ -1396,6 +1412,16 @@ const inflectFuncs = {
 				}
 			});
 			forms = mergeObjects(forms, fourthDeclForms);
+		}
+		if (declensions.includes(3) && rest.IsGreekThirdDeclensionInOmega) {
+			const fourthDeclForms = {};
+			if (genders.length === 1 && genders.includes("feminine")) {
+				fourthDeclForms.feminine = getFourthDeclensionGreekForms();
+				forms = mergeObjects(forms, fourthDeclForms);
+			}
+			else {
+				console.warn(`Don’t know how to handle a Greek third-declension noun that’s not feminine-only: ${Lemma} ${genders}`);
+			}
 		}
 		if (declensions.includes(5)) {
 			const fifthDeclForms = {};
