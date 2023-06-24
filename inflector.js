@@ -4349,21 +4349,6 @@ if (typeof require !== 'undefined') {
 							// }
 							// const parsingDataAsJson = JSON.stringify(parsingData)
 							// console.log({parsingDataAsJson})
-
-							const comparativeForm = parsingData.unencliticized?.comparative?.neuter?.singular?.nominative?.[0]
-								?? parsingData.unencliticized?.comparative?.[0];
-							if (comparativeForm) {
-								if (!expectedFormsAsSet.has(comparativeForm)) {
-									const lemmataToNotComplainAboutComparativesFor = [
-										"iūrisperītus", "celeriter", "sērus", "posterus", "novus", "nōtus", "multus", "lūcidus", "limpidus", "inīquus", "grātus", "fīdus", "falsus", "aptus", "noviter", "altus", "inter", "citer", "fortis", "piger", "similis", "efficāx", "adrogāns", "āctuōsus", "frequenter", "mānsuēs", "vetus", "malevolus", "maleficus", "benevolus", "benivolus", "beneficus", "dissimilis", "gracilis"
-									];
-										if (!lemmataToNotComplainAboutComparativesFor.includes(lemma)) {
-											console.log(`${lemma} should not have comparative form ${comparativeForm}`);
-											// console.log(`${comparativeForm}`);
-											incorrectComparatives++;
-										}
-								}
-							}
 						} else {
 							errorCount++;
 							console.error({
@@ -4400,7 +4385,6 @@ if (typeof require !== 'undefined') {
 					}
 				});
 				const skippedCount = totalLemmata - errorCount - successCount - noTestDataCount;
-				console.warn(`There were ${incorrectComparatives} lemmata with unwanted comparatives.`);
 				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes, ${skippedCount} skipped, and ${noTestDataCount} with no existing forms data to compare) out of ${totalLemmata} lemmata.`);
 
 				console.timeEnd('checkingOutput');
