@@ -1450,9 +1450,9 @@ const inflectFuncs = {
 			return multiplyWithEnclitics([... new Set(rest.Forms).add(removeBrackets(Lemma))]);
 		}
 		if (rest.Forms) {
-			return multiplyWithEnclitics(rest.Forms);
+			return applyFieldsToForms(rest.Forms, rest);
 		}
-		return multiplyWithEnclitics([removeBrackets(Lemma)]);
+		return applyFieldsToForms([removeBrackets(Lemma)], rest);
 	},
 	"Pronoun": ({Lemma, PartOfSpeech, ...rest}) => {
 		// Pronouns are hardcoded, so there’s not much for the Inflector to do.
