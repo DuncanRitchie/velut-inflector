@@ -4010,6 +4010,34 @@ function subtractSet(superset, setToSubtract) {
   return _difference;
 }
 
+// Some lemmata have the part of speech given in brackets, eg amĭcus[n] & amĭcus[adj]
+// This function checks that this is correct for the lemma’s PartOfSpeech property.
+function checkPartOfSpeechInBrackets(lemmaObject) {
+	if (!lemmaObject) return;
+	if (!lemmaObject.Lemma) return;
+	if (!lemmaObject.Lemma.includes('[')) return;
+	
+	const textInBrackets = lemmaObject.Lemma.replace(/.+\[/, '').replace(']', '');
+	if (!textInBrackets) { return true; }
+
+	const partsOfSpeech = {
+		n: "Noun",
+		prn: "Proper noun",
+		pro: "Pronoun",
+		adj: "Adjective",
+		v: "Verb",
+		adv: "Adverb",
+		con: "Conjunction",
+		pre: "Preposition",
+		int: "Interjection",
+	};
+
+	if (partsOfSpeech[textInBrackets] === undefined) {
+		return true;
+	}
+	return partsOfSpeech[textInBrackets] === lemmaObject.PartOfSpeech;
+}
+
 //// `outputAsObject` gets modified by `convertInputToOutputData` inside `generateJson`
 //// and either gets displayed in the second text-area by `displayOutput` (in web.js)
 //// or gets written to a file (in the Node-only section).
@@ -4049,6 +4077,16 @@ const convertInputToOutputData = (lemmata) => {
 		}
 
 		try {
+			const DOES_PART_OF_SPEECH_GET_CHECKED = false;
+
+			if (DOES_PART_OF_SPEECH_GET_CHECKED
+				&& checkPartOfSpeechInBrackets(lemma) === false
+			) {
+				console.warn(
+					`Part of speech of ${lemma.Lemma} is ${lemma.PartOfSpeech}`
+				);
+			}
+
 			const parsingData = inflectFuncs[lemma.PartOfSpeech](lemma);
 
 			if (Object.keys(parsingData).length === 0) {
