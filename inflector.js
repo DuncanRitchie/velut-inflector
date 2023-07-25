@@ -105,7 +105,8 @@ const mergeObjects = (formsObject, objectToMerge) => {
 			formsObject, objectToMerge
 		})
 		}
-		return formsObject.concat(objectToMerge);
+		//// Concatenate the two arrays, removing duplicates.
+		return [... new Set(formsObject.concat(objectToMerge))];
 	}
 	//// Take `formsObject` & merge properties with the same key in the two objects.
 	const objectWithSamePropertiesMerged = Object.entries(formsObject)
