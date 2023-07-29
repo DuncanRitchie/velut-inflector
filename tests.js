@@ -9,7 +9,7 @@ const tests = [
 			"PartOfSpeech": "Noun",
 			"Meanings": "letter Aa",
 			"Genders": ["neuter"],
-			"IsIndeclinable": true,
+			"Declensions": [0],
 		},
 		Expected: {
 			"unencliticized": {

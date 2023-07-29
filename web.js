@@ -65,7 +65,7 @@ const sampleDataJson =
 		"PartOfSpeech": "Noun",
 		"Meanings": "letter Aa",
 		"Genders": ["neuter"],
-		"IsIndeclinable": true
+		"Declensions": [0]
 	},
 	{
 		"Lemma": "ab",

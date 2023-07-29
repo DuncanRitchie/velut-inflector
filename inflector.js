@@ -498,7 +498,20 @@ const inflectFuncs = {
 		}
 		const lemma = rest.IsLemmaInQue ? removeBrackets(Lemma).replace(/que$/, '') : removeBrackets(Lemma);
 
-		if (rest.IsIndeclinable) {
+		const declensionsString = rest.Declensions
+			? JSON.stringify(rest.Declensions)
+			: (
+				(lemma.endsWith("us"))
+				|| (lemma.endsWith("üs"))
+				|| (lemma.endsWith("er"))
+				|| (lemma.endsWith("a"))
+				|| (lemma.endsWith("ī"))
+			) ? "[1,2]"
+				: "[3]";
+
+
+		//// Indeclinable adjectives
+		if (declensionsString === "[0]") {
 			const forms = { positive: {
 				masculine: {
 					singular: {
@@ -557,17 +570,6 @@ const inflectFuncs = {
 			} };
 			return applyFieldsToForms(forms, rest);
 		}
-
-		const declensionsString = rest.Declensions
-			? JSON.stringify(rest.Declensions)
-			: (
-				(lemma.endsWith("us"))
-				|| (lemma.endsWith("üs"))
-				|| (lemma.endsWith("er"))
-				|| (lemma.endsWith("a"))
-				|| (lemma.endsWith("ī"))
-			) ? "[1,2]"
-				: "[3]";
 
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === "[1,2]") {
@@ -838,9 +840,6 @@ const inflectFuncs = {
 			if (rest.Declensions) {
 				return rest.Declensions;
 			}
-			if (rest.IsIndeclinable) {
-				return [];
-			}
 			if (Lemma.endsWith("ōrum]")) {
 				console.log(`Assuming 2nd declension for ${Lemma}`)
 				return [2];
@@ -986,11 +985,7 @@ const inflectFuncs = {
 		const hasLocativePlural = rest.HasLocative && rest.ParsingsToExclude?.includes("singular");
 		const hasLocativeSingular = rest.HasLocative && !hasLocativePlural;
 
-		if (rest.IsIndeclinable) {
-			if (rest.Declensions) {
-				console.warn('Both IsIndeclinable and Declensions are truthy for: ' + Lemma);
-			}
-
+		if (declensions.includes(0)) {
 			genders.forEach(gender => {
 				forms[gender] = ({
 					singular: {
