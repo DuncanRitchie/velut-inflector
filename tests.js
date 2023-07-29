@@ -744,6 +744,12 @@ const tests = [
 						}
 					}
 				},
+				"gerund": {
+					"accusative": ["abdicandum"],
+					"genitive": ["abdicandī"],
+					"dative": ["abdicandō"],
+					"ablative": ["abdicandō"]
+				},
 				"supine": {
 					"accusative": ["abdicātum"],
 					"ablative": ["abdicātū"]
@@ -1221,6 +1227,12 @@ const tests = [
 							}
 						}
 					}
+				},
+				"gerund": {
+					"accusative": ["abdicandumne"],
+					"genitive": ["abdicandīne"],
+					"dative": ["abdicandōne"],
+					"ablative": ["abdicandōne"]
 				},
 				"supine": {
 					"accusative": ["abdicātumne"],
@@ -1700,6 +1712,12 @@ const tests = [
 						}
 					}
 				},
+				"gerund": {
+					"accusative": ["abdicandumque"],
+					"genitive": ["abdicandīque"],
+					"dative": ["abdicandōque"],
+					"ablative": ["abdicandōque"]
+				},
 				"supine": {
 					"accusative": ["abdicātumque"],
 					"ablative": ["abdicātūque"]
@@ -2177,6 +2195,12 @@ const tests = [
 							}
 						}
 					}
+				},
+				"gerund": {
+					"accusative": ["abdicandumve"],
+					"genitive": ["abdicandīve"],
+					"dative": ["abdicandōve"],
+					"ablative": ["abdicandōve"]
 				},
 				"supine": {
 					"accusative": ["abdicātumve"],
@@ -2679,6 +2703,12 @@ const tests = [
 						}
 					}
 				},
+				"gerund": {
+					"accusative": ["abdīcendum"],
+					"genitive": ["abdīcendī"],
+					"dative": ["abdīcendō"],
+					"ablative": ["abdīcendō"]
+				},
 				"supine": {
 					"accusative": ["abdictum"],
 					"ablative": ["abdictū"]
@@ -3156,6 +3186,12 @@ const tests = [
 							}
 						}
 					}
+				},
+				"gerund": {
+					"accusative": ["abdīcendumne"],
+					"genitive": ["abdīcendīne"],
+					"dative": ["abdīcendōne"],
+					"ablative": ["abdīcendōne"]
 				},
 				"supine": {
 					"accusative": ["abdictumne"],
@@ -3635,6 +3671,12 @@ const tests = [
 						}
 					}
 				},
+				"gerund": {
+					"accusative": ["abdīcendumque"],
+					"genitive": ["abdīcendīque"],
+					"dative": ["abdīcendōque"],
+					"ablative": ["abdīcendōque"]
+				},
 				"supine": {
 					"accusative": ["abdictumque"],
 					"ablative": ["abdictūque"]
@@ -4112,6 +4154,12 @@ const tests = [
 							}
 						}
 					}
+				},
+				"gerund": {
+					"accusative": ["abdīcendumve"],
+					"genitive": ["abdīcendīve"],
+					"dative": ["abdīcendōve"],
+					"ablative": ["abdīcendōve"]
 				},
 				"supine": {
 					"accusative": ["abdictumve"],
