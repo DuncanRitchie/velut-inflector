@@ -4449,10 +4449,11 @@ if (typeof require !== 'undefined') {
 				const errata = inputLemmata
 					.filter(lemmaObject => lemmaObject.ExtraEncliticizedForms?.incorrect?.length)
 					.map(lemmaObject => { return {
-						Lemma: lemmaObject.Lemma,
-						IncorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect
+						lemma: lemmaObject.Lemma,
+						incorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect
 					}});
 
+				//// Fields are camel-cased in the `summary` MongoDB collection.
 				const summaryObject = {
 					lastUpdatedDate,
 					errata
