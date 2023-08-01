@@ -22,6 +22,11 @@ const removeBrackets = (lemma) => {
 	return lemma;
 }
 
+// This func works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
+// From https://stackoverflow.com/a/37511463
+const removeDiacritics = (text) =>
+	`${text}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 	if (parsingObject.unencliticized || parsingObject.ne || parsingObject.que || parsingObject.ve) {
 		return parsingObject;
@@ -4184,10 +4189,6 @@ if (typeof require !== 'undefined') {
 
 				const combinedLemmataDataAsObject = {};
 
-				// This func works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
-				// From https://stackoverflow.com/a/37511463
-				const removeDiacritics = text => `${text}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
 				let countNotChecked = 0;
 				const PART_OF_SPEECH_TO_LOG = "Proper noun";
 				let lemmataOfSamePartOfSpeech = "";
@@ -4451,7 +4452,25 @@ if (typeof require !== 'undefined') {
 					.map(lemmaObject => { return {
 						lemma: lemmaObject.Lemma,
 						incorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect
-					}});
+					}})
+					.sort((a, b) => {
+						const aNoTypeTag = removeBrackets(a.lemma);
+						const aNoMacra = removeDiacritics(aNoTypeTag);
+						const aNoMacraLowerCase = aNoMacra.toLowerCase();
+						const bNoTypeTag = removeBrackets(b.lemma);
+						const bNoMacra = removeDiacritics(bNoTypeTag);
+						const bNoMacraLowerCase = bNoMacra.toLowerCase();
+
+						if (aNoMacraLowerCase > bNoMacraLowerCase) { return 1; }
+						if (aNoMacraLowerCase < bNoMacraLowerCase) { return -1; }
+						if (aNoMacra > bNoMacra) { return 1; }
+						if (aNoMacra < bNoMacra) { return -1; }
+						if (aNoTypeTag > bNoTypeTag) { return 1; }
+						if (aNoTypeTag < bNoTypeTag) { return -1; }
+						if (a.lemma > b.lemma) { return 1; }
+						if (a.lemma < b.lemma) { return -1; }
+						return 0;
+					});
 
 				//// Fields are camel-cased in the `summary` MongoDB collection.
 				const summaryObject = {
