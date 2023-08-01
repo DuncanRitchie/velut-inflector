@@ -4130,6 +4130,9 @@ if (typeof require !== 'undefined') {
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
 		const expectedOutputFileUrl =
 			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-from-collator_mongo.json';
+		//// This will go into a `summary` MongoDB collection which will be read from a page on the velut site giving my progress in generating and checking inflections.
+		const summaryFileUrl =
+			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/summary-from-inflector_mongo.json';
 
 		try {
 			let batchFilepaths = [];
@@ -4424,10 +4427,28 @@ if (typeof require !== 'undefined') {
 				console.timeEnd('checkingOutput');
 			};
 
+			const generateSummaryFile = () => {
+				console.time('generatingSummaryFile');
+
+				const errata = inputLemmata
+					.filter(lemmaObject => lemmaObject.ExtraEncliticizedForms?.incorrect?.length)
+					.map(lemmaObject => { return {
+						Lemma: lemmaObject.Lemma,
+						IncorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect
+					}});
+
+				const summaryObject = { errata }
+
+				fs.writeFileSync(summaryFileUrl, JSON.stringify(summaryObject));
+
+				console.timeEnd('generatingSummaryFile');
+			}
+
 			generateOutputAndSaveInBatches();
 			// concatenateBatches();
 			mergeWithLemmataJson();
 			checkAgainstExpected();
+			generateSummaryFile();
 
 		} catch (err) {
 			console.error(err);
