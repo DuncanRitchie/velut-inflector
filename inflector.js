@@ -4444,6 +4444,8 @@ if (typeof require !== 'undefined') {
 			const generateSummaryFile = () => {
 				console.time('generatingSummaryFile');
 
+				const lastUpdatedDate = new Date().toISOString();
+
 				const errata = inputLemmata
 					.filter(lemmaObject => lemmaObject.ExtraEncliticizedForms?.incorrect?.length)
 					.map(lemmaObject => { return {
@@ -4451,7 +4453,10 @@ if (typeof require !== 'undefined') {
 						IncorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect
 					}});
 
-				const summaryObject = { errata }
+				const summaryObject = {
+					lastUpdatedDate,
+					errata
+				}
 
 				fs.writeFileSync(summaryFileUrl, JSON.stringify(summaryObject));
 
