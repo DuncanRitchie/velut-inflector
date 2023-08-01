@@ -4188,6 +4188,10 @@ if (typeof require !== 'undefined') {
 				// From https://stackoverflow.com/a/37511463
 				const removeDiacritics = text => `${text}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+				let countNotChecked = 0;
+				const PART_OF_SPEECH_TO_LOG = "Proper noun";
+				let lemmataOfSamePartOfSpeech = "";
+
 				//// Add data from input lemmata data.
 				inputLemmata.forEach((lemmaObject, index) => {
 					//// Ignore duplicate lemmata.
@@ -4204,8 +4208,18 @@ if (typeof require !== 'undefined') {
 						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
 							Index, Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root, NoMacra, NoMacraLowerCase
 						};
+
+						if (lemmaObject["20230721"]) {
+							countNotChecked++;
+							if (PartOfSpeech === PART_OF_SPEECH_TO_LOG) {
+								lemmataOfSamePartOfSpeech += ' ' + NoTypeTag;
+							}
+						}
 					}
 				});
+
+				console.log(PART_OF_SPEECH_TO_LOG + ':' + lemmataOfSamePartOfSpeech);
+				console.log(`There are ${countNotChecked} lemmata whose forms should be checked manually.`);
 
 				//// Add data from output of inflector to a "Forms" field in each lemma.
 				//// (This overrides any "Forms" field the lemma already has.)
