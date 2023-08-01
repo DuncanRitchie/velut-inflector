@@ -4142,6 +4142,13 @@ if (typeof require !== 'undefined') {
 		try {
 			let batchFilepaths = [];
 
+			let successCount = 0;
+			let errorCount = 0;
+			let noTestDataCount = 0;
+			let skippedCount = 0;
+			let totalLemmata = 0;
+			let countNotChecked = 0;
+
 			const generateOutputAndSaveInBatches = () => {
 				console.time('generatingOutput');
 
@@ -4189,7 +4196,7 @@ if (typeof require !== 'undefined') {
 
 				const combinedLemmataDataAsObject = {};
 
-				let countNotChecked = 0;
+				countNotChecked = 0;
 				const PART_OF_SPEECH_TO_LOG = "Proper noun";
 				let lemmataOfSamePartOfSpeech = "";
 
@@ -4250,13 +4257,13 @@ if (typeof require !== 'undefined') {
 			const checkAgainstExpected = () => {
 				console.time('checkingOutput');
 
+				successCount = 0;
+				errorCount = 0;
+				noTestDataCount = 0;
+				totalLemmata = 0;
 				// const output = require(outputFileUrl);
 				const expectedOutput = require(expectedOutputFileUrl);
 
-				let successCount = 0;
-				let errorCount = 0;
-				let noTestDataCount = 0;
-				let totalLemmata = 0;
 				let incorrectComparatives = 0;
 				// const totalLemmata = outputEntries.length;
 
@@ -4436,7 +4443,7 @@ if (typeof require !== 'undefined') {
 						}
 					}
 				});
-				const skippedCount = totalLemmata - errorCount - successCount - noTestDataCount;
+				skippedCount = totalLemmata - errorCount - successCount - noTestDataCount;
 				console.warn(`There were ${errorCount} mismatches (and ${successCount} successes, ${skippedCount} skipped, and ${noTestDataCount} with no existing forms data to compare) out of ${totalLemmata} lemmata.`);
 
 				console.timeEnd('checkingOutput');
@@ -4446,6 +4453,16 @@ if (typeof require !== 'undefined') {
 				console.time('generatingSummaryFile');
 
 				const lastUpdatedDate = new Date().toISOString();
+
+				const inflectorCounts = {
+					mismatches: errorCount,
+					successes: successCount,
+					inflectFuncNotDefined: skippedCount,
+					noTestData: noTestDataCount,
+					total: totalLemmata,
+					toBeManuallyChecked: countNotChecked,
+					manuallyChecked: totalLemmata - countNotChecked,
+				}
 
 				const errata = inputLemmata
 					.filter(lemmaObject => lemmaObject.ExtraEncliticizedForms?.incorrect?.length)
@@ -4475,7 +4492,8 @@ if (typeof require !== 'undefined') {
 				//// Fields are camel-cased in the `summary` MongoDB collection.
 				const summaryObject = {
 					lastUpdatedDate,
-					errata
+					inflectorCounts,
+					errata,
 				}
 
 				fs.writeFileSync(summaryFileUrl, JSON.stringify(summaryObject));
