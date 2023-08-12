@@ -828,7 +828,7 @@ const inflectFuncs = {
 			return false;
 		})();
 
-		const isOneTermination =
+		const hasOneTermination =
 			!hasThreeTerminations &&
 			stems.some((stem) => lemma !== stem + 'is' && lemma !== stem + 'ēs');
 
@@ -852,7 +852,7 @@ const inflectFuncs = {
 						dative: joinStemsToEndings(stems, 'ī'),
 						ablative: joinStemsToEndings(
 							stems,
-							hasIStem && !isOneTermination ? 'ī' : 'e',
+							hasIStem && !hasOneTermination ? 'ī' : 'e',
 						),
 					},
 					plural: {
@@ -880,7 +880,7 @@ const inflectFuncs = {
 						dative: joinStemsToEndings(stems, 'ī'),
 						ablative: joinStemsToEndings(
 							stems,
-							hasIStem && !isOneTermination ? 'ī' : 'e',
+							hasIStem && !hasOneTermination ? 'ī' : 'e',
 						),
 					},
 					plural: {
@@ -897,20 +897,20 @@ const inflectFuncs = {
 				},
 				neuter: {
 					singular: {
-						nominative: isOneTermination
+						nominative: hasOneTermination
 							? [lemma]
 							: joinStemsToEndings(stems, 'e'),
-						vocative: isOneTermination
+						vocative: hasOneTermination
 							? [lemma]
 							: joinStemsToEndings(stems, 'e'),
-						accusative: isOneTermination
+						accusative: hasOneTermination
 							? [lemma]
 							: joinStemsToEndings(stems, 'e'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
 						ablative: joinStemsToEndings(
 							stems,
-							hasIStem && !isOneTermination ? 'ī' : 'e',
+							hasIStem && !hasOneTermination ? 'ī' : 'e',
 						),
 					},
 					plural: {
