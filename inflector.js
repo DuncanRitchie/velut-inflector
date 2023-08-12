@@ -813,9 +813,24 @@ const inflectFuncs = {
 			return true;
 		})();
 
-		const isOneTermination = stems.some(
-			(stem) => lemma !== stem + 'is' && lemma !== stem + 'ēs',
-		);
+		const hasThreeTerminations = (() => {
+			if (
+				rest.HasThreeTerminations === true ||
+				rest.HasThreeTerminations === false
+			) {
+				return rest.HasThreeTerminations;
+			}
+			if (lemma.endsWith('er')) {
+				console.log(
+					`Please define HasThreeTerminations because ${lemma} ends in -er`,
+				);
+			}
+			return false;
+		})();
+
+		const isOneTermination =
+			!hasThreeTerminations &&
+			stems.some((stem) => lemma !== stem + 'is' && lemma !== stem + 'ēs');
 
 		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems =
@@ -854,8 +869,12 @@ const inflectFuncs = {
 				},
 				feminine: {
 					singular: {
-						nominative: [lemma],
-						vocative: [lemma],
+						nominative: hasThreeTerminations
+							? joinStemsToEndings(stems, 'is')
+							: [lemma],
+						vocative: hasThreeTerminations
+							? joinStemsToEndings(stems, 'is')
+							: [lemma],
 						accusative: joinStemsToEndings(stems, 'em'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
