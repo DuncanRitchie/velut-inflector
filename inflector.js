@@ -4078,6 +4078,28 @@ const convertInputToOutputData = (lemmata) => {
 		}
 
 		try {
+			//// Console.logs when I’ve added properties to lemmata to suggest that I should review them.
+
+			// "Conjugations added programmatically."
+			// if (lemma["20221217"]) {
+			// 	console.log(lemma["20221217"] + " " + lemma.Lemma)
+			// }
+
+			// "This lemma was failing"
+			// if (lemma["20221218"]) {
+			// 	console.log(lemma["20221218"] + " " + lemma.Lemma)
+			// }
+
+			// "Conjugations added programmatically."
+			// if (lemma["20230115"]) {
+			// 	console.log(lemma["20230115"] + " " + lemma.Lemma)
+			// }
+
+			// All words.
+			// if (lemma["20230721"]) {
+			// 	console.log(lemma["20230721"] + " " + lemma.Lemma)
+			// }
+
 			const DOES_PART_OF_SPEECH_GET_CHECKED = false;
 
 			if (DOES_PART_OF_SPEECH_GET_CHECKED
@@ -4091,7 +4113,7 @@ const convertInputToOutputData = (lemmata) => {
 			const parsingData = inflectFuncs[lemma.PartOfSpeech](lemma);
 
 			if (Object.keys(parsingData).length === 0) {
-				// console.log(`Inflection function has not been defined for ${lemma.PartOfSpeech}.`);
+				console.log(`Inflection function has not been defined for ${lemma.PartOfSpeech}.`);
 			}
 			outputAsObject[lemma.Lemma] = parsingData;
 		} catch (error) {
@@ -4210,7 +4232,8 @@ if (typeof require !== 'undefined') {
 						const { Lemma, PartOfSpeech, Meanings, Notes, Transliterations, Root } = lemmaObject;
 						const Index = index;
 						// The velut website uses NoMacra & NoMacraLowerCase when sorting lemmata.
-						const NoMacra = removeDiacritics(Lemma);
+						const NoTypeTag = removeBrackets(Lemma);
+						const NoMacra = removeDiacritics(NoTypeTag);
 						const NoMacraLowerCase = NoMacra.toLowerCase();
 
 						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
@@ -4264,7 +4287,6 @@ if (typeof require !== 'undefined') {
 				// const output = require(outputFileUrl);
 				const expectedOutput = require(expectedOutputFileUrl);
 
-				let incorrectComparatives = 0;
 				// const totalLemmata = outputEntries.length;
 
 				batchFilepaths.forEach((filename) => {
@@ -4412,11 +4434,12 @@ if (typeof require !== 'undefined') {
 							errorCount++;
 							console.error({
 								expected: expectedFormsAsSet,
-								actual: formsAsSet,
+								// actual: formsAsSet,
 								missing: subtractSet(expectedFormsAsSet, formsAsSet),
 								for: lemma,
 							});
 							// console.error(lemma)
+							// console.error(subtractSet(expectedFormsAsSet, formsAsSet));
 						}
 
 						//// If I had added incorrect forms to velut in Excel,
