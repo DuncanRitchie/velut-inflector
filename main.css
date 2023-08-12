@@ -2,6 +2,6 @@
 	tab-size: 2;
 }
 
-q[lang="la"] {
-	quotes: "‘" "’";
+q[lang='la'] {
+	quotes: '‘' '’';
 }
