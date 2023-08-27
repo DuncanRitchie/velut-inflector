@@ -841,6 +841,11 @@ const inflectFuncs = {
 				? joinStemsToEndings(lemma, 'rim')
 				: joinStemsToEndings(stems, 'issim'));
 
+		const ablativeSingular = joinStemsToEndings(
+			stems,
+			hasIStem ? (lemma.endsWith('ns') ? ['ī', 'e'] : 'ī') : 'e',
+		);
+
 		const allUnencliticizedForms = {
 			positive: {
 				masculine: {
@@ -850,10 +855,7 @@ const inflectFuncs = {
 						accusative: joinStemsToEndings(stems, 'em'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(
-							stems,
-							hasIStem && !hasOneTermination ? 'ī' : 'e',
-						),
+						ablative: ablativeSingular,
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
@@ -878,10 +880,7 @@ const inflectFuncs = {
 						accusative: joinStemsToEndings(stems, 'em'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(
-							stems,
-							hasIStem && !hasOneTermination ? 'ī' : 'e',
-						),
+						ablative: ablativeSingular,
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, 'ēs'),
@@ -908,10 +907,7 @@ const inflectFuncs = {
 							: joinStemsToEndings(stems, 'e'),
 						genitive: joinStemsToEndings(stems, 'is'),
 						dative: joinStemsToEndings(stems, 'ī'),
-						ablative: joinStemsToEndings(
-							stems,
-							hasIStem && !hasOneTermination ? 'ī' : 'e',
-						),
+						ablative: ablativeSingular,
 					},
 					plural: {
 						nominative: joinStemsToEndings(stems, hasIStem ? 'ia' : 'a'),
