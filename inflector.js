@@ -2259,16 +2259,27 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
+									// If the verb is transitive (meaning it has a non-impersonal passive),
+									// first- & second-person forms will be merged in later.
+									// If the `first` and `second` keys were not already on the object,
+									// it would result in the order of object keys being {third, first, second}
+									// Using empty arrays here means we get {first, second, third}.
+									first: [],
+									second: [],
 									third: ['ītur'],
 								},
 							},
 							imperfect: {
 								singular: {
+									first: [],
+									second: [],
 									third: ['ībātur'],
 								},
 							},
 							future: {
 								singular: {
+									first: [],
+									second: [],
 									third: ['ībitur'],
 								},
 							},
@@ -2328,11 +2339,15 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
+									first: [],
+									second: [],
 									third: ['eātur'],
 								},
 							},
 							imperfect: {
 								singular: {
+									first: [],
+									second: [],
 									third: ['īrētur'],
 								},
 							},
