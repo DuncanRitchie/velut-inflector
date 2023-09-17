@@ -1852,7 +1852,6 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 					},
-					incorrect: ['erint'],
 				};
 
 				// Attach the prefix to all the forms of ‘sum’.
