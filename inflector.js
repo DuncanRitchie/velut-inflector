@@ -64,7 +64,7 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 					return accumulated;
 				}, {});
 		} catch (error) {
-			console.error(`Error in addEnclitics(${object}): error`);
+			console.error(`Error in addEnclitics(${object}): ${error}`);
 			return {};
 		}
 	};
@@ -928,11 +928,15 @@ const inflectFuncs = {
 		if (Lemma.startsWith('-')) {
 			return rest.Forms;
 		}
-		const basicForms = [
-			...new Set(rest.Forms ?? []).add(removeBrackets(Lemma)),
-		];
+		// Forms should include the lemma plus forms in any “Forms” field.
+		const lemma = removeBrackets(Lemma);
+		const basicForms = [lemma];
+		if (rest.Forms) {
+			basicForms.push(...rest.Forms);
+		}
+		const uniqueBasicForms = [...new Set(basicForms)];
 		// applyFieldsToForms adds enclitics and handles other fields in the lemma object.
-		const allForms = applyFieldsToForms(basicForms, rest);
+		const allForms = applyFieldsToForms(uniqueBasicForms, rest);
 		if (rest.ReceivesEnclitics) {
 			return allForms;
 		}
