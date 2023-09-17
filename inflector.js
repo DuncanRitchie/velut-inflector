@@ -928,7 +928,16 @@ const inflectFuncs = {
 		if (Lemma.startsWith('-')) {
 			return rest.Forms;
 		}
-		return [...new Set(rest.Forms ?? []).add(removeBrackets(Lemma))];
+		const basicForms = [
+			...new Set(rest.Forms ?? []).add(removeBrackets(Lemma)),
+		];
+		// applyFieldsToForms adds enclitics and handles other fields in the lemma object.
+		const allForms = applyFieldsToForms(basicForms, rest);
+		if (rest.ReceivesEnclitics) {
+			return allForms;
+		}
+		// If encliticized forms shouldn’t actually be given, we remove them.
+		return deleteUnwantedForms(allForms, ['ne', 'que', 've']);
 	},
 	Adverb: ({ Lemma, PartOfSpeech, ...rest }) => {
 		if (rest.Forms) {
@@ -4429,7 +4438,7 @@ if (typeof require !== 'undefined') {
 				const combinedLemmataDataAsObject = {};
 
 				countNotChecked = 0;
-				const PART_OF_SPEECH_TO_LOG = 'Proper noun';
+				const PART_OF_SPEECH_TO_LOG = 'Conjunction';
 				let lemmataOfSamePartOfSpeech = '';
 
 				//// Add data from input lemmata data.
