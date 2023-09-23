@@ -1319,7 +1319,7 @@ const inflectFuncs = {
 				singular: {
 					nominative: [lemma],
 					vocative: [lemma],
-					accusative: joinStemsToEndings(stems, 'e'),
+					accusative: [lemma],
 					genitive: joinStemsToEndings(stems, 'is'),
 					dative: joinStemsToEndings(stems, 'ī'),
 					ablative: joinStemsToEndings(stems, hasIStem ? 'ī' : 'e'),
@@ -4441,7 +4441,7 @@ if (typeof require !== 'undefined') {
 				const combinedLemmataDataAsObject = {};
 
 				countNotChecked = 0;
-				const PART_OF_SPEECH_TO_LOG = 'Conjunction';
+				const PART_OF_SPEECH_TO_LOG = 'Noun';
 				let lemmataOfSamePartOfSpeech = '';
 
 				//// Add data from input lemmata data.
