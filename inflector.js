@@ -1385,9 +1385,9 @@ const inflectFuncs = {
 			//// Adjectives, and all other nouns, should have vocative masculine singular in -ie.
 			//// (However, before imperial times, -ie forms were avoided, and sometimes -ī forms were used instead.)
 			//// Source: https://ore.exeter.ac.uk/repository/bitstream/handle/10036/65307/DickeyOEgregie.pdf
-			const nonProperNounVocSings = joinStemsToEndings(stems, 'e').map((form) =>
-				form.replace(/ae$/, 'aë').replace(/oe$/, 'oë'),
-			);
+			const nonProperNounVocSings = lemma.endsWith('er')
+				? [lemma]
+				: joinStemsToEndings(stems, 'e');
 			const vocSings =
 				PartOfSpeech === 'Proper noun'
 					? nonProperNounVocSings.map((form) => form.replace(/[iï]e$/, 'ī'))
