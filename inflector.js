@@ -1142,7 +1142,7 @@ const inflectFuncs = {
 		})();
 
 		if (rest.Forms) {
-			return multiplyWithEnclitics(rest.Forms);
+			return applyFieldsToForms(rest.Forms, rest);
 		}
 
 		let forms = {};
