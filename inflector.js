@@ -622,6 +622,23 @@ const inflectFuncs = {
 			return applyFieldsToForms(forms, rest);
 		}
 
+		//// 1st-declension adjectives (eg rūricola)
+		if (declensionsString === '[1]') {
+			//// Just a 1st-declension noun replicated across three genders.
+			const firstDeclForms = inflectFuncs.Noun({
+				Lemma,
+				...rest,
+			}).unencliticized.feminine;
+			const allUnencliticizedForms = {
+				positive: {
+					masculine: firstDeclForms,
+					feminine: firstDeclForms,
+					neuter: firstDeclForms,
+				},
+			};
+			return applyFieldsToForms(allUnencliticizedForms, rest);
+		}
+
 		//// 1st/2nd-declension adjectives
 		if (declensionsString === '[1,2]') {
 			if (lemma.match(/[^q][eiu]us$/) && !rest.ParsingsToExclude) {
