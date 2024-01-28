@@ -1645,7 +1645,7 @@ const inflectFuncs = {
 	Preposition: ({ Lemma, PartOfSpeech, ...rest }) => {
 		if (rest.Forms && Array.isArray(rest.Forms)) {
 			return multiplyWithEnclitics([
-				...new Set(rest.Forms).add(removeBrackets(Lemma)),
+				...new Set([removeBrackets(Lemma), ...rest.Forms]),
 			]);
 		}
 		if (rest.Forms) {
