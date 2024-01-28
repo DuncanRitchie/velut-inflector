@@ -995,10 +995,9 @@ const inflectFuncs = {
 		return applyFieldsToForms(allForms, rest);
 	},
 	Interjection: ({ Lemma, PartOfSpeech, ...rest }) => {
-		if (rest.Forms) {
-			return rest.Forms;
-		}
-		return [removeBrackets(Lemma)];
+		const forms = rest.Forms ?? [removeBrackets(Lemma)];
+		const withFields = applyFieldsToForms(forms, rest);
+		return deleteUnwantedForms(withFields, ['ne', 'que', 've']);
 	},
 	Noun: ({ Lemma, PartOfSpeech, ...rest }) => {
 		const lemma = removeBrackets(Lemma);
