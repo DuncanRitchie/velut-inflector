@@ -962,7 +962,7 @@ const inflectFuncs = {
 	},
 	Adverb: ({ Lemma, PartOfSpeech, ...rest }) => {
 		if (rest.Forms) {
-			return multiplyWithEnclitics(rest.Forms);
+			return applyFieldsToForms(rest.Forms, rest);
 		}
 		const positive = removeBrackets(Lemma);
 		const stems = rest.ObliqueStems || [
@@ -980,13 +980,26 @@ const inflectFuncs = {
 				// although the two properties are treated the same.
 				console.warn(`Adverb marked as indeclinable: ${Lemma}`);
 			}
-			return multiplyWithEnclitics({ positive: [positive] });
+			return applyFieldsToForms({ positive: [positive] }, rest);
 		}
 
-		const comparatives = stems.map((stem) => stem + 'ius');
-		const superlatives = stems.map((stem) =>
-			/[bce]r$/.test(stem) ? stem.replace(/e?r$/, 'errimē') : stem + 'issimē',
-		);
+		// The data fields ComparativeStems and SuperlativeStems aren’t especially
+		// helpful for adverbs, since ReplacementForms can easily be used instead.
+		// The following two lines are equivalent:
+		// ComparativeStems: ['meli']);
+		// ReplacementForms: { comparative: ['melius'] };
+		// But I include handling for ComparativeStems and SuperlativeStems here for consistency with adjectives.
+
+		const comparativeStems = rest.ComparativeStems ?? stems.map((s) => s + 'i');
+		const comparatives = comparativeStems.map((s) => s + 'us');
+
+		const superlativeStems =
+			rest.SuperlativeStems ??
+			stems.map((s) =>
+				/[bce]r$/.test(s) ? s.replace(/e?r$/, 'errim') : s + 'issim',
+			);
+		const superlatives = superlativeStems.map((s) => s + 'ē');
+
 		const allForms = {
 			positive: [positive],
 			comparative: comparatives,
