@@ -996,7 +996,7 @@ const inflectFuncs = {
 		const superlativeStems =
 			rest.SuperlativeStems ??
 			stems.map((s) =>
-				/[bce]r$/.test(s) ? s.replace(/e?r$/, 'errim') : s + 'issim',
+				/[bcdefgpt]r$/.test(s) ? s.replace(/e?r$/, 'errim') : s + 'issim',
 			);
 		const superlatives = superlativeStems.map((s) => s + 'ē');
 
