@@ -509,13 +509,21 @@ const emptyFieldsForIntransitiveVerbs = {
 };
 
 // This function should be called at the end of each inflection function.
-function applyFieldsToForms(allUnencliticizedForms, rest) {
+function applyFieldsToForms(
+	allUnencliticizedForms,
+	rest,
+	// Eg ‘hīcine’ may be better than ‘hīcne’
+	addIAfterCBeforeEncliticNe = false,
+) {
 	const withReplacements = replaceFieldsInObjects(
 		allUnencliticizedForms,
 		rest.ReplacementForms,
 	);
 	const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
-	const withEnclitics = multiplyWithEnclitics(withExtraForms);
+	const withEnclitics = multiplyWithEnclitics(
+		withExtraForms,
+		addIAfterCBeforeEncliticNe,
+	);
 	const withReplacementEncliticizedForms = replaceFieldsInObjects(
 		withEnclitics,
 		rest.ReplacementEncliticizedForms,
@@ -962,7 +970,7 @@ const inflectFuncs = {
 	},
 	Adverb: ({ Lemma, PartOfSpeech, ...rest }) => {
 		if (rest.Forms) {
-			return applyFieldsToForms(rest.Forms, rest);
+			return applyFieldsToForms(rest.Forms, rest, true);
 		}
 		const positive = removeBrackets(Lemma);
 		const stems = rest.ObliqueStems || [
@@ -980,7 +988,7 @@ const inflectFuncs = {
 				// although the two properties are treated the same.
 				console.warn(`Adverb marked as indeclinable: ${Lemma}`);
 			}
-			return applyFieldsToForms({ positive: [positive] }, rest);
+			return applyFieldsToForms({ positive: [positive] }, rest, true);
 		}
 
 		// The data fields ComparativeStems and SuperlativeStems aren’t especially
@@ -1005,7 +1013,7 @@ const inflectFuncs = {
 			comparative: comparatives,
 			superlative: superlatives,
 		};
-		return applyFieldsToForms(allForms, rest);
+		return applyFieldsToForms(allForms, rest, true);
 	},
 	Interjection: ({ Lemma, PartOfSpeech, ...rest }) => {
 		const forms = rest.Forms ?? [removeBrackets(Lemma)];
