@@ -703,10 +703,9 @@ const inflectFuncs = {
 					masculine: {
 						singular: {
 							nominative: [lemma],
-							vocative: joinStemsToEndings(
-								stems,
-								stems[0].endsWith('a') ? 'ë' : 'e',
-							),
+							vocative: lemma.endsWith('er')
+								? [lemma]
+								: joinStemsToEndings(stems, stems[0].endsWith('a') ? 'ë' : 'e'),
 							accusative: joinStemsToEndings(stems, 'um'),
 							genitive: getPositiveMasculineSingularGenitiveForms(),
 							dative: joinStemsToEndings(stems, 'ō'),
