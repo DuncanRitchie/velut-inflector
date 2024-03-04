@@ -319,7 +319,7 @@ const generateComparativeForms = (comparativeStems) => {
 			plural: {
 				nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
 				vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-				accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
+				accusative: joinStemsToEndings(comparativeStems, 'ōrēs'),
 				genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
 				dative: joinStemsToEndings(comparativeStems, 'ōribus'),
 				ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
@@ -337,7 +337,7 @@ const generateComparativeForms = (comparativeStems) => {
 			plural: {
 				nominative: joinStemsToEndings(comparativeStems, 'ōrēs'),
 				vocative: joinStemsToEndings(comparativeStems, 'ōrēs'),
-				accusative: joinStemsToEndings(comparativeStems, ['ōrēs', 'ōrīs']),
+				accusative: joinStemsToEndings(comparativeStems, 'ōrēs'),
 				genitive: joinStemsToEndings(comparativeStems, 'ōrum'),
 				dative: joinStemsToEndings(comparativeStems, 'ōribus'),
 				ablative: joinStemsToEndings(comparativeStems, 'ōribus'),
