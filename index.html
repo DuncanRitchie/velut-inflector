@@ -264,16 +264,23 @@
 				<dt><code>"IsPresentParticiple"</code></dt>
 				<dd>
 					<p>
-						Boolean that is true for an adjective lemma representing a present participle (ending in “-āns” or “ēns”).
+						Boolean that is true for an adjective lemma representing a present participle (ending in “-āns” or “ēns”) for a <em>non-existent</em> verb.
 						Present participles receive ablative singular forms in both “-e” and “-ī”.
 					</p>
 					<p>
-						Why are some participles made into their own lemmata?
+						So <q lang="la">inciēns</q> has <code>"IsPresentParticiple": true</code> because it (at least supposedly) derives from the verb <q lang="la">incieō</q> as its present participle, but <q lang="la">incieō</q> doesn’t exist in its own right.
+						Thus it differs from <q lang="la">ingēns</q>, which ends in “-ēns” but is not a participle.
+					</p>
+					<p>
+						Why are some participles made into their own lemmata, other than because the verb doesn’t exist?
 						Forms for verb lemmata do not include comparative or superlative forms — they are not “graded”.
 						If a participle is to be given comparative or superlative forms, I make it its own lemma, as an adjective.
 					</p>
 					<p>
-						Therefore, <q lang="la">amante</q> and <q lang="la">amantī</q> are given as the ablative singular masculine/feminine/neuter positive forms of an adjective lemma <q lang="la">amāns</q> (which has positive, comparative, and superlative forms, and has <code>"IsPresentParticiple": true</code>), and <q lang="la">amante</q> and <q lang="la">amantī</q>  are also the ablative singular masculine/feminine/neuter present participle forms of the verb lemma <q lang="la">amō</q>.
+						Therefore, <q lang="la">amantī</q> is given as the ablative singular masculine/feminine/neuter positive form of an adjective lemma <q lang="la">amāns</q> (which has positive, comparative, and superlative forms, but does <em>not</em> have <code>"IsPresentParticiple": true</code>). The forms <q lang="la">amante</q> and <q lang="la">amantī</q> are the ablative singular masculine/feminine/neuter present participle forms of the verb lemma <q lang="la">amō</q>.
+					</p>
+					<p>
+						Inside the Inflector, <code>"IsPresentParticiple"</code> is used when generating the present participle forms of verbs, but this doesn’t affect the input lemmata data.
 					</p>
 				</dd>
 
