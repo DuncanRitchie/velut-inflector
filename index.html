@@ -180,7 +180,11 @@
 				<dt><code>"HasIStem"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether a 3rd-declension adjective should follow the “i-stem” paradigm.
+						Boolean for whether a 3rd-declension adjective or 3rd-declension noun should follow the “i-stem” paradigm.
+					</p>
+					<p>
+						This may not need to be explicitly set to true or false for all 3rd-declension lemmata.
+						For example, if <code>HasThreeTerminations</code> is true (for an adjective), <code>HasIStem</code> is treated as true by default.
 					</p>
 				</dd>
 
@@ -254,6 +258,22 @@
 				<dd>
 					<p>
 						Boolean for whether the lemma’s forms end in grammatical endings followed by “-que”, such as <q lang="la">plērusque</q> and <q lang="la">uterque</q>. Such lemmata have no encliticized forms: the “-que” suffix does not mean “and”.
+					</p>
+				</dd>
+
+				<dt><code>"IsPresentParticiple"</code></dt>
+				<dd>
+					<p>
+						Boolean that is true for an adjective lemma representing a present participle (ending in “-āns” or “ēns”).
+						Present participles receive ablative singular forms in both “-e” and “-ī”.
+					</p>
+					<p>
+						Why are some participles made into their own lemmata?
+						Forms for verb lemmata do not include comparative or superlative forms — they are not “graded”.
+						If a participle is to be given comparative or superlative forms, I make it its own lemma, as an adjective.
+					</p>
+					<p>
+						Therefore, <q lang="la">amante</q> and <q lang="la">amantī</q> are given as the ablative singular masculine/feminine/neuter positive forms of an adjective lemma <q lang="la">amāns</q> (which has positive, comparative, and superlative forms, and has <code>"IsPresentParticiple": true</code>), and <q lang="la">amante</q> and <q lang="la">amantī</q>  are also the ablative singular masculine/feminine/neuter present participle forms of the verb lemma <q lang="la">amō</q>.
 					</p>
 				</dd>
 

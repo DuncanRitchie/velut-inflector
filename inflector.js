@@ -867,7 +867,7 @@ const inflectFuncs = {
 
 		const ablativeSingular = joinStemsToEndings(
 			stems,
-			hasIStem ? (lemma.endsWith('ns') ? ['ī', 'e'] : 'ī') : 'e',
+			hasIStem ? (rest.IsPresentParticiple ? ['ī', 'e'] : 'ī') : 'e',
 		);
 
 		const allUnencliticizedForms = {
@@ -2161,8 +2161,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: 'ferēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: 'ferēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: 'lātūrus' })
 								.unencliticized.positive,
 						},
@@ -2435,8 +2437,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: 'iēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: 'iēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: 'itūrus' })
 								.unencliticized.positive,
 						},
@@ -2759,8 +2763,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: 'faciēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: 'faciēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: 'factūrus' })
 								.unencliticized.positive,
 						},
@@ -3143,8 +3149,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: '1āns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: '1āns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
 								.unencliticized.positive,
 						},
@@ -3445,8 +3453,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: '1ēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: '1ēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
 								.unencliticized.positive,
 						},
@@ -3752,8 +3762,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: '1ēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: '1ēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '5ūrus' })
 								.unencliticized.positive,
 						},
@@ -4066,8 +4078,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
-							present: inflectFuncs['Adjective']({ Lemma: '1iēns' })
-								.unencliticized.positive,
+							present: inflectFuncs['Adjective']({
+								Lemma: '1iēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '5ūrus' })
 								.unencliticized.positive,
 						},
