@@ -865,12 +865,21 @@ const inflectFuncs = {
 				? joinStemsToEndings(lemma, 'rim')
 				: joinStemsToEndings(stems, 'issim'));
 
+		// Samnīs, Suffēnās, etc should have abl sing in -ī & -e.
+		const isPatrialLikeSamnīs =
+			lemma !== lemma.toLowerCase() &&
+			(lemma.endsWith('ās') || lemma.endsWith('īs'));
+
 		// IsPresentParticiple is used inside verb conjugations.
 		// It can be used on adjective lemmata in the source data, but it shouldn’t be used on an adjective if a corresponding verb would generate a present participle in -ante/-ente.
 		// For example, the adjective lemma ‘elegāns’ has IsPresentParticiple=true, because there’s no verb ‘elegō’ that has ‘elegante’ as a participle among its generated forms, and we want ‘elegante’ to be generated, so it’s generated from the adjective.
 		const ablativeSingular = joinStemsToEndings(
 			stems,
-			hasIStem ? (rest.IsPresentParticiple ? ['ī', 'e'] : 'ī') : 'e',
+			hasIStem
+				? rest.IsPresentParticiple || isPatrialLikeSamnīs
+					? ['ī', 'e']
+					: 'ī'
+				: 'e',
 		);
 
 		const allUnencliticizedForms = {
