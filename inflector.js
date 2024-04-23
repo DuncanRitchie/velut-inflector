@@ -678,26 +678,6 @@ const inflectFuncs = {
 					? joinStemsToEndings(lemma, 'rim')
 					: joinStemsToEndings(stems, 'issim'));
 
-			//// Eg Sīdōnius => Sīdōniī, Sīdōnī
-			const getPositiveMasculineSingularGenitiveForms = () => {
-				const mappedStems = stems.map((stem) => {
-					const uncontracted = joinStemsToEndings(stem, 'ī');
-					const contracted = stem.substring(0, stems[0].length - 1) + 'ī';
-					const contractedWithAcute = contracted
-						.replace(/a(?=[bcdfglmnprstv]ī$)/, 'á')
-						.replace(/e(?=[bcdfglmnprstv]ī$)/, 'é')
-						.replace(/i(?=[bcdfglmnprstv]ī$)/, 'í')
-						.replace(/o(?=[bcdfglmnprstv]ī$)/, 'ó')
-						.replace(/u(?=[bcdfglmnprstv]ī$)/, 'ú')
-						.replace(/y(?=[bcdfglmnprstv]ī$)/, 'ý');
-					if (stem.endsWith('i') || stem.endsWith('ï')) {
-						return [uncontracted, [contracted, contractedWithAcute]];
-					}
-					return [uncontracted];
-				});
-				return [...new Set(mappedStems.flat(2))];
-			};
-
 			const allUnencliticizedForms = {
 				positive: {
 					masculine: {
@@ -707,7 +687,7 @@ const inflectFuncs = {
 								? [lemma]
 								: joinStemsToEndings(stems, stems[0].endsWith('a') ? 'ë' : 'e'),
 							accusative: joinStemsToEndings(stems, 'um'),
-							genitive: getPositiveMasculineSingularGenitiveForms(),
+							genitive: joinStemsToEndings(stems, 'ī'), // Unlike for nouns, genitives in -iī do not contract.
 							dative: joinStemsToEndings(stems, 'ō'),
 							ablative: joinStemsToEndings(stems, 'ō'),
 						},
