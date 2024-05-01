@@ -191,7 +191,18 @@
 				<dt><code>"HasLocative"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether a noun (proper or otherwise) should get a locative form.
+						Boolean for whether a noun (proper or otherwise) should get a locative form, or for whether a first/second-declension adjective should get locative forms.
+					</p>
+					<p>
+						Most nouns that get the locative have either singular forms and no plural (eg <q lang="la">Rōma</q>, locative singular <q lang="la">Rōmae</q>) or plural forms and no singular (eg <q lang="la">Athēnae</q>, locative plural <q lang="la">Athēnīs</q>).
+						Nouns that exist in both singular and plural (eg <q lang="la">domus</q>) will get the locative for the singular only.
+					</p>
+					<p>
+						The only adjectives I mark with <code>"HasLocative": true</code> are the possessives: <q lang="la">meus</q>, <q lang="la">tuus</q>, <q lang="la">suus</q>, <q lang="la">noster</q>, <q lang="la">voster</q>, <q lang="la">vester</q>, <q lang="la">aliēnus</q>.
+						These all belong to the first/second declension.
+						They will get the locative for all three genders in both singular and plural, but only for the positive degree.
+						(The adjective <q lang="la">aliēnus</q> is not attested in the locative comparative/superlative; the other adjectives have no comparative or superlative at all.
+						Theoretically “in the Athens of complete strangers” could be translated as <q lang="la">Athēnīs aliēnissimīs</q>, but I’m not allowing that without attestation.)
 					</p>
 				</dd>
 

@@ -690,6 +690,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ī'), // Unlike for nouns, genitives in -iī do not contract.
 							dative: joinStemsToEndings(stems, 'ō'),
 							ablative: joinStemsToEndings(stems, 'ō'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'ī') : [],
 						},
 						plural: {
 							nominative: joinStemsToEndings(stems, 'ī'),
@@ -698,6 +699,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ōrum'),
 							dative: joinStemsToEndings(stems, 'īs'),
 							ablative: joinStemsToEndings(stems, 'īs'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'īs') : [],
 						},
 					},
 					feminine: {
@@ -708,6 +710,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ae'),
 							dative: joinStemsToEndings(stems, 'ae'),
 							ablative: joinStemsToEndings(stems, 'ā'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'ae') : [],
 						},
 						plural: {
 							nominative: joinStemsToEndings(stems, 'ae'),
@@ -716,6 +719,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ārum'),
 							dative: joinStemsToEndings(stems, 'īs'),
 							ablative: joinStemsToEndings(stems, 'īs'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'īs') : [],
 						},
 					},
 					neuter: {
@@ -726,6 +730,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ī'),
 							dative: joinStemsToEndings(stems, 'ō'),
 							ablative: joinStemsToEndings(stems, 'ō'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'ī') : [],
 						},
 						plural: {
 							nominative: joinStemsToEndings(stems, 'a'),
@@ -734,6 +739,7 @@ const inflectFuncs = {
 							genitive: joinStemsToEndings(stems, 'ōrum'),
 							dative: joinStemsToEndings(stems, 'īs'),
 							ablative: joinStemsToEndings(stems, 'īs'),
+							locative: rest.HasLocative ? joinStemsToEndings(stems, 'īs') : [],
 						},
 					},
 				},
