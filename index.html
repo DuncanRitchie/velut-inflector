@@ -78,7 +78,7 @@
 			<p>
 				The input needs to be a Json array of objects.
 				Each object must have the string fields of <code>Lemma</code> and <code>PartOfSpeech</code>.
-				Additionally, the Inflector also looks for some optional fields.
+				Additionally, the Inflector also looks for some <em>optional</em> fields, which can override aspects of the Inflector’s default behaviour.
 				(However, not all of these apply to all parts of speech.)
 			</p>
 
@@ -111,11 +111,30 @@
 				<dt><code>"Declensions"</code></dt>
 				<dd>
 					<p>
-						An integer array for nouns and adjectives; adjectives can have <samp>[1, 2]</samp> or <samp>[3]</samp> or <samp>[0]</samp>.
-						Zero means the lemma is indeclinable: all forms are the same as the lemma form.
+						An integer array for nouns and adjectives; adjectives can have the following —
+					</p>
+					<ul>
+						<li>
+							<samp>[1, 2]</samp> is for first/second-declension adjectives (first declension for feminine, second declension for masculine and neuter).
+						</li>
+						<li>
+							<samp>[3]</samp> is for third-declension adjectives.
+						</li>
+						<li>
+							<samp>[0]</samp> means the lemma is indeclinable: all forms are the same as the lemma form.
+							Comparative and superlative forms are not generated.
+						</li>
+						<li>
+							<samp>[1]</samp> is used for <q lang="la">rūricola</q>, which follows the first declension for <em>both</em> its feminine and its masculine (it happens to have no neuter).
+							Comparative and superlative forms are not generated.
+						</li>
+					</ul>
+					<p>
+						(Whenever adjective lemmata are labelled as belonging to the first/second declension or the third declension, this only really describes the positive forms.
+						Comparative forms will have third-declension endings and superlative forms will have first/second-declension endings, regardless of the declension of the rest of the adjective.)
 					</p>
 					<p>
-						For nouns (including proper nouns), the array can contain any integer from <samp>0</samp> to <samp>5</samp>.
+						For nouns (including proper nouns), the <code>"Declensions"</code> array can contain any integer from <samp>0</samp> to <samp>5</samp>.
 						It is possible to have more than one declension.
 						For example, <samp>[2, 4]</samp> produces both second-declension and fourth-declension forms (eg for <q lang="la">domus</q>), and <samp>[0, 3]</samp> produces both indeclinable forms and third-declension forms (eg for <q lang="la">Iōb</q>).
 					</p>
@@ -291,7 +310,8 @@
 						Therefore, <q lang="la">amantī</q> is given as the ablative singular masculine/feminine/neuter positive form of an adjective lemma <q lang="la">amāns</q> (which has positive, comparative, and superlative forms, but does <em>not</em> have <code>"IsPresentParticiple": true</code>). The forms <q lang="la">amante</q> and <q lang="la">amantī</q> are the ablative singular masculine/feminine/neuter present participle forms of the verb lemma <q lang="la">amō</q>.
 					</p>
 					<p>
-						Inside the Inflector, <code>"IsPresentParticiple"</code> is used when generating the present participle forms of verbs, but this doesn’t affect the input lemmata data.
+						Inside the Inflector, present participle forms of verbs are generated as if they belonged to an adjective lemma with <code>"IsPresentParticiple": true</code>.
+						This doesn’t affect the input lemmata data.
 					</p>
 				</dd>
 
@@ -306,15 +326,34 @@
 				<dt><code>"ObliqueStems"</code></dt>
 				<dd>
 					<p>
-						String array, for 3rd-declension nouns and adjectives, eg <samp>["āctiōn"]</samp> for <q lang="la">āctiō’</q> or <samp>["veter"]</samp> for <q lang="la">vetus</q>.
-						For adverbs, this should probably be replaced with <code>"ComparativeStems"</code>, <code>"SuperlativeStems"</code>, etc.
+						String array, for adjectives, adverbs, and nouns.
+						It represents the stems to use for oblique (ie, non-lemma) forms.
+						For example, <q lang="la">āctiō’</q> has <samp>["āctiōn"]</samp> and <q lang="la">vetus</q> has <samp>["veter"]</samp>.
+					</p>
+					<p>
+						Most adjectives/adverbs/nouns have only one oblique stem.
+						<code>"ObliqueStems"</code> is not needed if the lemma has one oblique stem and it can be easily deduced from the lemma form.
+					</p>
+					<p>
+						Adjectives and adverbs can get comparative and superlative forms.
+						Comparative forms and superlative forms are generated from <code>"ObliqueStems"</code> if the fields <code>"ComparativeStems"</code> and <code>"SuperlativeStems"</code> are not specified (respectively).
+					</p>
+					<p>
+						More precisely — if <code>"ComparativeStems"</code> is not specified, the comparative stems are the oblique stems plus “i”, which will then be combined with the endings “-or”, “-or”, “-us” etc.
+						Likewise, if <code>"SuperlativeStems"</code> is not specified, the superlative stems are the oblique stems plus “issim”, which will then be combined with the regular 1st/2nd-declension endings “-us”, “-a”, “-um” etc.
 					</p>
 				</dd>
 
 				<dt><code>"ParsingsToExclude"</code></dt>
 				<dd>
 					<p>
-						String array, eg <samp>["comparative", "superlative"]</samp> for an adjective that does not have these forms.
+						String array, eg <samp>["comparative", "superlative"]</samp> for an adjective/adverb that does not have any comparative or superlative forms.
+					</p>
+					<p>
+						To remove forms at the <em>intersection</em> of multiple grammatical labels, <code>"ReplacementForms"</code> or <code>"ReplacementEncliticizedForms"</code> can be used with an empty array in a nested object.
+						For example, <samp>"ReplacementForms": { "participle": { "active": { "future": [] } } }</samp> means that the lemma will not have any future active participles.
+						For this to work, the nesting must match what the Inflector would generate.
+						(<samp>"ReplacementForms": { "future": { "active": { "participle": [] } } }</samp> does nothing.)
 					</p>
 				</dd>
 
@@ -340,7 +379,7 @@
 				<dd>
 					<p>
 						Object of forms to use instead of the regularly generated forms for the parsings that are specified, after enclitics have been added.
-						Only used for the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
+						For example, it is used on the adjective <q lang="la">suus</q>, to make <q lang="la">süāve</q> appear instead of <q lang="la">suāve</q>.
 						(This is to differentiate from the <q lang="la">suāve</q> that is a form of <q lang="la">suāvis</q> with consonantal u.)
 					</p>
 				</dd>
@@ -349,6 +388,9 @@
 				<dd>
 					<p>
 						Object of forms to use instead of the regularly generated forms for the parsings that are specified, before any enclitics are added to the result.
+					</p>
+					<p>
+						For example, <samp>"ReplacementForms": { "positive": { "masculine": { "singular": { "vocative": ["mī"] } } } }</samp> results in the vocative singular masculine positive form being <q lang="la">mī</q> instead of whatever the Inflector would create regularly (which would be the incorrect <q lang="la">mee</q> in this case, for the lemma <q lang="la">meus</q>).
 					</p>
 				</dd>
 
