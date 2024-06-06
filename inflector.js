@@ -685,7 +685,7 @@ const inflectFuncs = {
 							nominative: [lemma],
 							vocative: lemma.endsWith('r') // eg āter, signifer, camur, satur
 								? [lemma]
-								: joinStemsToEndings(stems, stems[0].endsWith('a') ? 'ë' : 'e'),
+								: joinStemsToEndings(stems, 'e'),
 							accusative: joinStemsToEndings(stems, 'um'),
 							genitive: joinStemsToEndings(stems, 'ī'), // Unlike for nouns, genitives in -iī do not contract.
 							dative: joinStemsToEndings(stems, 'ō'),
