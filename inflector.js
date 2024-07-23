@@ -46,6 +46,12 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 				return object
 					.filter((form) => /[aeiouyāēīōūȳ]/i.test(form)) // Forms with no vowels (eg ‘st') should not get an enclitic
 					.map((form) => {
+						if (typeof form !== 'string') {
+							console.warn(
+								`Form ${form} is not a string but of type ${typeof form}`,
+							);
+							return `${form}`;
+						}
 						if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
 							return removeAcutes(form) + 'i' + enclitic;
 						}
