@@ -3128,7 +3128,7 @@ const inflectFuncs = {
 									second: ['1ā'],
 								},
 								plural: {
-									third: ['1āte'],
+									second: ['1āte'],
 								},
 							},
 							future: {
@@ -3148,7 +3148,7 @@ const inflectFuncs = {
 									second: ['1āre'],
 								},
 								plural: {
-									third: ['1āminī'],
+									second: ['1āminī'],
 								},
 							},
 							future: {
@@ -3432,7 +3432,7 @@ const inflectFuncs = {
 									second: ['1ē'],
 								},
 								plural: {
-									third: ['1ēte'],
+									second: ['1ēte'],
 								},
 							},
 							future: {
@@ -3452,7 +3452,7 @@ const inflectFuncs = {
 									second: ['1ēre'],
 								},
 								plural: {
-									third: ['1ēminī'],
+									second: ['1ēminī'],
 								},
 							},
 							future: {
@@ -3741,7 +3741,7 @@ const inflectFuncs = {
 									second: ['2e'],
 								},
 								plural: {
-									third: ['2ite'],
+									second: ['2ite'],
 								},
 							},
 							future: {
@@ -3761,7 +3761,7 @@ const inflectFuncs = {
 									second: ['2ere'],
 								},
 								plural: {
-									third: ['2iminī'],
+									second: ['2iminī'],
 								},
 							},
 							future: {
@@ -4057,7 +4057,7 @@ const inflectFuncs = {
 									second: ['1ī'],
 								},
 								plural: {
-									third: ['1īte'],
+									second: ['1īte'],
 								},
 							},
 							future: {
