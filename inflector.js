@@ -493,7 +493,7 @@ const emptyFieldsForIntransitiveVerbs = {
 	},
 	participle: {
 		passive: {
-			past: {
+			perfect: {
 				masculine: [],
 				feminine: [],
 				neuter: {
@@ -2193,8 +2193,8 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: 'lātus' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: 'lātus' })
+								.unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: 'ferendus' })
 								.unencliticized.positive,
 						},
@@ -2570,8 +2570,8 @@ const inflectFuncs = {
 					},
 					participle: {
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: 'itus' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: 'itus' })
+								.unencliticized.positive,
 						},
 					},
 				};
@@ -2897,7 +2897,7 @@ const inflectFuncs = {
 					},
 					participle: {
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: 'factus' })
+							perfect: inflectFuncs['Adjective']({ Lemma: 'factus' })
 								.unencliticized.positive,
 						},
 					},
@@ -3165,7 +3165,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['1āre'],
-							past: ['3isse'],
+							perfect: ['3isse'],
 						},
 						passive: {
 							present: ['1ārī'],
@@ -3181,8 +3181,8 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: '4us' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: '4us' })
+								.unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '1andus' })
 								.unencliticized.positive,
 						},
@@ -3469,7 +3469,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['1ēre'],
-							past: ['3isse'],
+							perfect: ['3isse'],
 						},
 						passive: {
 							present: ['1ērī'],
@@ -3485,8 +3485,8 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: '4us' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: '4us' })
+								.unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '1endus' })
 								.unencliticized.positive,
 						},
@@ -3778,7 +3778,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['2ere'],
-							past: ['3isse'],
+							perfect: ['3isse'],
 						},
 						passive: {
 							present: ['2ī'],
@@ -3794,8 +3794,8 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: '4us' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: '4us' })
+								.unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '6ndus' })
 								.unencliticized.positive,
 						},
@@ -4094,7 +4094,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['1īre'],
-							past: ['3isse'],
+							perfect: ['3isse'],
 						},
 						passive: {
 							present: ['1īrī'],
@@ -4110,8 +4110,8 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							past: inflectFuncs['Adjective']({ Lemma: '4us' }).unencliticized
-								.positive,
+							perfect: inflectFuncs['Adjective']({ Lemma: '4us' })
+								.unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: '6ndus' })
 								.unencliticized.positive,
 						},
@@ -4183,8 +4183,8 @@ const inflectFuncs = {
 				delete forms.infinitive.passive;
 				forms.imperative.active = forms.imperative.passive;
 				delete forms.imperative.passive;
-				forms.participle.active.past = forms.participle.passive.past;
-				delete forms.participle.passive.past;
+				forms.participle.active.perfect = forms.participle.passive.perfect;
+				delete forms.participle.passive.perfect;
 			}
 
 			if (rest.IsSemiDeponent) {
@@ -4193,15 +4193,15 @@ const inflectFuncs = {
 				delete forms.indicative.active.futureperfect;
 				delete forms.subjunctive.active.perfect;
 				delete forms.subjunctive.active.pluperfect;
-				delete forms.infinitive.active.past;
+				delete forms.infinitive.active.perfect;
 
 				delete forms.indicative.passive;
 				delete forms.subjunctive.passive;
 				delete forms.imperative.passive;
 				delete forms.infinitive.passive;
 
-				forms.participle.active.past = forms.participle.passive.past;
-				delete forms.participle.passive.past;
+				forms.participle.active.perfect = forms.participle.passive.perfect;
+				delete forms.participle.passive.perfect;
 			}
 
 			if (rest.IsImpersonal) {
@@ -4216,14 +4216,14 @@ const inflectFuncs = {
 				delete forms.infinitive.passive;
 				delete forms.imperative.passive;
 				delete forms.participle.passive.future;
-				delete forms.participle.passive.past.masculine;
-				delete forms.participle.passive.past.feminine;
-				delete forms.participle.passive.past.neuter.plural;
+				delete forms.participle.passive.perfect.masculine;
+				delete forms.participle.passive.perfect.feminine;
+				delete forms.participle.passive.perfect.neuter.plural;
 			}
 
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
-				forms.participle.active.past = forms.participle.passive.past;
+				forms.participle.active.perfect = forms.participle.passive.perfect;
 				forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 			}
 			if (

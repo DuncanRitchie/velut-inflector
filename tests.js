@@ -508,7 +508,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāre'],
-						past: ['abdicāvisse'],
+						perfect: ['abdicāvisse'],
 					},
 					passive: {
 						present: ['abdicārī'],
@@ -630,7 +630,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdicātus'],
@@ -992,7 +992,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicārene'],
-						past: ['abdicāvissene'],
+						perfect: ['abdicāvissene'],
 					},
 					passive: {
 						present: ['abdicārīne'],
@@ -1114,7 +1114,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdicātusne'],
@@ -1476,7 +1476,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāreque'],
-						past: ['abdicāvisseque'],
+						perfect: ['abdicāvisseque'],
 					},
 					passive: {
 						present: ['abdicārīque'],
@@ -1598,7 +1598,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdicātusque'],
@@ -1960,7 +1960,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāreve'],
-						past: ['abdicāvisseve'],
+						perfect: ['abdicāvisseve'],
 					},
 					passive: {
 						present: ['abdicārīve'],
@@ -2082,7 +2082,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdicātusve'],
@@ -2467,7 +2467,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdīcere'],
-						past: ['abdīxisse'],
+						perfect: ['abdīxisse'],
 					},
 					passive: {
 						present: ['abdīcī'],
@@ -2589,7 +2589,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdictus'],
@@ -2951,7 +2951,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdīcerene'],
-						past: ['abdīxissene'],
+						perfect: ['abdīxissene'],
 					},
 					passive: {
 						present: ['abdīcīne'],
@@ -3073,7 +3073,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdictusne'],
@@ -3435,7 +3435,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdīcereque'],
-						past: ['abdīxisseque'],
+						perfect: ['abdīxisseque'],
 					},
 					passive: {
 						present: ['abdīcīque'],
@@ -3557,7 +3557,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdictusque'],
@@ -3919,7 +3919,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdīcereve'],
-						past: ['abdīxisseve'],
+						perfect: ['abdīxisseve'],
 					},
 					passive: {
 						present: ['abdīcīve'],
@@ -4041,7 +4041,7 @@ const tests = [
 						},
 					},
 					passive: {
-						past: {
+						perfect: {
 							masculine: {
 								singular: {
 									nominative: ['abdictusve'],
