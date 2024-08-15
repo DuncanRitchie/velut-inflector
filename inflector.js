@@ -4839,6 +4839,204 @@ if (typeof require !== 'undefined') {
 				);
 
 				console.timeEnd('checkingOutput');
+
+				// Loop over the output forms objects (again), this time looking for properties that won’t display on the velut website.
+				// (The website won’t display any verb forms other than participles and a set list of other parsings.
+				// Participles and forms of non-verbs don’t need to be checked here because the website displays them separately.)
+
+				console.time('checkingVerbFormTags');
+
+				batchFilepaths.forEach((filename) => {
+					const outputBatch = require(filename);
+					const outputEntries = Object.entries(outputBatch);
+
+					for ([lemma, parsingData] of outputEntries) {
+						if (!parsingData) {
+							console.debug({ lemma, parsingData });
+						}
+						checkVerbFormTags(parsingData);
+					}
+				});
+
+				console.timeEnd('checkingVerbFormTags');
+			};
+
+			// This function receives a verb’s Forms output and checks that it doesn’t contain any fields that won’t display on the velut website.
+			// Eg formsData.unencliticized.supine.ablative is okay, but formsData.unencliticized.supine.dative is not — dative supines don’t exist.
+			// (Only `unencliticized fields` are checked.)
+			const checkVerbFormTags = (formsData) => {
+				if (!formsData) {
+					console.debug({ formsData });
+					return;
+				}
+				if (!formsData.unencliticized) {
+					return;
+				}
+				// Skip if the forms object is not a verb’s.
+				if (
+					!formsData.unencliticized.indicative &&
+					!formsData.unencliticized.subjunctive &&
+					!formsData.unencliticized.imperative &&
+					!formsData.unencliticized.infinitive &&
+					!formsData.unencliticized.participle &&
+					!formsData.unencliticized.gerund &&
+					!formsData.unencliticized.supine
+				) {
+					return;
+				}
+
+				// This should match the class-names used in <VerbDataCell> on the velut website.
+				// Participles are handled separately.
+				const classNames = [
+					'indicative active present singular first',
+					'indicative active present singular second',
+					'indicative active present singular third',
+					'indicative active present plural first',
+					'indicative active present plural second',
+					'indicative active present plural third',
+					'indicative active imperfect singular first',
+					'indicative active imperfect singular second',
+					'indicative active imperfect singular third',
+					'indicative active imperfect plural first',
+					'indicative active imperfect plural second',
+					'indicative active imperfect plural third',
+					'indicative active future singular first',
+					'indicative active future singular second',
+					'indicative active future singular third',
+					'indicative active future plural first',
+					'indicative active future plural second',
+					'indicative active future plural third',
+					'indicative active perfect singular first',
+					'indicative active perfect singular second',
+					'indicative active perfect singular third',
+					'indicative active perfect plural first',
+					'indicative active perfect plural second',
+					'indicative active perfect plural third',
+					'indicative active pluperfect singular first',
+					'indicative active pluperfect singular second',
+					'indicative active pluperfect singular third',
+					'indicative active pluperfect plural first',
+					'indicative active pluperfect plural second',
+					'indicative active pluperfect plural third',
+					'indicative active futureperfect singular first',
+					'indicative active futureperfect singular second',
+					'indicative active futureperfect singular third',
+					'indicative active futureperfect plural first',
+					'indicative active futureperfect plural second',
+					'indicative active futureperfect plural third',
+					'indicative passive present singular first',
+					'indicative passive present singular second',
+					'indicative passive present singular third',
+					'indicative passive present plural first',
+					'indicative passive present plural second',
+					'indicative passive present plural third',
+					'indicative passive imperfect singular first',
+					'indicative passive imperfect singular second',
+					'indicative passive imperfect singular third',
+					'indicative passive imperfect plural first',
+					'indicative passive imperfect plural second',
+					'indicative passive imperfect plural third',
+					'indicative passive future singular first',
+					'indicative passive future singular second',
+					'indicative passive future singular third',
+					'indicative passive future plural first',
+					'indicative passive future plural second',
+					'indicative passive future plural third',
+					'subjunctive active present singular first',
+					'subjunctive active present singular second',
+					'subjunctive active present singular third',
+					'subjunctive active present plural first',
+					'subjunctive active present plural second',
+					'subjunctive active present plural third',
+					'subjunctive active imperfect singular first',
+					'subjunctive active imperfect singular second',
+					'subjunctive active imperfect singular third',
+					'subjunctive active imperfect plural first',
+					'subjunctive active imperfect plural second',
+					'subjunctive active imperfect plural third',
+					'subjunctive active perfect singular first',
+					'subjunctive active perfect singular second',
+					'subjunctive active perfect singular third',
+					'subjunctive active perfect plural first',
+					'subjunctive active perfect plural second',
+					'subjunctive active perfect plural third',
+					'subjunctive active pluperfect singular first',
+					'subjunctive active pluperfect singular second',
+					'subjunctive active pluperfect singular third',
+					'subjunctive active pluperfect plural first',
+					'subjunctive active pluperfect plural second',
+					'subjunctive active pluperfect plural third',
+					'subjunctive passive present singular first',
+					'subjunctive passive present singular second',
+					'subjunctive passive present singular third',
+					'subjunctive passive present plural first',
+					'subjunctive passive present plural second',
+					'subjunctive passive present plural third',
+					'subjunctive passive imperfect singular first',
+					'subjunctive passive imperfect singular second',
+					'subjunctive passive imperfect singular third',
+					'subjunctive passive imperfect plural first',
+					'subjunctive passive imperfect plural second',
+					'subjunctive passive imperfect plural third',
+					'imperative active present singular second',
+					'imperative active present singular third',
+					'imperative active present plural second',
+					'imperative active present plural third',
+					'imperative active future singular second',
+					'imperative active future singular third',
+					'imperative active future plural second',
+					'imperative active future plural third',
+					'imperative passive present singular second',
+					'imperative passive present singular third',
+					'imperative passive present plural second',
+					'imperative passive present plural third',
+					'imperative passive future singular second',
+					'imperative passive future singular third',
+					'imperative passive future plural second',
+					'imperative passive future plural third',
+					'infinitive active present',
+					'infinitive active perfect',
+					'infinitive active future',
+					'infinitive passive present',
+					'gerund accusative',
+					'gerund genitive',
+					'gerund dative',
+					'gerund ablative',
+					'supine accusative',
+					'supine ablative',
+				];
+
+				let forms = structuredClone(formsData.unencliticized);
+
+				// Recursive function for following the keys in an array to nullify a key in the object.
+				// Eg if the array is ['infinitive','active','present']
+				// formsObject.infinitive.active.present will be set to null.
+				// The `deleteEmptyForms` function will then delete all the null and empty-object properties.
+				const deleteForm = (formsObject, keysArray) => {
+					if (keysArray.length === 1) {
+						formsObject[keysArray[0]] = null;
+						return;
+					}
+					if (formsObject[keysArray[0]]) {
+						deleteForm(formsObject[keysArray[0]], keysArray.slice(1));
+					}
+				};
+
+				classNames.forEach((className) => {
+					const classesArray = className.split(' ');
+					deleteForm(forms, classesArray);
+				});
+
+				delete forms.participle;
+
+				forms = deleteEmptyFields(forms);
+
+				// After deleting all the expected forms, the object should be empty.
+				// If it isn’t, we should see what’s left in it.
+				// A future subjunctive? An imperfect imperative? Something even weirder?
+				if (JSON.stringify(forms) !== '{}') {
+					consoleLogAsJson(forms);
+				}
 			};
 
 			const generateSummaryFile = () => {
