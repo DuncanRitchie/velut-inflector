@@ -4139,11 +4139,6 @@ const inflectFuncs = {
 			}
 
 			if (isDeponent) {
-				if (lemma === 'cūnctor') {
-					console.log('Forms before deponent handling:', forms);
-					console.log(forms.participle.passive.future);
-				}
-
 				forms.indicative.active = forms.indicative.passive;
 				delete forms.indicative.passive;
 				forms.subjunctive.active = forms.subjunctive.passive;
@@ -4192,29 +4187,13 @@ const inflectFuncs = {
 
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
-				console.log(
-					'Perfect passive participles: ',
-					forms.participle.passive.perfect,
-				);
 				// Deponent verbs should have already had their passive perfect participles relabelled as active.
 				if (!isDeponent) {
 					forms.participle.active.perfect = structuredClone(
 						forms.participle.passive.perfect,
 					);
 				}
-
-				if (lemma === 'cūnctor') {
-					console.log('Forms before handling intransitive verb:');
-					consoleLogAsJson(forms);
-					// console.log(forms.participle.passive.future);
-					// console.log(emptyFieldsForIntransitiveVerbs);
-				}
 				forms = deleteFormsForIntransitiveVerb(forms);
-				if (lemma === 'cūnctor') {
-					console.log('Forms after handling intransitive verb:');
-					consoleLogAsJson(forms);
-				}
-				// forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
 			}
 			if (
 				lemma.endsWith('scō') &&
