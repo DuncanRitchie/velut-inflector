@@ -3222,7 +3222,7 @@ const inflectFuncs = {
 					forms = runLambdaOnObject(forms, (form) =>
 						form
 							.replace(/dāv(?=[^d]+$)/, 'ded')
-							.replace(/dā(?!ns)(?!s)(?=.)(?=[^d]+$)/, 'da'),
+							.replace(/dā(?!ns)(?!s)(?=[^d]+$)/, 'da'),
 					);
 				}
 			}
