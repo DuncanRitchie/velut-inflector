@@ -429,89 +429,53 @@ const generateSuperlativeForms = (superlativeStems) => {
 	};
 };
 
-// This should be passed into replaceFieldsInForms for intransitive verbs,
+// This should receive the `forms` object of intransitive verbs,
 // to clear out passive non-impersonal forms.
-const emptyFieldsForIntransitiveVerbs = {
-	indicative: {
-		passive: {
-			present: {
-				singular: {
-					first: [],
-					second: [],
-				},
-				plural: [],
-			},
-			imperfect: {
-				singular: {
-					first: [],
-					second: [],
-				},
-				plural: [],
-			},
-			future: {
-				singular: {
-					first: [],
-					second: [],
-				},
-				plural: [],
-			},
-		},
-	},
-	subjunctive: {
-		passive: {
-			present: {
-				singular: {
-					first: [],
-					second: [],
-				},
-				plural: [],
-			},
-			imperfect: {
-				singular: {
-					first: [],
-					second: [],
-				},
-				plural: [],
-			},
-		},
-	},
-	imperative: {
-		passive: {
-			present: {
-				singular: {
-					second: [],
-				},
-				plural: [],
-			},
-			future: {
-				singular: {
-					second: [],
-				},
-				plural: [],
-			},
-		},
-	},
-	participle: {
-		passive: {
-			perfect: {
-				masculine: [],
-				feminine: [],
-				neuter: {
-					plural: [],
-				},
-			},
-			future: {
-				masculine: [],
-				feminine: [],
-				neuter: {
-					plural: [],
-				},
-			},
-		},
-	},
-	supine: {
-		ablative: [],
-	},
+// It does not mutate the object passed in.
+const deleteFormsForIntransitiveVerb = (forms) => {
+	if (!forms) {
+		console.error('Forms is ' + forms);
+	}
+	const f = structuredClone(forms);
+	if (f.indicative?.passive) {
+		delete f.indicative.passive.present.singular.first;
+		delete f.indicative.passive.present.singular.second;
+		delete f.indicative.passive.present.plural;
+		delete f.indicative.passive.imperfect.singular.first;
+		delete f.indicative.passive.imperfect.singular.second;
+		delete f.indicative.passive.imperfect.plural;
+		delete f.indicative.passive.future.singular.first;
+		delete f.indicative.passive.future.singular.second;
+		delete f.indicative.passive.future.plural;
+	}
+	if (f.subjunctive?.passive) {
+		delete f.subjunctive.passive.present.singular.first;
+		delete f.subjunctive.passive.present.singular.second;
+		delete f.subjunctive.passive.present.plural;
+		delete f.subjunctive.passive.imperfect.singular.first;
+		delete f.subjunctive.passive.imperfect.singular.second;
+		delete f.subjunctive.passive.imperfect.plural;
+	}
+	if (f.imperative?.passive) {
+		delete f.imperative.passive.present.singular.second;
+		delete f.imperative.passive.present.plural;
+		delete f.imperative.passive.future.singular.second;
+		delete f.imperative.passive.future.plural;
+	}
+	if (f.participle?.passive?.perfect) {
+		delete f.participle.passive.perfect.masculine;
+		delete f.participle.passive.perfect.feminine;
+		delete f.participle.passive.perfect.neuter.plural;
+	}
+	if (f.participle?.passive?.future) {
+		delete f.participle.passive.future.masculine;
+		delete f.participle.passive.future.feminine;
+		delete f.participle.passive.future.neuter.plural;
+	}
+	if (f.supine) {
+		delete f.supine.ablative;
+	}
+	return f;
 };
 
 // This function should be called at the end of each inflection function.
@@ -4223,8 +4187,13 @@ const inflectFuncs = {
 
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
-				forms.participle.active.perfect = forms.participle.passive.perfect;
-				forms = replaceFieldsInObjects(forms, emptyFieldsForIntransitiveVerbs);
+				// Deponent verbs should have already had their passive perfect participles relabelled as active.
+				if (!isDeponent) {
+					forms.participle.active.perfect = structuredClone(
+						forms.participle.passive.perfect,
+					);
+				}
+				forms = deleteFormsForIntransitiveVerb(forms);
 			}
 			if (
 				lemma.endsWith('scō') &&
