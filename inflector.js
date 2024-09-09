@@ -4148,7 +4148,10 @@ const inflectFuncs = {
 				forms.imperative.active = forms.imperative.passive;
 				delete forms.imperative.passive;
 				forms.participle.active.perfect = forms.participle.passive.perfect;
-				delete forms.participle.passive.perfect;
+
+				if (!rest.HasPerfectPassiveParticiple) {
+					delete forms.participle.passive.perfect;
+				}
 			}
 
 			if (rest.IsSemiDeponent) {
@@ -4165,7 +4168,10 @@ const inflectFuncs = {
 				delete forms.infinitive.passive;
 
 				forms.participle.active.perfect = forms.participle.passive.perfect;
-				delete forms.participle.passive.perfect;
+
+				if (!rest.HasPerfectPassiveParticiple) {
+					delete forms.participle.passive.perfect;
+				}
 			}
 
 			if (rest.IsImpersonal) {

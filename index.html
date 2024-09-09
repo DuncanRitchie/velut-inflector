@@ -226,6 +226,20 @@
 					</p>
 				</dd>
 
+				<dt><code>"HasPerfectPassiveParticiple"</code></dt>
+				<dd>
+					<p>
+						Boolean for whether perfect <em>passive</em> participles should be generated for deponent or semi-deponent verbs, potentially in addition to perfect active participles.
+						If this property is not specified, the default is <code>false</code>.
+					</p>
+					<p>
+						For example, <q lang="la">effor</q> has <code>"HasPerfectPassiveParticiple": true</code> because <q lang="la">haec verba effāta sunt</q> can mean “they [neuter plural] spoke these words” (active) or “these words were spoken” (passive).
+					</p>
+					<p>
+						This property has no effect on non-deponent verbs or other parts of speech — the perfect participles of non-deponent verbs are passive regardless.
+					</p>
+				</dd>
+
 				<dt><code>"HasThreeTerminations"</code></dt>
 				<dd>
 					<p>
