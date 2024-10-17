@@ -4515,6 +4515,9 @@ if (typeof require !== 'undefined') {
 						const NoTypeTag = removeBrackets(Lemma);
 						const NoMacra = removeDiacritics(NoTypeTag);
 						const NoMacraLowerCase = NoMacra.toLowerCase();
+						// I added `"20230721": ["Probably not checked"]` to all lemmata in the source-data in July 2023.
+						// When I’ve checked a lemma, I remove the property.
+						const FormsHaveBeenChecked = !lemmaObject['20230721'];
 
 						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
 							Index,
@@ -4526,6 +4529,7 @@ if (typeof require !== 'undefined') {
 							Root,
 							NoMacra,
 							NoMacraLowerCase,
+							FormsHaveBeenChecked,
 						};
 
 						if (lemmaObject['20230721']) {
