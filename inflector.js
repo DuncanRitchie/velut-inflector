@@ -466,11 +466,13 @@ const deleteFormsForIntransitiveVerb = (forms) => {
 		delete f.participle.passive.perfect.masculine;
 		delete f.participle.passive.perfect.feminine;
 		delete f.participle.passive.perfect.neuter.plural;
+		delete f.participle.passive.future.neuter.singular.vocative;
 	}
 	if (f.participle?.passive?.future) {
 		delete f.participle.passive.future.masculine;
 		delete f.participle.passive.future.feminine;
 		delete f.participle.passive.future.neuter.plural;
+		delete f.participle.passive.future.neuter.singular.vocative;
 	}
 	if (f.supine) {
 		delete f.supine.ablative;
@@ -4189,6 +4191,7 @@ const inflectFuncs = {
 				delete forms.participle.passive.perfect.masculine;
 				delete forms.participle.passive.perfect.feminine;
 				delete forms.participle.passive.perfect.neuter.plural;
+				delete forms.participle.passive.perfect.neuter.singular.vocative;
 			}
 
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
