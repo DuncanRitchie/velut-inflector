@@ -4149,7 +4149,9 @@ const inflectFuncs = {
 				delete forms.infinitive.passive;
 				forms.imperative.active = forms.imperative.passive;
 				delete forms.imperative.passive;
-				forms.participle.active.perfect = forms.participle.passive.perfect;
+				forms.participle.active.perfect = structuredClone(
+					forms.participle.passive.perfect,
+				);
 
 				if (!rest.HasPerfectPassiveParticiple) {
 					delete forms.participle.passive.perfect;
@@ -4169,7 +4171,9 @@ const inflectFuncs = {
 				delete forms.imperative.passive;
 				delete forms.infinitive.passive;
 
-				forms.participle.active.perfect = forms.participle.passive.perfect;
+				forms.participle.active.perfect = structuredClone(
+					forms.participle.passive.perfect,
+				);
 
 				if (!rest.HasPerfectPassiveParticiple) {
 					delete forms.participle.passive.perfect;
@@ -4196,8 +4200,8 @@ const inflectFuncs = {
 
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
-				// Deponent verbs should have already had their passive perfect participles relabelled as active.
-				if (!isDeponent) {
+				// Deponent & semi-deponent verbs should have already had their passive perfect participles relabelled as active.
+				if (!isDeponent && !rest.IsSemiDeponent) {
 					forms.participle.active.perfect = structuredClone(
 						forms.participle.passive.perfect,
 					);
