@@ -4140,6 +4140,17 @@ const inflectFuncs = {
 				return {};
 			}
 
+			// Give active perfect participles to deponents & semi-deponents.
+			if (isDeponent || rest.IsSemiDeponent) {
+				forms.participle.active.perfect = structuredClone(
+					forms.participle.passive.perfect,
+				);
+
+				if (!rest.HasPerfectPassiveParticiple) {
+					delete forms.participle.passive.perfect;
+				}
+			}
+
 			if (isDeponent) {
 				forms.indicative.active = forms.indicative.passive;
 				delete forms.indicative.passive;
@@ -4149,13 +4160,6 @@ const inflectFuncs = {
 				delete forms.infinitive.passive;
 				forms.imperative.active = forms.imperative.passive;
 				delete forms.imperative.passive;
-				forms.participle.active.perfect = structuredClone(
-					forms.participle.passive.perfect,
-				);
-
-				if (!rest.HasPerfectPassiveParticiple) {
-					delete forms.participle.passive.perfect;
-				}
 			}
 
 			if (rest.IsSemiDeponent) {
@@ -4170,14 +4174,6 @@ const inflectFuncs = {
 				delete forms.subjunctive.passive;
 				delete forms.imperative.passive;
 				delete forms.infinitive.passive;
-
-				forms.participle.active.perfect = structuredClone(
-					forms.participle.passive.perfect,
-				);
-
-				if (!rest.HasPerfectPassiveParticiple) {
-					delete forms.participle.passive.perfect;
-				}
 			}
 
 			if (rest.IsImpersonal) {
