@@ -282,7 +282,13 @@ const consoleLogAsJson = (...args) => {
 };
 
 const removeAcutes = (string) => {
-	return string.replaceAll('ḗ', 'ē');
+	return string
+		.replaceAll('á', 'a')
+		.replaceAll('é', 'e')
+		.replaceAll('í', 'i')
+		.replaceAll('ó', 'o')
+		.replaceAll('ú', 'u')
+		.replaceAll('ḗ', 'ē');
 	// More `replaceAll` calls may need to be added here.
 };
 
