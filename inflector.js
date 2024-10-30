@@ -467,7 +467,7 @@ const deleteFormsForIntransitiveVerb = (forms) => {
 		delete f.participle.passive.perfect.masculine;
 		delete f.participle.passive.perfect.feminine;
 		delete f.participle.passive.perfect.neuter.plural;
-		delete f.participle.passive.future.neuter.singular.vocative;
+		delete f.participle.passive.perfect.neuter.singular.vocative;
 	}
 	if (f.participle?.passive?.future) {
 		delete f.participle.passive.future.masculine;
