@@ -184,9 +184,13 @@
 				<dd>
 					<p>
 						String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the third or fourth conjugation.
-						For example, the array is <samp>["u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerundus</q> etc.
+						For example, the array is <samp>["e", "u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerendus/gerundus</q> etc.
 						If this is not specified (or the verb is not of the third or fourth conjugation), the default is <samp>["e"]</samp>.
-						The only lemmata that need this are <q lang="la">gerō</q> and <q lang="la">orior</q>.
+						The only lemmata that currently have this are <q lang="la">faciō</q> and <q lang="la">gerō</q>; curiously one of the few verbs in Latin with an irregular gerund is the source of the word “gerund”.
+					</p>
+					<p>
+						(I previously considered <q lang="la">orior</q> as a verb with <samp>"GerundVowels": ["u"]</samp>.
+						But <q lang="la">oriundus</q> should be an adjective meaning “originating from”, not a gerund or gerundive.)
 					</p>
 				</dd>
 
