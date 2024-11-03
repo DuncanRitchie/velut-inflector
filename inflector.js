@@ -433,7 +433,11 @@ const generateSuperlativeForms = (superlativeStems) => {
 // This should receive the `forms` object of intransitive verbs,
 // to clear out passive non-impersonal forms.
 // It does not mutate the object passed in.
-const deleteFormsForIntransitiveVerb = (forms) => {
+// Does not delete perfect passive participles if told they should exist.
+const deleteFormsForIntransitiveVerb = (
+	forms,
+	{ HasPerfectPassiveParticiple },
+) => {
 	if (!forms) {
 		console.error('Forms is ' + forms);
 	}
@@ -463,7 +467,7 @@ const deleteFormsForIntransitiveVerb = (forms) => {
 		delete f.imperative.passive.future.singular.second;
 		delete f.imperative.passive.future.plural;
 	}
-	if (f.participle?.passive?.perfect) {
+	if (f.participle?.passive?.perfect && !HasPerfectPassiveParticiple) {
 		delete f.participle.passive.perfect.masculine;
 		delete f.participle.passive.perfect.feminine;
 		delete f.participle.passive.perfect.neuter.plural;
@@ -4203,7 +4207,7 @@ const inflectFuncs = {
 						forms.participle.passive.perfect,
 					);
 				}
-				forms = deleteFormsForIntransitiveVerb(forms);
+				forms = deleteFormsForIntransitiveVerb(forms, rest);
 			}
 			if (
 				lemma.endsWith('scō') &&
