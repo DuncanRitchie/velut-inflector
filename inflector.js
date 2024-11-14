@@ -298,16 +298,27 @@ const ensureIsArray = (possibleArray) => {
 //// (The velut Word Data Generator interprets final vowel+'m' as nasalised
 //// before it interprets 'ae'/'au'/'oe' as a diphthong, which means that
 //// non-diphthong 'ae'/'au'/'oe' doesn’t need the diaeresis if it’s before final 'm'.)
-const joinStemsToEndings = (stems, endings) => {
+//// `includesSyncopation` means returning syncopated forms such as 'amāsse' alongside 'amāvisse'.
+const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
 	return stemsArray.flatMap((stem) => {
-		return endingsArray.map((ending) => {
-			return (stem + '~' + ending)
-				.replace(/a~e(?!m$)/, 'aë')
-				.replace(/a~u(?!m$)/, 'aü')
-				.replace(/o~e(?!m$)/, 'oë')
-				.replace('~', '');
+		return endingsArray.flatMap((ending) => {
+			const stemsAndEndings = includeSyncopation
+				? [stem + '~' + ending, stem + '~~' + ending]
+				: [stem + '~' + ending];
+			const notDeduped = stemsAndEndings.map((stemAndEnding) =>
+				stemAndEnding
+					.replace(/a~e(?!m$)/, 'aë')
+					.replace(/a~u(?!m$)/, 'aü')
+					.replace(/o~e(?!m$)/, 'oë')
+					.replace(/āv~~er/, 'ār') // eg amāverō -> amārō
+					.replace(/āv~~ēr(?!e)/, 'ār') // eg amāvērunt should syncopate to amārunt but amāvēre should not syncopate to amāre
+					.replace(/āv~~is/, 'ās') // eg amāvisse, amāvistī -> amāsse, amāstī
+					.replace(/~+/, ''),
+			);
+			// Remove any duplicates.
+			return [...new Set(notDeduped)];
 		});
 	});
 };
@@ -3179,7 +3190,7 @@ const inflectFuncs = {
 						return joinStemsToEndings(presentStem, form.substring(1));
 					}
 					if (form.startsWith('3')) {
-						return joinStemsToEndings(perfectStems, form.substring(1));
+						return joinStemsToEndings(perfectStems, form.substring(1), true);
 					}
 					if (form.startsWith('4')) {
 						return joinStemsToEndings(supineStems, form.substring(1));
