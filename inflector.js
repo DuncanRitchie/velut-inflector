@@ -2910,6 +2910,8 @@ const inflectFuncs = {
 				const presentStem = lemma.replace(/(ō|or|at)$/, ''); // Replaces 1 in forms below.
 				const perfectStems = rest.PerfectStems || [presentStem + 'āv']; // Replaces 3 in forms below.
 				const supineStems = rest.SupineStems || [presentStem + 'āt']; // Replaces 4 in forms below.
+				const futureActiveParticipleStems =
+					rest.FutureActiveParticipleStems || supineStems; // Replaces 5 in forms below.
 
 				forms = {
 					indicative: {
@@ -3160,7 +3162,7 @@ const inflectFuncs = {
 								Lemma: '1āns',
 								IsPresentParticiple: true,
 							}).unencliticized.positive,
-							future: inflectFuncs['Adjective']({ Lemma: '4ūrus' })
+							future: inflectFuncs['Adjective']({ Lemma: '5ūrus' })
 								.unencliticized.positive,
 						},
 						passive: {
@@ -3195,6 +3197,12 @@ const inflectFuncs = {
 					}
 					if (form.startsWith('4')) {
 						return joinStemsToEndings(supineStems, form.substring(1));
+					}
+					if (form.startsWith('5')) {
+						return joinStemsToEndings(
+							futureActiveParticipleStems,
+							form.substring(1),
+						);
 					}
 					return form;
 				});
