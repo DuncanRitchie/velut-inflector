@@ -298,7 +298,7 @@ const ensureIsArray = (possibleArray) => {
 //// (The velut Word Data Generator interprets final vowel+'m' as nasalised
 //// before it interprets 'ae'/'au'/'oe' as a diphthong, which means that
 //// non-diphthong 'ae'/'au'/'oe' doesn’t need the diaeresis if it’s before final 'm'.)
-//// `includesSyncopation` means returning syncopated forms such as 'amāsse' alongside 'amāvisse'.
+//// `includeSyncopation` means returning syncopated forms such as 'amāsse' alongside 'amāvisse'.
 const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
@@ -309,9 +309,10 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 				: [stem + '~' + ending];
 			const notDeduped = stemsAndEndings.map((stemAndEnding) =>
 				stemAndEnding
-					.replace(/a~e(?!m$)/, 'aë')
-					.replace(/a~u(?!m$)/, 'aü')
-					.replace(/o~e(?!m$)/, 'oë')
+					.replace(/a~+e(?!m$)/, 'aë')
+					.replace(/a~+u(?!m$)/, 'aü')
+					.replace(/o~+e(?!m$)/, 'oë')
+					// The + in the previous regexes probably isn’t necessary because no perfect stems end in 'a' or 'o'.
 					.replace(/āv~~er/, 'ār') // eg amāverō -> amārō
 					.replace(/āv~~ēr(?!e)/, 'ār') // eg amāvērunt should syncopate to amārunt but amāvēre should not syncopate to amāre
 					.replace(/āv~~is/, 'ās') // eg amāvisse, amāvistī -> amāsse, amāstī
