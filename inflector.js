@@ -5114,7 +5114,10 @@ if (typeof require !== 'undefined') {
 					errata,
 				};
 
-				fs.writeFileSync(summaryFileUrl, JSON.stringify(summaryObject));
+				fs.writeFileSync(
+					summaryFileUrl,
+					JSON.stringify(summaryObject, null, 2) + '\n', // Pretty-printing & the extra newline aren’t technically necessary, but they make Git diffs nicer.
+				);
 
 				console.timeEnd('generatingSummaryFile');
 			};
