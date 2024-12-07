@@ -4413,29 +4413,29 @@ if (typeof require !== 'undefined') {
 	const fs = require('fs');
 
 	const runAllWords = () => {
+		const FOLDER_PATH =
+			'C:/Users/Duncan Ritchie/Documents/Code/velut/velutSideAssets/Json/';
+
 		//// Input data are an array of lemma objects.
-		const inputFileUrl =
-			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-nongenerated-fields.json';
+		const inputFileUrl = FOLDER_PATH + 'lemmata-nongenerated-fields.json';
 		const inputLemmata = require(inputFileUrl);
 		//// Output data are generated in batches & each batch is written to a file.
 		//// This allows me to track the output in Git without tracking a huge file.
 		const getOutputFileUrlForBatch = (batchNumber) =>
-			// 	`C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_with-ambiguous-stress_mongo_batch${batchNumber}.json`;
+			// 	FOLDER_PATH + `words-from-inflector_with-ambiguous-stress_mongo_batch${batchNumber}.json`;
 			// const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
-			`C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo_batch${batchNumber}.json`;
+			FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`;
 		const batchSize = 1_000;
 		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
-		const outputFileUrl =
-			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/words-from-inflector_mongo.json';
+		const outputFileUrl = FOLDER_PATH + 'words-from-inflector_mongo.json';
 		//// The output from the Inflector is also merged into the input lemmata data, for Git to ignore and me to import to MongoDB.
 		const combinedOutputFileUrl =
-			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-with-words-from-inflector_mongo.json';
+			FOLDER_PATH + 'lemmata-with-words-from-inflector_mongo.json';
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
 		const expectedOutputFileUrl =
-			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/lemmata-from-collator_mongo.json';
+			FOLDER_PATH + 'lemmata-from-collator_mongo.json';
 		//// This will go into a `summary` MongoDB collection which will be read from a page on the velut site giving my progress in generating and checking inflections.
-		const summaryFileUrl =
-			'C:/Users/Duncan Ritchie/Documents/Code/velutSideAssets/Json/summary-from-inflector_mongo.json';
+		const summaryFileUrl = FOLDER_PATH + 'summary-from-inflector_mongo.json';
 
 		try {
 			let batchFilepaths = [];
