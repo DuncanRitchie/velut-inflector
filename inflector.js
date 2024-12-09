@@ -4207,14 +4207,14 @@ const inflectFuncs = {
 					'second',
 					'plural',
 					'supine',
+					'masculine',
+					'feminine',
 				]);
 				delete forms.indicative.passive;
 				delete forms.subjunctive.passive;
 				delete forms.infinitive.passive;
 				delete forms.imperative.passive;
 				delete forms.participle.passive.future;
-				delete forms.participle.passive.perfect.masculine;
-				delete forms.participle.passive.perfect.feminine;
 				delete forms.participle.passive.perfect.neuter.plural;
 				delete forms.participle.passive.perfect.neuter.singular.vocative;
 			}
