@@ -244,6 +244,26 @@
 					</p>
 				</dd>
 
+				<dt><code>"HasSyncopatedPerfectForms"</code></dt>
+				<dd>
+					<p>
+						Boolean for whether perfect-system forms should include syncopation — which would occur when a first-conjugation verb has a perfect stem ending in -āv-.
+						For example, <q lang="la">amāsse</q> is a valid variant of <q lang="la">amāvisse</q>, so the lemma <q lang="la">amō</q> could have <code>"HasSyncopatedPerfectForms": true</code>.
+						But <q lang="la">lāvisse</q> cannot be contracted to <q lang="la">lāsse</q>, and likewise for the other lāv- forms, so <q lang="la">lavō</q> has <code>"HasSyncopatedPerfectForms": false</code>.
+					</p>
+					<p>
+						(Theoretically you could argue that <q lang="la">lāvisse</q> is itself a syncopated form, since the regular perfect infinitive would be <q lang="la">lavāvisse</q>.
+						But the long form doesn’t exist, and indeed there are no attestations of lavāv- in Latin, and the regular syncopation of <q lang="la">lavāvisse</q> would be <q lang="la">lavāsse</q> not <q lang="la">lāvisse</q>.
+						So it’s cleaner for me to specify the lāv- as a custom stem in <code>"PerfectStems"</code>, and have a <code>"HasSyncopatedPerfectForms"</code> field to stop unwanted forms like <q lang="la">lāsse</q> being created.)
+					</p>
+					<p>
+						If this field is omitted, first-conjugation verbs will receive syncopated forms by default.
+					</p>
+					<p>
+						I have not yet implemented syncopation for verbs outside the first conjugation, so the field has an effect on the first conjugation only.
+					</p>
+				</dd>
+
 				<dt><code>"HasThreeTerminations"</code></dt>
 				<dd>
 					<p>
