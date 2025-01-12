@@ -230,6 +230,23 @@
 					</p>
 				</dd>
 
+				<dt><code>"HasPerfectActiveParticiple"</code></dt>
+				<dd>
+					<p>
+						Boolean for whether perfect <em>active</em> participles should be generated for intransitive non-deponent verbs, potentially in addition to impersonal perfect passive participles.
+						If this property is not specified, the default is <code>false</code>.
+					</p>
+					<p>
+						For example, <q lang="la">ārdeō</q> has <code>"HasPerfectActiveParticiple": true</code> because <q lang="la">ārsus</q> can mean “having burnt”.
+						Likewise, <q lang="la">exolēscō</q> has <code>"HasPerfectActiveParticiple": true</code> because <q lang="la">exolētus</q> can mean “having obsolesced” (ie, “obsolete”).
+					</p>
+					<p>
+						This property has no effect on deponent, semi-deponent, or transitive verbs, or parts of speech other than verbs.
+						Deponent and semi-deponent verbs have perfect active participles anyway.
+						The perfect participles of transitive non-deponent verbs are passive, not active.
+					</p>
+				</dd>
+
 				<dt><code>"HasPerfectPassiveParticiple"</code></dt>
 				<dd>
 					<p>
