@@ -4864,8 +4864,8 @@ if (typeof require !== 'undefined') {
 				console.timeEnd('checkingOutput');
 
 				// Loop over the output forms objects (again), this time looking for properties that won’t display on the velut website.
-				// (The website won’t display any verb forms other than participles and a set list of other parsings.
-				// Participles and forms of non-verbs don’t need to be checked here because the website displays them separately.)
+				// (The website won’t display any verb forms other than a set list of parsings.
+				// Forms of non-verbs don’t need to be checked here because the website displays them separately.)
 
 				console.time('checkingVerbFormTags');
 
