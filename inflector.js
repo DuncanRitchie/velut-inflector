@@ -316,6 +316,9 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 					.replace(/āv~~er/, 'ār') // eg amāverō -> amārō
 					.replace(/āv~~ēr(?!e)/, 'ār') // eg amāvērunt should syncopate to amārunt but amāvēre should not syncopate to amāre
 					.replace(/āv~~is/, 'ās') // eg amāvisse, amāvistī -> amāsse, amāstī
+					.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
+					.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
+					.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
 					.replace(/~+/, ''),
 			);
 			// Remove any duplicates.
@@ -538,7 +541,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation 1", "Deponent", "Intransitive", "Probably not checked"]';
+	'["Verb", "Conjugation 2", "Intransitive", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -3505,12 +3508,28 @@ const inflectFuncs = {
 					});
 				}
 
+				if (
+					![true, false].includes(rest.HasSyncopatedPerfectForms) &&
+					perfectStems.some((stem) => stem.endsWith('ēv'))
+				) {
+					console.warn(
+						'Please define HasSyncopatedPerfectForms as true or false for',
+						lemma,
+					);
+				}
+				const hasSyncopatedPerfectForms =
+					rest.HasSyncopatedPerfectForms ?? true;
+
 				forms = runLambdaOnObject(forms, (form) => {
 					if (form.startsWith('1')) {
 						return joinStemsToEndings(presentStem, form.substring(1));
 					}
 					if (form.startsWith('3')) {
-						return joinStemsToEndings(perfectStems, form.substring(1));
+						return joinStemsToEndings(
+							perfectStems,
+							form.substring(1),
+							hasSyncopatedPerfectForms,
+						);
 					}
 					if (form.startsWith('4')) {
 						return joinStemsToEndings(supineStems, form.substring(1));
