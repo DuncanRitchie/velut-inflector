@@ -4247,18 +4247,19 @@ const inflectFuncs = {
 				delete forms.participle.passive.perfect.neuter.singular.vocative;
 			}
 
+			if (
+				rest.HasPerfectActiveParticiple &&
+				// Deponent & semi-deponent verbs should have already had their passive perfect participles relabelled as active.
+				!isDeponent &&
+				!rest.IsSemiDeponent
+			) {
+				forms.participle.active.perfect = structuredClone(
+					forms.participle.passive.perfect,
+				);
+			}
+
 			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
 			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
-				if (
-					rest.HasPerfectActiveParticiple &&
-					// Deponent & semi-deponent verbs should have already had their passive perfect participles relabelled as active.
-					!isDeponent &&
-					!rest.IsSemiDeponent
-				) {
-					forms.participle.active.perfect = structuredClone(
-						forms.participle.passive.perfect,
-					);
-				}
 				forms = deleteFormsForIntransitiveVerb(forms, rest);
 			}
 			if (
