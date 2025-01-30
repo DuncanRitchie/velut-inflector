@@ -3192,7 +3192,8 @@ const inflectFuncs = {
 				}
 
 				const hasSyncopatedPerfectForms =
-					rest.HasSyncopatedPerfectForms ?? true;
+					rest.HasSyncopatedPerfectForms ??
+					perfectStems.some((stem) => stem.endsWith('āv'));
 
 				forms = runLambdaOnObject(forms, (form) => {
 					if (form.startsWith('1')) {
@@ -3518,7 +3519,8 @@ const inflectFuncs = {
 					);
 				}
 				const hasSyncopatedPerfectForms =
-					rest.HasSyncopatedPerfectForms ?? true;
+					rest.HasSyncopatedPerfectForms ??
+					perfectStems.some((stem) => stem.endsWith('ēv'));
 
 				forms = runLambdaOnObject(forms, (form) => {
 					if (form.startsWith('1')) {
