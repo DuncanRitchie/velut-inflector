@@ -319,6 +319,9 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 					.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
 					.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
 					.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
+					.replace(/ōv~~er/, 'ōr') // eg admōverō -> admōrō
+					.replace(/ōv~~ēr(?!e)/, 'ōr') // eg admōvērunt should syncopate to admōrunt but admōvēre should not syncopate to admōre
+					.replace(/ōv~~is/, 'ōs') // eg admōvisse, admōvistī -> admōsse, admōstī
 					.replace(/~+/, ''),
 			);
 			// Remove any duplicates.

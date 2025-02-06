@@ -267,7 +267,7 @@
 				<dt><code>"HasSyncopatedPerfectForms"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether perfect-system forms should include syncopation — which would occur when a first-conjugation verb has a perfect stem ending in -āv-.
+						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second-conjugation verb has a perfect stem ending in -āv-, -ēv-, or -ōv-.
 						For example, <q lang="la">amāsse</q> is a valid variant of <q lang="la">amāvisse</q>, so the lemma <q lang="la">amō</q> could have <code>"HasSyncopatedPerfectForms": true</code>.
 						But <q lang="la">lāvisse</q> cannot be contracted to <q lang="la">lāsse</q>, and likewise for the other lāv- forms, so <q lang="la">lavō</q> has <code>"HasSyncopatedPerfectForms": false</code>.
 					</p>
@@ -275,6 +275,10 @@
 						(Theoretically you could argue that <q lang="la">lāvisse</q> is itself a syncopated form, since the regular perfect infinitive would be <q lang="la">lavāvisse</q>.
 						But the long form doesn’t exist, and indeed there are no attestations of lavāv- in Latin, and the regular syncopation of <q lang="la">lavāvisse</q> would be <q lang="la">lavāsse</q> not <q lang="la">lāvisse</q>.
 						So it’s cleaner for me to specify the lāv- as a custom stem in <code>"PerfectStems"</code>, and have a <code>"HasSyncopatedPerfectForms"</code> field to stop unwanted forms like <q lang="la">lāsse</q> being created.)
+					</p>
+					<p>
+						Syncopation on -ōv- is used for <q lang="la">moveō</q> and some of its compounds.
+						It makes <q lang="la">mōrunt</q> appear alongside <q lang="la">mōvērunt</q> and <q lang="la">remōsse</q> appear alongside <q lang="la">remōvisse</q>, for example.
 					</p>
 					<p>
 						If this field is omitted, first-conjugation verbs will receive syncopated forms by default if the perfect stem ends in -āv-, and second-conjugation verbs will receive syncopated forms by default if the perfect stem ends in -ēv-.
