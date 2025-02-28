@@ -267,7 +267,7 @@
 				<dt><code>"HasSyncopatedPerfectForms"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second-conjugation verb has a perfect stem ending in -āv-, -ēv-, or -ōv-.
+						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second- or third-conjugation verb has a perfect stem ending in -āv-, -ēv-, or -ōv-.
 						For example, <q lang="la">amāsse</q> is a valid variant of <q lang="la">amāvisse</q>, so the lemma <q lang="la">amō</q> could have <code>"HasSyncopatedPerfectForms": true</code>.
 						But <q lang="la">lāvisse</q> cannot be contracted to <q lang="la">lāsse</q>, and likewise for the other lāv- forms, so <q lang="la">lavō</q> has <code>"HasSyncopatedPerfectForms": false</code>.
 					</p>
@@ -279,12 +279,13 @@
 					<p>
 						Syncopation on -ōv- is used for <q lang="la">moveō</q> and some of its compounds.
 						It makes <q lang="la">mōrunt</q> appear alongside <q lang="la">mōvērunt</q> and <q lang="la">remōsse</q> appear alongside <q lang="la">remōvisse</q>, for example.
+						Syncopation on -ōv- is also used on <q lang="la">nōscō</q> and its compounds.
 					</p>
 					<p>
-						If this field is omitted, first-conjugation verbs will receive syncopated forms by default if the perfect stem ends in -āv-, and second-conjugation verbs will receive syncopated forms by default if the perfect stem ends in -ēv-.
+						If this field is omitted, first-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -āv-, second-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ēv-, and third-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ōv-.
 					</p>
 					<p>
-						I have not yet implemented syncopation for verbs outside the first and second conjugations, so the field has an effect on the first and second conjugations only.
+						I have not yet implemented syncopation for verbs outside the first/second/third conjugations, so the field has an effect on the first/second/third conjugations only.
 					</p>
 				</dd>
 

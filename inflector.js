@@ -544,7 +544,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation 2", "Intransitive", "Probably not checked"]';
+	'["Verb", "Conjugation 3", "Transitive", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -3838,6 +3838,19 @@ const inflectFuncs = {
 					});
 				}
 
+				if (
+					![true, false].includes(rest.HasSyncopatedPerfectForms) &&
+					perfectStems.some((stem) => stem.endsWith('ōv'))
+				) {
+					console.warn(
+						'Please define HasSyncopatedPerfectForms as true or false for',
+						lemma,
+					);
+				}
+				const hasSyncopatedPerfectForms =
+					rest.HasSyncopatedPerfectForms ??
+					perfectStems.some((stem) => stem.endsWith('ōv'));
+
 				forms = runLambdaOnObject(forms, (form) => {
 					if (form.startsWith('1')) {
 						return joinStemsToEndings(presentStem, form.substring(1));
@@ -3846,7 +3859,11 @@ const inflectFuncs = {
 						return joinStemsToEndings(presentInfinitiveStem, form.substring(1));
 					}
 					if (form.startsWith('3')) {
-						return joinStemsToEndings(perfectStems, form.substring(1));
+						return joinStemsToEndings(
+							perfectStems,
+							form.substring(1),
+							hasSyncopatedPerfectForms,
+						);
 					}
 					if (form.startsWith('4')) {
 						return joinStemsToEndings(supineStems, form.substring(1));
