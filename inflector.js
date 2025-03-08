@@ -319,6 +319,11 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 					.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
 					.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
 					.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
+					// I have not found any attestations of -īver- or -īvēr- contracting to -īr-, except sīrint in Plautus (https://latin.packhum.org/loc/119/4/8/3793-3800).
+					// If I find more attestations, I might uncomment the next two lines.
+					// .replace(/īv~~er/, 'īr') // eg lacessīverō -> lacessīrō
+					// .replace(/īv~~ēr(?!e)/, 'īr') // eg lacessīvērunt would syncopate to lacessīrunt but lacessīvēre would not syncopate to lacessīre
+					.replace(/īv~~is/, 'īs') // eg lacessīvisse, lacessīvistī -> lacessīsse, lacessīstī
 					.replace(/ōv~~er/, 'ōr') // eg mōverō -> mōrō
 					.replace(/ōv~~ēr(?!e)/, 'ōr') // eg mōvērunt should syncopate to mōrunt but mōvēre should not syncopate to mōre
 					.replace(/ōv~~is/, 'ōs') // eg mōvisse, mōvistī -> mōsse, mōstī
@@ -3840,7 +3845,10 @@ const inflectFuncs = {
 
 				if (
 					![true, false].includes(rest.HasSyncopatedPerfectForms) &&
-					perfectStems.some((stem) => stem.endsWith('ōv'))
+					perfectStems.some(
+						(stem) =>
+							stem.endsWith('ēv') || stem.endsWith('īv') || stem.endsWith('ōv'),
+					)
 				) {
 					console.warn(
 						'Please define HasSyncopatedPerfectForms as true or false for',

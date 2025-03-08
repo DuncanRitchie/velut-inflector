@@ -267,7 +267,7 @@
 				<dt><code>"HasSyncopatedPerfectForms"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second- or third-conjugation verb has a perfect stem ending in -āv-, -ēv-, or -ōv-.
+						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second- or third-conjugation verb has a perfect stem ending in -āv-, -ēv-, -īv, or -ōv-.
 						For example, <q lang="la">amāsse</q> is a valid variant of <q lang="la">amāvisse</q>, so the lemma <q lang="la">amō</q> could have <code>"HasSyncopatedPerfectForms": true</code>.
 						But <q lang="la">lāvisse</q> cannot be contracted to <q lang="la">lāsse</q>, and likewise for the other lāv- forms, so <q lang="la">lavō</q> has <code>"HasSyncopatedPerfectForms": false</code>.
 					</p>
@@ -282,7 +282,13 @@
 						Syncopation on -ōv- is also used on <q lang="la">nōscō</q> and its compounds.
 					</p>
 					<p>
-						If this field is omitted, first-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -āv-, second-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ēv-, and third-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ōv-.
+						Syncopation happens when the grammatical ending begins with -er-, -ēr-, or -is-.
+						For example, <q lang="la">amāverant</q> to <q lang="la">amārant</q>, <q lang="la">amāvērunt</q> to <q lang="la">amārunt</q>, and <q lang="la">amāvistī</q> to <q lang="la">amāstī</q>.
+						However, I do not allow syncopation on stems ending in -īv- when the ending begins with -er- or -ēr-, because I can find but one attestation of this (<a href="https://latin.packhum.org/loc/119/4/8/3793-3800"><q lang="la">sīrint</q></a> for <q lang="la">sīverint</q> in Plautus).
+						So <q lang="la">quaerō</q> has <q lang="la">quaesīvisse</q> contracting to <q lang="la">quaesīsse</q>, but <q lang="la">quaesīverō</q> has no contraction.
+					</p>
+					<p>
+						If the <code>"HasSyncopatedPerfectForms"</code> field is omitted, first-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -āv-, second-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ēv-, and third-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ōv-.
 					</p>
 					<p>
 						I have not yet implemented syncopation for verbs outside the first/second/third conjugations, so the field has an effect on the first/second/third conjugations only.
