@@ -444,7 +444,7 @@
 						String array of stems for the perfect forms of non-deponent verbs, eg <samp>["sonu"]</samp> for <q lang="la">sonō</q> (so the perfect forms are <q lang="la">sonuī</q> etc, not the regular <q lang="la">sonāvī</q>).
 					</p>
 					<p>
-						If this is not set, the default perfect stems are such that the following forms are produced: <q lang="la">amāvī</q>, <q lang="la">docuī</q>, <q lang="la">cansī</q>, <q lang="la">audīvī, audiī</q>, for the main four conjugations respectively.
+						If this is not set, the default perfect stems are such that the following forms are produced: <q lang="la">amāvī</q>, <q lang="la">monuī</q>, <q lang="la">cansī</q>, <q lang="la">audīvī, audiī</q>, for the main four conjugations respectively.
 						In the case of the third conjugation, a warning will be logged to the console if <code>"PerfectStems"</code> is not set, since I expect the default to be nonsense, as indeed my example here of <q lang="la">cansī</q> is!
 					</p>
 					<p>
@@ -496,6 +496,11 @@
 				<dd>
 					<p>
 						String array of stems for the supine and perfect participle forms of verbs, eg <samp>["sonit"]</samp> for <q lang="la">sonō</q> (so the participle forms are <q lang="la">sonitus</q> etc, not the regular <q lang="la">sonātus</q>).
+					</p>
+					<p>
+						If this is not set, the default supine stems are such that the following forms are produced: <q lang="la">amātum</q>, <q lang="la">monitum</q>, <q lang="la">cantum</q>, <q lang="la">audītum</q>, for the main four conjugations respectively.
+						In the case of the third conjugation, a warning will be logged to the console if <code>"SupineStems"</code> is not set, since the default is likely to be nonsense.
+						(Even if the default is correct for a third-conjugation verb, as my example here of <q lang="la">cantum</q> is, I still find it reassuring to set <code>"SupineStems"</code> specifically.)
 					</p>
 				</dd>
 			</dl>
