@@ -441,7 +441,17 @@
 				<dt><code>"PerfectStems"</code></dt>
 				<dd>
 					<p>
-						String array of stems for the perfect forms of verbs, eg <samp>["sonu"]</samp> for <q lang="la">sonō</q> (so the perfect forms are <q lang="la">sonuī</q> etc, not the regular <q lang="la">sonāvī</q>).
+						String array of stems for the perfect forms of non-deponent verbs, eg <samp>["sonu"]</samp> for <q lang="la">sonō</q> (so the perfect forms are <q lang="la">sonuī</q> etc, not the regular <q lang="la">sonāvī</q>).
+					</p>
+					<p>
+						If this is not set, the default perfect stems are such that the following forms are produced: <q lang="la">amāvī</q>, <q lang="la">docuī</q>, <q lang="la">cansī</q>, <q lang="la">audīvī, audiī</q>, for the main four conjugations respectively.
+						In the case of the third conjugation, a warning will be logged to the console if <code>"PerfectStems"</code> is not set, since I expect the default to be nonsense, as indeed my example here of <q lang="la">cansī</q> is!
+					</p>
+					<p>
+						The <code>"PerfectStems"</code> field only applies to non-deponent verbs.
+						Deponent/semi-deponent verbs use constructions such as <q lang="la">locūtus sum</q> for the (active) perfect — using the perfect participle, which is formed from the supine stems and not any “perfect stems”.
+						(And the Inflector doesn’t even produce <q lang="la">locūtus sum</q> as a form.
+						It doesn’t generate forms consisting of more than one word, so it produces <q lang="la">locūtus</q> for the perfect participle but not <q lang="la">locūtus sum</q>.)
 					</p>
 				</dd>
 

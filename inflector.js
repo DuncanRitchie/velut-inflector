@@ -549,7 +549,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation 3", "Transitive", "Probably not checked"]';
+	'["Verb", "Conjugation 4", "Transitive", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -3894,7 +3894,10 @@ const inflectFuncs = {
 
 			if (rest.Conjugations?.includes(4)) {
 				const presentStem = lemma.replace(/i(ō|or)$/, ''); // Replaces 1 in forms below.
-				const perfectStems = rest.PerfectStems || [presentStem + 'īv']; // Replaces 3 in forms below.
+				const perfectStems = rest.PerfectStems || [
+					presentStem + 'īv',
+					presentStem + 'i',
+				]; // Replaces 3 in forms below.
 				const supineStems = rest.SupineStems || [presentStem + 'īt']; // Replaces 4 in forms below.
 				const futureActiveParticipleStems =
 					rest.FutureActiveParticipleStems || supineStems; // Replaces 5 in forms below.
