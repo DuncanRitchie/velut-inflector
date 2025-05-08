@@ -302,12 +302,28 @@ const ensureIsArray = (possibleArray) => {
 const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
-	return stemsArray.flatMap((stem) => {
+	//// TO DO: Refactor!
+	//// If syncopation is allowed and the stems include -īv and -i,
+	//// resulting forms should be like audīvistī, audiistī, audīstī, in that order,
+	//// with the audīstī form (created by syncopating audīvistī) coming after audiistī.
+	//// I expect the -īv and -i stems to be the same (except for the -īv and -i),
+	//// but this isn’t yet being checked.
+	const includeIntermediateSyncopation =
+		includeSyncopation &&
+		stemsArray.some((s) => s.endsWith('īv')) &&
+		stemsArray.some((s) => s.endsWith('i'));
+	const notDeduped = stemsArray.flatMap((stem) => {
 		return endingsArray.flatMap((ending) => {
-			const stemsAndEndings = includeSyncopation
+			const stemsAndEndings = includeIntermediateSyncopation
+				? [
+						stem + '~' + ending,
+						stem.replace(/īv$/, 'i') + '~' + ending,
+						stem + '~~' + ending,
+				  ]
+				: includeSyncopation
 				? [stem + '~' + ending, stem + '~~' + ending]
 				: [stem + '~' + ending];
-			const notDeduped = stemsAndEndings.map((stemAndEnding) =>
+			return stemsAndEndings.map((stemAndEnding) =>
 				stemAndEnding
 					.replace(/a~+e(?!m$)/, 'aë')
 					.replace(/a~+u(?!m$)/, 'aü')
@@ -329,10 +345,10 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 					.replace(/ōv~~is/, 'ōs') // eg mōvisse, mōvistī -> mōsse, mōstī
 					.replace(/~+/, ''),
 			);
-			// Remove any duplicates.
-			return [...new Set(notDeduped)];
 		});
 	});
+	// Remove any duplicates.
+	return [...new Set(notDeduped)];
 };
 
 const generateComparativeForms = (comparativeStems) => {
@@ -4182,12 +4198,20 @@ const inflectFuncs = {
 					});
 				}
 
+				const hasSyncopatedPerfectForms =
+					rest.HasSyncopatedPerfectForms ??
+					perfectStems.some((stem) => stem.endsWith('īv'));
+
 				forms = runLambdaOnObject(forms, (form) => {
 					if (form.startsWith('1')) {
 						return joinStemsToEndings(presentStem, form.substring(1));
 					}
 					if (form.startsWith('3')) {
-						return joinStemsToEndings(perfectStems, form.substring(1));
+						return joinStemsToEndings(
+							perfectStems,
+							form.substring(1),
+							hasSyncopatedPerfectForms,
+						);
 					}
 					if (form.startsWith('4')) {
 						return joinStemsToEndings(supineStems, form.substring(1));

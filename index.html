@@ -267,7 +267,7 @@
 				<dt><code>"HasSyncopatedPerfectForms"</code></dt>
 				<dd>
 					<p>
-						Boolean for whether perfect-system forms should include syncopation — which would occur when a first- or second- or third-conjugation verb has a perfect stem ending in -āv-, -ēv-, -īv, or -ōv-.
+						Boolean for whether perfect-system forms should include syncopation — which would occur when a verb of the main four conjugations has a perfect stem ending in -āv-, -ēv-, -īv, or -ōv-.
 						For example, <q lang="la">amāsse</q> is a valid variant of <q lang="la">amāvisse</q>, so the lemma <q lang="la">amō</q> could have <code>"HasSyncopatedPerfectForms": true</code>.
 						But <q lang="la">lāvisse</q> cannot be contracted to <q lang="la">lāsse</q>, and likewise for the other lāv- forms, so <q lang="la">lavō</q> has <code>"HasSyncopatedPerfectForms": false</code>.
 					</p>
@@ -288,10 +288,16 @@
 						So <q lang="la">quaerō</q> has <q lang="la">quaesīvisse</q> contracting to <q lang="la">quaesīsse</q>, but <q lang="la">quaesīverō</q> has no contraction.
 					</p>
 					<p>
-						If the <code>"HasSyncopatedPerfectForms"</code> field is omitted, first-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -āv-, second-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ēv-, and third-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ōv-.
+						If the <code>"HasSyncopatedPerfectForms"</code> field is omitted, first-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -āv-, second-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ēv-, third-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -ōv-, and fourth-conjugation verbs will receive syncopated forms by default if a perfect stem ends in -īv-.
 					</p>
 					<p>
-						I have not yet implemented syncopation for verbs outside the first/second/third conjugations, so the field has an effect on the first/second/third conjugations only.
+						If syncopated forms are being created, with a stem ending in -īv as well as a stem ending in -i, the resulting forms will include an unsyncopated -īv- form, an -i- form, and a syncopated form.
+						This happens by default for the fourth conjugation.
+						For example, <q lang="la">audiō</q> does not have custom <code>"HasSyncopatedPerfectForms"</code> or <code>"PerfectStems"</code> fields in my source data, so the perfect stems will be audīv- and audi-, and the second-person singular perfect active indicative forms will be <q lang="la">audīvistī</q>, <q lang="la">audiistī</q>, <q lang="la">audīstī</q>.
+						(This only happens with endings that begin with -is-, because as noted above I do not allow syncopation that would produce -īr- from -īver- or -īvēr-.)
+					</p>
+					<p>
+						I have not yet implemented syncopation for verbs outside the first/second/third/fourth conjugations, so the <code>"HasSyncopatedPerfectForms"</code> field has an effect on verbs of the main four conjugations only.
 					</p>
 				</dd>
 
