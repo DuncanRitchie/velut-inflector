@@ -565,7 +565,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation 4", "Transitive", "Probably not checked"]';
+	'["Verb", "Conjugation eō", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -2759,7 +2759,7 @@ const inflectFuncs = {
 							},
 							imperfect: {
 								singular: {
-									third: ['fīeret', 'fieret'],
+									third: ['fieret', 'fīeret'],
 								},
 							},
 						},
@@ -2872,13 +2872,13 @@ const inflectFuncs = {
 							},
 							imperfect: {
 								singular: {
-									first: ['fīerem', 'fierem'],
-									second: ['fīerēs', 'fierēs'],
+									first: ['fierem', 'fīerem'],
+									second: ['fierēs', 'fīerēs'],
 								},
 								plural: {
-									first: ['fīerēmus', 'fierēmus'],
-									second: ['fīerētis', 'fierētis'],
-									third: ['fīerent', 'fierent'],
+									first: ['fierēmus', 'fīerēmus'],
+									second: ['fierētis', 'fīerētis'],
+									third: ['fierent', 'fīerent'],
 								},
 							},
 						},
