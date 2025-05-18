@@ -2345,28 +2345,38 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
-									// If the verb is transitive (meaning it has a non-impersonal passive),
-									// first- & second-person forms will be merged in later.
-									// If the `first` and `second` keys were not already on the object,
-									// it would result in the order of object keys being {third, first, second}
-									// Using empty arrays here means we get {first, second, third}.
-									first: [],
-									second: [],
+									first: ['eor'],
+									second: ['īris', 'īre'],
 									third: ['ītur'],
+								},
+								plural: {
+									first: ['īmur'],
+									second: ['īminī'],
+									third: ['euntur'],
 								},
 							},
 							imperfect: {
 								singular: {
-									first: [],
-									second: [],
+									first: ['ībar'],
+									second: ['ībāris', 'ībāre'],
 									third: ['ībātur'],
+								},
+								plural: {
+									first: ['ībāmur'],
+									second: ['ībāminī'],
+									third: ['ībantur'],
 								},
 							},
 							future: {
 								singular: {
-									first: [],
-									second: [],
+									first: ['ībor'],
+									second: ['īberis', 'ībere'],
 									third: ['ībitur'],
+								},
+								plural: {
+									first: ['ībimur'],
+									second: ['ībiminī'],
+									third: ['ībuntur'],
 								},
 							},
 						},
@@ -2425,16 +2435,26 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
-									first: [],
-									second: [],
+									first: ['ear'],
+									second: ['eāris', 'eāre'],
 									third: ['eātur'],
+								},
+								plural: {
+									first: ['eāmur'],
+									second: ['eāminī'],
+									third: ['eantur'],
 								},
 							},
 							imperfect: {
 								singular: {
-									first: [],
-									second: [],
+									first: ['īrer'],
+									second: ['īrēris', 'īrēre'],
 									third: ['īrētur'],
+								},
+								plural: {
+									first: ['īrēmur'],
+									second: ['īrēminī'],
+									third: ['īrentur'],
 								},
 							},
 						},
@@ -2460,119 +2480,6 @@ const inflectFuncs = {
 								},
 							},
 						},
-					},
-					infinitive: {
-						active: {
-							present: ['īre'],
-							perfect: ['iisse', 'īsse', 'īvisse'],
-						},
-						passive: {
-							present: ['īrī', 'īrier'],
-						},
-					},
-					participle: {
-						active: {
-							present: inflectFuncs['Adjective']({
-								Lemma: 'iēns',
-								IsPresentParticiple: true,
-							}).unencliticized.positive,
-							future: inflectFuncs['Adjective']({ Lemma: 'itūrus' })
-								.unencliticized.positive,
-						},
-						passive: {
-							perfect: {
-								neuter: {
-									singular: inflectFuncs['Adjective']({
-										Lemma: 'itus',
-										ParsingsToExclude: ['vocative'],
-									}).unencliticized.positive.neuter.singular,
-								},
-							},
-							future: {
-								neuter: {
-									singular: inflectFuncs['Adjective']({
-										Lemma: 'eundus',
-										ParsingsToExclude: ['vocative'],
-									}).unencliticized.positive.neuter.singular,
-								},
-							},
-						},
-					},
-					gerund: inflectFuncs['Adjective']({
-						Lemma: 'eundus',
-						ParsingsToExclude: ['nominative', 'vocative'],
-					}).unencliticized.positive.neuter.singular,
-					supine: {
-						accusative: ['itum'],
-						ablative: ['itū'],
-					},
-				};
-
-				const transitiveForms = {
-					indicative: {
-						passive: {
-							present: {
-								singular: {
-									first: ['eor'],
-									second: ['īris', 'īre'],
-								},
-								plural: {
-									first: ['īmur'],
-									second: ['īminī'],
-									third: ['euntur'],
-								},
-							},
-							imperfect: {
-								singular: {
-									first: ['ībar'],
-									second: ['ībāris', 'ībāre'],
-								},
-								plural: {
-									first: ['ībāmur'],
-									second: ['ībāminī'],
-									third: ['ībantur'],
-								},
-							},
-							future: {
-								singular: {
-									first: ['ībor'],
-									second: ['īberis', 'ībere'],
-								},
-								plural: {
-									first: ['ībimur'],
-									second: ['ībiminī'],
-									third: ['ībuntur'],
-								},
-							},
-						},
-					},
-					subjunctive: {
-						passive: {
-							present: {
-								singular: {
-									first: ['ear'],
-									second: ['eāris', 'eāre'],
-								},
-								plural: {
-									first: ['eāmur'],
-									second: ['eāminī'],
-									third: ['eantur'],
-								},
-							},
-							imperfect: {
-								singular: {
-									first: ['īrer'],
-									second: ['īrēris', 'īrēre'],
-								},
-								plural: {
-									first: ['īrēmur'],
-									second: ['īrēminī'],
-									third: ['īrentur'],
-								},
-							},
-						},
-					},
-					imperative: {
 						passive: {
 							present: {
 								singular: {
@@ -2593,14 +2500,40 @@ const inflectFuncs = {
 							},
 						},
 					},
-					participle: {
+					infinitive: {
+						active: {
+							present: ['īre'],
+							perfect: ['iisse', 'īsse', 'īvisse'],
+						},
 						passive: {
-							perfect: inflectFuncs['Adjective']({ Lemma: 'itus' })
+							present: ['īrī', 'īrier'],
+						},
+					},
+					participle: {
+						active: {
+							present: inflectFuncs['Adjective']({
+								Lemma: 'iēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
+							future: inflectFuncs['Adjective']({ Lemma: 'itūrus' })
 								.unencliticized.positive,
+						},
+						passive: {
+							perfect: inflectFuncs['Adjective']({
+								Lemma: 'itus',
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({
 								Lemma: 'eundus',
 							}).unencliticized.positive,
 						},
+					},
+					gerund: inflectFuncs['Adjective']({
+						Lemma: 'eundus',
+						ParsingsToExclude: ['nominative', 'vocative'],
+					}).unencliticized.positive.neuter.singular,
+					supine: {
+						accusative: ['itum'],
+						ablative: ['itū'],
 					},
 				};
 
@@ -2611,11 +2544,6 @@ const inflectFuncs = {
 						'Please specify IsIntransitive as true or false for ',
 						lemma,
 					);
-				}
-
-				// Verbs are treated as transitive if IsIntransitive is false or undefined.
-				if (!rest.IsIntransitive) {
-					forms = mergeObjects(forms, transitiveForms);
 				}
 
 				// Attach the prefix to all the forms of ‘eō’.
@@ -4341,8 +4269,7 @@ const inflectFuncs = {
 				);
 			}
 
-			// ‘eō’ verbs are excluded from this handling of intransitive verbs because it would wrongly delete impersonal-passive forms.
-			if (rest.IsIntransitive && !rest.Conjugations.includes('eō')) {
+			if (rest.IsIntransitive) {
 				forms = deleteFormsForIntransitiveVerb(forms, rest);
 			}
 			if (
