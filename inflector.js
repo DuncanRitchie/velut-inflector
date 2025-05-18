@@ -2306,38 +2306,38 @@ const inflectFuncs = {
 							},
 							perfect: {
 								singular: {
-									first: ['īvī', 'iī'],
-									second: ['īvistī', 'iistī', 'īstī'],
-									third: ['īvit', 'iit'],
+									first: ['iī', 'īvī'],
+									second: ['iistī', 'īstī', 'īvistī'],
+									third: ['iit', 'īvit'],
 								},
 								plural: {
-									first: ['iimus'],
-									second: ['iistis', 'īstis'],
-									third: ['iērunt', 'iēre'],
+									first: ['iimus', 'īvimus'],
+									second: ['iistis', 'īstis', 'īvistis'],
+									third: ['iērunt', 'iēre', 'īvērunt', 'īvēre'],
 								},
 							},
 							pluperfect: {
 								singular: {
-									first: ['ieram'],
-									second: ['ierās'],
-									third: ['ierat'],
+									first: ['ieram', 'īveram'],
+									second: ['ierās', 'īverās'],
+									third: ['ierat', 'īverat'],
 								},
 								plural: {
-									first: ['ierāmus'],
-									second: ['ierātis'],
-									third: ['ierant'],
+									first: ['ierāmus', 'īverāmus'],
+									second: ['ierātis', 'īverātis'],
+									third: ['ierant', 'īverant'],
 								},
 							},
 							futureperfect: {
 								singular: {
-									first: ['ierō'],
-									second: ['ieris'],
-									third: ['ierit'],
+									first: ['ierō', 'īverō'],
+									second: ['ieris', 'īveris'],
+									third: ['ierit', 'īverit'],
 								},
 								plural: {
-									first: ['ierimus'],
-									second: ['ieritis'],
-									third: ['ierint'],
+									first: ['ierimus', 'īverimus'],
+									second: ['ieritis', 'īveritis'],
+									third: ['ierint', 'īverint'],
 								},
 							},
 						},
@@ -2398,26 +2398,26 @@ const inflectFuncs = {
 							},
 							perfect: {
 								singular: {
-									first: ['ierim'],
-									second: ['ierīs'],
-									third: ['ierit'],
+									first: ['ierim', 'īverim'],
+									second: ['ierīs', 'īverīs'],
+									third: ['ierit', 'īverit'],
 								},
 								plural: {
-									first: ['ierīmus'],
-									second: ['ierītis'],
-									third: ['ierint'],
+									first: ['ierīmus', 'īverīmus'],
+									second: ['ierītis', 'īverītis'],
+									third: ['ierint', 'īverint'],
 								},
 							},
 							pluperfect: {
 								singular: {
-									first: ['īssem'],
-									second: ['īssēs'],
-									third: ['īsset'],
+									first: ['īssem', 'īvissem'],
+									second: ['īssēs', 'īvissēs'],
+									third: ['īsset', 'īvisset'],
 								},
 								plural: {
-									first: ['īssēmus'],
-									second: ['īssētis'],
-									third: ['īssent'],
+									first: ['īssēmus', 'īvissēmus'],
+									second: ['īssētis', 'īvissētis'],
+									third: ['īssent', 'īvissent'],
 								},
 							},
 						},
@@ -2463,7 +2463,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['īre'],
-							perfect: ['īsse'],
+							perfect: ['īsse', 'īvisse'],
 						},
 						passive: {
 							present: ['īrī', 'īrier'],
@@ -2607,8 +2607,8 @@ const inflectFuncs = {
 						.map((form) =>
 							form.replace(/oient/, 'oëunt').replace(/ient/, 'eunt'),
 						)
-						// Forms such as ‘abīvī’ should not exist.
-						.filter((form) => !form.includes('abīv')),
+						// Forms with -īv- should not exist for the bare verb ‘eō’ or for ‘abeō’.
+						.filter((form) => !form.startsWith('īv') && !form.includes('abīv')),
 				);
 			} else if (rest.Conjugations?.includes('faciō')) {
 				if (!lemma.endsWith('faciō') && !lemma.endsWith('ficiō')) {
