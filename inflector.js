@@ -2411,14 +2411,14 @@ const inflectFuncs = {
 							},
 							pluperfect: {
 								singular: {
-									first: ['īssem', 'iissem', 'īvissem'],
-									second: ['īssēs', 'iissēs', 'īvissēs'],
-									third: ['īsset', 'iisset', 'īvisset'],
+									first: ['iissem', 'īssem', 'īvissem'],
+									second: ['iissēs', 'īssēs', 'īvissēs'],
+									third: ['iisset', 'īsset', 'īvisset'],
 								},
 								plural: {
-									first: ['īssēmus', 'iissēmus', 'īvissēmus'],
-									second: ['īssētis', 'iissētis', 'īvissētis'],
-									third: ['īssent', 'iissent', 'īvissent'],
+									first: ['iissēmus', 'īssēmus', 'īvissēmus'],
+									second: ['iissētis', 'īssētis', 'īvissētis'],
+									third: ['iissent', 'īssent', 'īvissent'],
 								},
 							},
 						},
