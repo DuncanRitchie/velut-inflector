@@ -565,7 +565,8 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation eō", "Probably not checked"]';
+	'["Verb", "Conjugation eō", "Intransitive", "Probably not checked"]';
+//// After that batch, it will be ["Verb", "Conjugation eō", "Transitive", "Probably not checked"]
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -2410,14 +2411,14 @@ const inflectFuncs = {
 							},
 							pluperfect: {
 								singular: {
-									first: ['īssem', 'īvissem'],
-									second: ['īssēs', 'īvissēs'],
-									third: ['īsset', 'īvisset'],
+									first: ['īssem', 'iissem', 'īvissem'],
+									second: ['īssēs', 'iissēs', 'īvissēs'],
+									third: ['īsset', 'iisset', 'īvisset'],
 								},
 								plural: {
-									first: ['īssēmus', 'īvissēmus'],
-									second: ['īssētis', 'īvissētis'],
-									third: ['īssent', 'īvissent'],
+									first: ['īssēmus', 'iissēmus', 'īvissēmus'],
+									second: ['īssētis', 'iissētis', 'īvissētis'],
+									third: ['īssent', 'iissent', 'īvissent'],
 								},
 							},
 						},
@@ -2463,7 +2464,7 @@ const inflectFuncs = {
 					infinitive: {
 						active: {
 							present: ['īre'],
-							perfect: ['īsse', 'īvisse'],
+							perfect: ['iisse', 'īsse', 'īvisse'],
 						},
 						passive: {
 							present: ['īrī', 'īrier'],
@@ -2479,8 +2480,22 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							future: inflectFuncs['Adjective']({ Lemma: 'eundus' })
-								.unencliticized.positive,
+							perfect: {
+								neuter: {
+									singular: inflectFuncs['Adjective']({
+										Lemma: 'itus',
+										ParsingsToExclude: ['vocative'],
+									}).unencliticized.positive.neuter.singular,
+								},
+							},
+							future: {
+								neuter: {
+									singular: inflectFuncs['Adjective']({
+										Lemma: 'eundus',
+										ParsingsToExclude: ['vocative'],
+									}).unencliticized.positive.neuter.singular,
+								},
+							},
 						},
 					},
 					gerund: inflectFuncs['Adjective']({
@@ -2582,6 +2597,9 @@ const inflectFuncs = {
 						passive: {
 							perfect: inflectFuncs['Adjective']({ Lemma: 'itus' })
 								.unencliticized.positive,
+							future: inflectFuncs['Adjective']({
+								Lemma: 'eundus',
+							}).unencliticized.positive,
 						},
 					},
 				};
