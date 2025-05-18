@@ -2586,7 +2586,17 @@ const inflectFuncs = {
 					},
 				};
 
-				if (rest.IsIntransitive === false) {
+				// If an eō verb is being treated as transitive, it should be because it has been explicitly marked as such.
+				// So if it’s not explicitly marked, there should be a warning.
+				if (rest.IsIntransitive !== true && rest.IsIntransitive !== false) {
+					console.warn(
+						'Please specify IsIntransitive as true or false for ',
+						lemma,
+					);
+				}
+
+				// Verbs are treated as transitive if IsIntransitive is false or undefined.
+				if (!rest.IsIntransitive) {
 					forms = mergeObjects(forms, transitiveForms);
 				}
 
