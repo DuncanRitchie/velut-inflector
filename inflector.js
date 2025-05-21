@@ -565,8 +565,8 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation eō", "Intransitive", "Probably not checked"]';
-//// After that batch, it will be ["Verb", "Conjugation eō", "Transitive", "Probably not checked"]
+	'["Verb", "Conjugation eō", "Transitive", "Probably not checked"]';
+//// After that batch, it will be ["Verb", "Conjugation ferō", "Transitive", "Probably not checked"]
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -2554,7 +2554,21 @@ const inflectFuncs = {
 							form.replace(/oient/, 'oëunt').replace(/ient/, 'eunt'),
 						)
 						// Forms with -īv- should not exist for the bare verb ‘eō’ or for ‘abeō’.
-						.filter((form) => !form.startsWith('īv') && !form.includes('abīv')),
+						.filter((form) => !form.startsWith('īv') && !form.includes('abīv'))
+						// Handle synaloepha in forms of ‘anteō’, eg ‘anteeat’ => ‘antēat’.
+						.flatMap((form) =>
+							form.startsWith('ante')
+								? [
+										...new Set([
+											form,
+											form
+												.replace('eīss', 'īss')
+												.replace('eīb', 'īb')
+												.replace(/ee(?=[aā])/, 'ē'),
+										]),
+								  ]
+								: form,
+						),
 				);
 			} else if (rest.Conjugations?.includes('faciō')) {
 				if (!lemma.endsWith('faciō') && !lemma.endsWith('ficiō')) {
