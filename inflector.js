@@ -565,8 +565,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation eō", "Transitive", "Probably not checked"]';
-//// After that batch, it will be ["Verb", "Conjugation ferō", "Transitive", "Probably not checked"]
+	'["Verb", "Conjugation dō", "Transitive", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -2253,9 +2252,10 @@ const inflectFuncs = {
 								? [form, form.replace(/^con/, 'col')]
 								: form,
 						)
+						// rettulī etc are more frequent than retulī but both are permissible.
 						.flatMap((form) =>
 							form.startsWith('ret')
-								? [form, form.replace(/^ret/, 'rett')]
+								? [form.replace(/^ret/, 'rett'), form]
 								: form,
 						)
 						.flatMap((form) =>
@@ -2905,7 +2905,11 @@ const inflectFuncs = {
 
 			if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes('dō')) {
 				const presentStem = lemma.replace(/(ō|or|at)$/, ''); // Replaces 1 in forms below.
-				const perfectStems = rest.PerfectStems || [presentStem + 'āv']; // Replaces 3 in forms below.
+				const perfectStems =
+					rest.PerfectStems ||
+					(rest.Conjugations?.includes('dō')
+						? [presentStem + 'ed']
+						: [presentStem + 'āv']); // Replaces 3 in forms below.
 				const supineStems = rest.SupineStems || [presentStem + 'āt']; // Replaces 4 in forms below.
 				const futureActiveParticipleStems =
 					rest.FutureActiveParticipleStems || supineStems; // Replaces 5 in forms below.
