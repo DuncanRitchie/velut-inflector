@@ -576,8 +576,9 @@ function applyFieldsToForms(
 // When I’ve finished checking all the lemmata that matched
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
+// Or actually, I won’t — ‘faciō’ is the last batch of lemmata to check!
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation faciō", "Transitive", "Probably not checked"]';
+	'["Verb", "Conjugation faciō", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
