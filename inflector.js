@@ -565,7 +565,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation dō", "Transitive", "Probably not checked"]';
+	'["Verb", "Conjugation sum", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -1789,7 +1789,7 @@ const inflectFuncs = {
 							future: {
 								singular: {
 									first: ['erō'],
-									second: ['eris', 'ere'],
+									second: ['eris'],
 									third: ['erit'],
 								},
 								plural: {
@@ -1919,6 +1919,10 @@ const inflectFuncs = {
 					},
 					participle: {
 						active: {
+							present: inflectFuncs['Adjective']({
+								Lemma: 'sēns',
+								IsPresentParticiple: true,
+							}).unencliticized.positive,
 							future: inflectFuncs['Adjective']({ Lemma: 'futūrus' })
 								.unencliticized.positive,
 						},
@@ -1930,21 +1934,40 @@ const inflectFuncs = {
 					joinStemsToEndings(prefix, form)
 						// Forms such as ‘posfore’ & ‘posfutūrum’ should not exist.
 						.filter(
-							(form) => !form.includes('posfor') && !form.includes('posfut'),
+							(form) =>
+								!form.includes('posfor') &&
+								!form.includes('posfut') &&
+								!form.includes('obfor'),
 						)
 						// Some prefixes change depending on the next letter.
 						.map((form) =>
 							form
+								.replace(/^abf(?=ut|or)/, 'āf') // ‘āfutūrus’ & ‘āfore’ are good; ‘abfutūrus’ & ‘abfore’ are not.
 								.replace(/^īn(?![fs])/, 'in')
+								.replace(/^dēe/, 'dee')
+								.replace(/^poss(?=ēns|ent)/, 'pot')
 								.replace(/^posess/, 'poss')
 								.replace(/^pose/, 'pote')
 								.replace(/^posfu/, 'potu')
 								.replace(/^prōe/, 'prōde'),
 						)
-						// Both ‘abfore’ & ‘āfore’ etc are permissible.
+						// Both ‘āfore’ & ‘abfore’ are good, and likewise ‘āfuī’ & ‘abfuī’.
+						// We have already created ‘āfutūrus’ & ‘āfore’.
 						.flatMap((form) =>
 							form.startsWith('abf')
-								? [form, form.replace(/^abf/, 'āf')]
+								? [form.replace(/^abf/, 'āf'), form]
+								: form,
+						)
+						// Both ‘adfuī’ & ‘affuī’ are good, and likewise ‘adfutūtus’ & ‘affutūrus’.
+						.flatMap((form) =>
+							form.startsWith('adf')
+								? [form, form.replace(/^adf/, 'aff')]
+								: form,
+						)
+						// Both ‘obfuī’ & ‘offuī’ are good, and likewise ‘obfutūtus’ & ‘offutūrus’.
+						.flatMap((form) =>
+							form.startsWith('obf')
+								? [form, form.replace(/^obf/, 'off')]
 								: form,
 						),
 				);
