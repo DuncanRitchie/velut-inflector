@@ -157,6 +157,18 @@ const mergeObjects = (formsObject, objectToMerge) => {
 	return objectWithSamePropertiesMerged;
 };
 
+const mergeMoreThanTwoObjects = (objects) => {
+	if (!objects || !objects.length) {
+		console.error('No objects in mergeMoreThanTwoObjects', objects);
+		return {};
+	}
+	let merged = objects[0];
+	for (let i = 1; i < objects.length; i++) {
+		merged = mergeObjects(merged, objects[i]);
+	}
+	return merged;
+};
+
 const replaceFieldsInObjects = (formsObject, replacementObject) => {
 	if (!replacementObject) {
 		return formsObject;
@@ -565,7 +577,7 @@ function applyFieldsToForms(
 // (ie, when no lemmata have "20230721" fields matching the Json fragment),
 // I’ll change the Json fragment to match other lemmata.
 const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation sum", "Probably not checked"]';
+	'["Verb", "Conjugation faciō", "Transitive", "Probably not checked"]';
 const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
 	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
 let lemmataToOpen = '';
@@ -2599,6 +2611,25 @@ const inflectFuncs = {
 				}
 				const prefix = lemma.replace(/f[ai]ciō$/, '');
 				const hasReducedVowel = lemma.endsWith('ficiō');
+
+				const gerundVowels = rest.GerundVowels || ['e'];
+				const gerunds = mergeMoreThanTwoObjects(
+					gerundVowels.map(
+						(vowel) =>
+							inflectFuncs['Adjective']({
+								Lemma: `faci${vowel}ndus`,
+								ParsingsToExclude: ['nominative', 'vocative'],
+							}).unencliticized.positive.neuter.singular,
+					),
+				);
+				const gerundives = mergeMoreThanTwoObjects(
+					gerundVowels.map(
+						(vowel) =>
+							inflectFuncs['Adjective']({ Lemma: `faci${vowel}ndus` })
+								.unencliticized.positive,
+					),
+				);
+
 				forms = {
 					indicative: {
 						active: {
@@ -2798,14 +2829,12 @@ const inflectFuncs = {
 								.unencliticized.positive,
 						},
 						passive: {
-							future: inflectFuncs['Adjective']({ Lemma: 'faciendus' })
+							perfect: inflectFuncs['Adjective']({ Lemma: 'factus' })
 								.unencliticized.positive,
+							future: gerundives,
 						},
 					},
-					gerund: inflectFuncs['Adjective']({
-						Lemma: 'faciendus',
-						ParsingsToExclude: ['nominative', 'vocative'],
-					}).unencliticized.positive.neuter.singular,
+					gerund: gerunds,
 					supine: {
 						accusative: ['factum'],
 						ablative: ['factū'],
@@ -2896,12 +2925,6 @@ const inflectFuncs = {
 									third: ['fīuntō'],
 								},
 							},
-						},
-					},
-					participle: {
-						passive: {
-							perfect: inflectFuncs['Adjective']({ Lemma: 'factus' })
-								.unencliticized.positive,
 						},
 					},
 				};
