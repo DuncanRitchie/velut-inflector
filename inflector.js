@@ -2710,17 +2710,38 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
+									first: ['fīō'],
+									second: ['fīs'],
 									third: ['fit'],
+								},
+								plural: {
+									first: ['fīmus'],
+									second: ['fītis'],
+									third: ['fīunt'],
 								},
 							},
 							imperfect: {
 								singular: {
+									first: ['fīēbam'],
+									second: ['fīēbās'],
 									third: ['fīēbat'],
+								},
+								plural: {
+									first: ['fīēbāmus'],
+									second: ['fīēbātis'],
+									third: ['fīēbant'],
 								},
 							},
 							future: {
 								singular: {
+									first: ['fīam'],
+									second: ['fīēs'],
 									third: ['fīet'],
+								},
+								plural: {
+									first: ['fīēmus'],
+									second: ['fīētis'],
+									third: ['fīent'],
 								},
 							},
 						},
@@ -2779,12 +2800,26 @@ const inflectFuncs = {
 						passive: {
 							present: {
 								singular: {
+									first: ['fīam'],
+									second: ['fīās'],
 									third: ['fīat'],
+								},
+								plural: {
+									first: ['fīāmus'],
+									second: ['fīātis'],
+									third: ['fīant'],
 								},
 							},
 							imperfect: {
 								singular: {
+									first: ['fierem', 'fīerem'],
+									second: ['fierēs', 'fīerēs'],
 									third: ['fieret', 'fīeret'],
+								},
+								plural: {
+									first: ['fierēmus', 'fīerēmus'],
+									second: ['fierētis', 'fīerētis'],
+									third: ['fierent', 'fīerent'],
 								},
 							},
 						},
@@ -2807,6 +2842,26 @@ const inflectFuncs = {
 								plural: {
 									second: ['facitōte'],
 									third: ['faciuntō'],
+								},
+							},
+						},
+						passive: {
+							present: {
+								singular: {
+									second: ['fī'],
+								},
+								plural: {
+									second: ['fīte'],
+								},
+							},
+							future: {
+								singular: {
+									second: ['fītō'],
+									third: ['fītō'],
+								},
+								plural: {
+									second: ['fītōte'],
+									third: ['fīuntō'],
 								},
 							},
 						},
@@ -2841,98 +2896,6 @@ const inflectFuncs = {
 						ablative: ['factū'],
 					},
 				};
-
-				const transitiveForms = {
-					indicative: {
-						passive: {
-							present: {
-								singular: {
-									first: ['fīō'],
-									second: ['fīs'],
-								},
-								plural: {
-									first: ['fīmus'],
-									second: ['fītis'],
-									third: ['fīunt'],
-								},
-							},
-							imperfect: {
-								singular: {
-									first: ['fīēbam'],
-									second: ['fīēbās'],
-								},
-								plural: {
-									first: ['fīēbāmus'],
-									second: ['fīēbātis'],
-									third: ['fīēbant'],
-								},
-							},
-							future: {
-								singular: {
-									first: ['fīam'],
-									second: ['fīēs'],
-								},
-								plural: {
-									first: ['fīēmus'],
-									second: ['fīētis'],
-									third: ['fīent'],
-								},
-							},
-						},
-					},
-					subjunctive: {
-						passive: {
-							present: {
-								singular: {
-									first: ['fīam'],
-									second: ['fīās'],
-								},
-								plural: {
-									first: ['fīāmus'],
-									second: ['fīātis'],
-									third: ['fīant'],
-								},
-							},
-							imperfect: {
-								singular: {
-									first: ['fierem', 'fīerem'],
-									second: ['fierēs', 'fīerēs'],
-								},
-								plural: {
-									first: ['fierēmus', 'fīerēmus'],
-									second: ['fierētis', 'fīerētis'],
-									third: ['fierent', 'fīerent'],
-								},
-							},
-						},
-					},
-					imperative: {
-						passive: {
-							present: {
-								singular: {
-									second: ['fī'],
-								},
-								plural: {
-									second: ['fīte'],
-								},
-							},
-							future: {
-								singular: {
-									second: ['fītō'],
-									third: ['fītō'],
-								},
-								plural: {
-									second: ['fītōte'],
-									third: ['fīuntō'],
-								},
-							},
-						},
-					},
-				};
-
-				if (!rest.IsIntransitive) {
-					forms = mergeObjects(forms, transitiveForms);
-				}
 
 				// Attach the prefix to all the forms of ‘faciō’.
 				forms = runLambdaOnObject(forms, (form) =>
