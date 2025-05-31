@@ -4430,28 +4430,6 @@ const convertInputToOutputData = (lemmata) => {
 		}
 
 		try {
-			//// Console.logs when I’ve added properties to lemmata to suggest that I should review them.
-
-			// "Conjugations added programmatically."
-			// if (lemma["20221217"]) {
-			// 	console.log(lemma["20221217"] + " " + lemma.Lemma)
-			// }
-
-			// "This lemma was failing"
-			// if (lemma["20221218"]) {
-			// 	console.log(lemma["20221218"] + " " + lemma.Lemma)
-			// }
-
-			// "Conjugations added programmatically."
-			// if (lemma["20230115"]) {
-			// 	console.log(lemma["20230115"] + " " + lemma.Lemma)
-			// }
-
-			// All words.
-			// if (lemma["20230721"]) {
-			// 	console.log(lemma["20230721"] + " " + lemma.Lemma)
-			// }
-
 			const DOES_PART_OF_SPEECH_GET_CHECKED = false;
 
 			if (
@@ -4619,9 +4597,6 @@ if (typeof require !== 'undefined') {
 						const NoTypeTag = removeBrackets(Lemma);
 						const NoMacra = removeDiacritics(NoTypeTag);
 						const NoMacraLowerCase = NoMacra.toLowerCase();
-						// I added `"20230721": ["Probably not checked"]` to all lemmata in the source-data in July 2023.
-						// When I’ve checked a lemma, I remove the property.
-						const FormsHaveBeenChecked = !lemmaObject['20230721'];
 
 						combinedLemmataDataAsObject[lemmaObject.Lemma] = {
 							Index,
@@ -4633,7 +4608,6 @@ if (typeof require !== 'undefined') {
 							Root,
 							NoMacra,
 							NoMacraLowerCase,
-							FormsHaveBeenChecked,
 						};
 
 						if (lemmaObject['20230721']) {
@@ -4649,7 +4623,6 @@ if (typeof require !== 'undefined') {
 					`,\n"20230721": ${SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN}`,
 				);
 				console.log(lemmataToOpen);
-				// console.log(PART_OF_SPEECH_TO_LOG + ':' + lemmataOfSamePartOfSpeech);
 				console.log(
 					`There are ${countNotChecked} lemmata whose forms should be checked manually.`,
 				);
