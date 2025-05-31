@@ -313,37 +313,37 @@ const tests = [
 						perfect: {
 							singular: {
 								first: ['abdicāvī'],
-								second: ['abdicāvistī'],
+								second: ['abdicāvistī', 'abdicāstī'],
 								third: ['abdicāvit'],
 							},
 							plural: {
 								first: ['abdicāvimus'],
-								second: ['abdicāvistis'],
-								third: ['abdicāvērunt', 'abdicāvēre'],
+								second: ['abdicāvistis', 'abdicāstis'],
+								third: ['abdicāvērunt', 'abdicārunt', 'abdicāvēre'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāveram'],
-								second: ['abdicāverās'],
-								third: ['abdicāverat'],
+								first: ['abdicāveram', 'abdicāram'],
+								second: ['abdicāverās', 'abdicārās'],
+								third: ['abdicāverat', 'abdicārat'],
 							},
 							plural: {
-								first: ['abdicāverāmus'],
-								second: ['abdicāverātis'],
-								third: ['abdicāverant'],
+								first: ['abdicāverāmus', 'abdicārāmus'],
+								second: ['abdicāverātis', 'abdicārātis'],
+								third: ['abdicāverant', 'abdicārant'],
 							},
 						},
 						futureperfect: {
 							singular: {
-								first: ['abdicāverō'],
-								second: ['abdicāveris'],
-								third: ['abdicāverit'],
+								first: ['abdicāverō', 'abdicārō'],
+								second: ['abdicāveris', 'abdicāris'],
+								third: ['abdicāverit', 'abdicārit'],
 							},
 							plural: {
-								first: ['abdicāverimus'],
-								second: ['abdicāveritis'],
-								third: ['abdicāverint'],
+								first: ['abdicāverimus', 'abdicārimus'],
+								second: ['abdicāveritis', 'abdicāritis'],
+								third: ['abdicāverint', 'abdicārint'],
 							},
 						},
 					},
@@ -414,26 +414,26 @@ const tests = [
 						},
 						perfect: {
 							singular: {
-								first: ['abdicāverim'],
-								second: ['abdicāverīs'],
-								third: ['abdicāverit'],
+								first: ['abdicāverim', 'abdicārim'],
+								second: ['abdicāverīs', 'abdicārīs'],
+								third: ['abdicāverit', 'abdicārit'],
 							},
 							plural: {
-								first: ['abdicāverīmus'],
-								second: ['abdicāverītis'],
-								third: ['abdicāverint'],
+								first: ['abdicāverīmus', 'abdicārīmus'],
+								second: ['abdicāverītis', 'abdicārītis'],
+								third: ['abdicāverint', 'abdicārint'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāvissem'],
-								second: ['abdicāvissēs'],
-								third: ['abdicāvisset'],
+								first: ['abdicāvissem', 'abdicāssem'],
+								second: ['abdicāvissēs', 'abdicāssēs'],
+								third: ['abdicāvisset', 'abdicāsset'],
 							},
 							plural: {
-								first: ['abdicāvissēmus'],
-								second: ['abdicāvissētis'],
-								third: ['abdicāvissent'],
+								first: ['abdicāvissēmus', 'abdicāssēmus'],
+								second: ['abdicāvissētis', 'abdicāssētis'],
+								third: ['abdicāvissent', 'abdicāssent'],
 							},
 						},
 					},
@@ -471,7 +471,7 @@ const tests = [
 								second: ['abdicā'],
 							},
 							plural: {
-								third: ['abdicāte'],
+								second: ['abdicāte'],
 							},
 						},
 						future: {
@@ -491,7 +491,7 @@ const tests = [
 								second: ['abdicāre'],
 							},
 							plural: {
-								third: ['abdicāminī'],
+								second: ['abdicāminī'],
 							},
 						},
 						future: {
@@ -508,7 +508,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāre'],
-						perfect: ['abdicāvisse'],
+						perfect: ['abdicāvisse', 'abdicāsse'],
 					},
 					passive: {
 						present: ['abdicārī'],
@@ -524,7 +524,7 @@ const tests = [
 									accusative: ['abdicantem'],
 									genitive: ['abdicantis'],
 									dative: ['abdicantī'],
-									ablative: ['abdicante'],
+									ablative: ['abdicantī', 'abdicante'],
 								},
 								plural: {
 									nominative: ['abdicantēs'],
@@ -542,7 +542,7 @@ const tests = [
 									accusative: ['abdicantem'],
 									genitive: ['abdicantis'],
 									dative: ['abdicantī'],
-									ablative: ['abdicante'],
+									ablative: ['abdicantī', 'abdicante'],
 								},
 								plural: {
 									nominative: ['abdicantēs'],
@@ -560,7 +560,7 @@ const tests = [
 									accusative: ['abdicāns'],
 									genitive: ['abdicantis'],
 									dative: ['abdicantī'],
-									ablative: ['abdicante'],
+									ablative: ['abdicantī', 'abdicante'],
 								},
 								plural: {
 									nominative: ['abdicantia'],
@@ -797,37 +797,37 @@ const tests = [
 						perfect: {
 							singular: {
 								first: ['abdicāvīne'],
-								second: ['abdicāvistīne'],
+								second: ['abdicāvistīne', 'abdicāstīne'],
 								third: ['abdicāvitne'],
 							},
 							plural: {
 								first: ['abdicāvimusne'],
-								second: ['abdicāvistisne'],
-								third: ['abdicāvēruntne', 'abdicāvērene'],
+								second: ['abdicāvistisne', 'abdicāstisne'],
+								third: ['abdicāvēruntne', 'abdicāruntne', 'abdicāvērene'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāveramne'],
-								second: ['abdicāverāsne'],
-								third: ['abdicāveratne'],
+								first: ['abdicāveramne', 'abdicāramne'],
+								second: ['abdicāverāsne', 'abdicārāsne'],
+								third: ['abdicāveratne', 'abdicāratne'],
 							},
 							plural: {
-								first: ['abdicāverāmusne'],
-								second: ['abdicāverātisne'],
-								third: ['abdicāverantne'],
+								first: ['abdicāverāmusne', 'abdicārāmusne'],
+								second: ['abdicāverātisne', 'abdicārātisne'],
+								third: ['abdicāverantne', 'abdicārantne'],
 							},
 						},
 						futureperfect: {
 							singular: {
-								first: ['abdicāverōne'],
-								second: ['abdicāverisne'],
-								third: ['abdicāveritne'],
+								first: ['abdicāverōne', 'abdicārōne'],
+								second: ['abdicāverisne', 'abdicārisne'],
+								third: ['abdicāveritne', 'abdicāritne'],
 							},
 							plural: {
-								first: ['abdicāverimusne'],
-								second: ['abdicāveritisne'],
-								third: ['abdicāverintne'],
+								first: ['abdicāverimusne', 'abdicārimusne'],
+								second: ['abdicāveritisne', 'abdicāritisne'],
+								third: ['abdicāverintne', 'abdicārintne'],
 							},
 						},
 					},
@@ -898,26 +898,26 @@ const tests = [
 						},
 						perfect: {
 							singular: {
-								first: ['abdicāverimne'],
-								second: ['abdicāverīsne'],
-								third: ['abdicāveritne'],
+								first: ['abdicāverimne', 'abdicārimne'],
+								second: ['abdicāverīsne', 'abdicārīsne'],
+								third: ['abdicāveritne', 'abdicāritne'],
 							},
 							plural: {
-								first: ['abdicāverīmusne'],
-								second: ['abdicāverītisne'],
-								third: ['abdicāverintne'],
+								first: ['abdicāverīmusne', 'abdicārīmusne'],
+								second: ['abdicāverītisne', 'abdicārītisne'],
+								third: ['abdicāverintne', 'abdicārintne'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāvissemne'],
-								second: ['abdicāvissēsne'],
-								third: ['abdicāvissetne'],
+								first: ['abdicāvissemne', 'abdicāssemne'],
+								second: ['abdicāvissēsne', 'abdicāssēsne'],
+								third: ['abdicāvissetne', 'abdicāssetne'],
 							},
 							plural: {
-								first: ['abdicāvissēmusne'],
-								second: ['abdicāvissētisne'],
-								third: ['abdicāvissentne'],
+								first: ['abdicāvissēmusne', 'abdicāssēmusne'],
+								second: ['abdicāvissētisne', 'abdicāssētisne'],
+								third: ['abdicāvissentne', 'abdicāssentne'],
 							},
 						},
 					},
@@ -955,7 +955,7 @@ const tests = [
 								second: ['abdicāne'],
 							},
 							plural: {
-								third: ['abdicātene'],
+								second: ['abdicātene'],
 							},
 						},
 						future: {
@@ -975,7 +975,7 @@ const tests = [
 								second: ['abdicārene'],
 							},
 							plural: {
-								third: ['abdicāminīne'],
+								second: ['abdicāminīne'],
 							},
 						},
 						future: {
@@ -992,7 +992,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicārene'],
-						perfect: ['abdicāvissene'],
+						perfect: ['abdicāvissene', 'abdicāssene'],
 					},
 					passive: {
 						present: ['abdicārīne'],
@@ -1008,7 +1008,7 @@ const tests = [
 									accusative: ['abdicantemne'],
 									genitive: ['abdicantisne'],
 									dative: ['abdicantīne'],
-									ablative: ['abdicantene'],
+									ablative: ['abdicantīne', 'abdicantene'],
 								},
 								plural: {
 									nominative: ['abdicantēsne'],
@@ -1026,7 +1026,7 @@ const tests = [
 									accusative: ['abdicantemne'],
 									genitive: ['abdicantisne'],
 									dative: ['abdicantīne'],
-									ablative: ['abdicantene'],
+									ablative: ['abdicantīne', 'abdicantene'],
 								},
 								plural: {
 									nominative: ['abdicantēsne'],
@@ -1044,7 +1044,7 @@ const tests = [
 									accusative: ['abdicānsne'],
 									genitive: ['abdicantisne'],
 									dative: ['abdicantīne'],
-									ablative: ['abdicantene'],
+									ablative: ['abdicantīne', 'abdicantene'],
 								},
 								plural: {
 									nominative: ['abdicantiane'],
@@ -1281,37 +1281,37 @@ const tests = [
 						perfect: {
 							singular: {
 								first: ['abdicāvīque'],
-								second: ['abdicāvistīque'],
+								second: ['abdicāvistīque', 'abdicāstīque'],
 								third: ['abdicāvitque'],
 							},
 							plural: {
 								first: ['abdicāvimusque'],
-								second: ['abdicāvistisque'],
-								third: ['abdicāvēruntque', 'abdicāvēreque'],
+								second: ['abdicāvistisque', 'abdicāstisque'],
+								third: ['abdicāvēruntque', 'abdicāruntque', 'abdicāvēreque'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāveramque'],
-								second: ['abdicāverāsque'],
-								third: ['abdicāveratque'],
+								first: ['abdicāveramque', 'abdicāramque'],
+								second: ['abdicāverāsque', 'abdicārāsque'],
+								third: ['abdicāveratque', 'abdicāratque'],
 							},
 							plural: {
-								first: ['abdicāverāmusque'],
-								second: ['abdicāverātisque'],
-								third: ['abdicāverantque'],
+								first: ['abdicāverāmusque', 'abdicārāmusque'],
+								second: ['abdicāverātisque', 'abdicārātisque'],
+								third: ['abdicāverantque', 'abdicārantque'],
 							},
 						},
 						futureperfect: {
 							singular: {
-								first: ['abdicāverōque'],
-								second: ['abdicāverisque'],
-								third: ['abdicāveritque'],
+								first: ['abdicāverōque', 'abdicārōque'],
+								second: ['abdicāverisque', 'abdicārisque'],
+								third: ['abdicāveritque', 'abdicāritque'],
 							},
 							plural: {
-								first: ['abdicāverimusque'],
-								second: ['abdicāveritisque'],
-								third: ['abdicāverintque'],
+								first: ['abdicāverimusque', 'abdicārimusque'],
+								second: ['abdicāveritisque', 'abdicāritisque'],
+								third: ['abdicāverintque', 'abdicārintque'],
 							},
 						},
 					},
@@ -1382,26 +1382,26 @@ const tests = [
 						},
 						perfect: {
 							singular: {
-								first: ['abdicāverimque'],
-								second: ['abdicāverīsque'],
-								third: ['abdicāveritque'],
+								first: ['abdicāverimque', 'abdicārimque'],
+								second: ['abdicāverīsque', 'abdicārīsque'],
+								third: ['abdicāveritque', 'abdicāritque'],
 							},
 							plural: {
-								first: ['abdicāverīmusque'],
-								second: ['abdicāverītisque'],
-								third: ['abdicāverintque'],
+								first: ['abdicāverīmusque', 'abdicārīmusque'],
+								second: ['abdicāverītisque', 'abdicārītisque'],
+								third: ['abdicāverintque', 'abdicārintque'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāvissemque'],
-								second: ['abdicāvissēsque'],
-								third: ['abdicāvissetque'],
+								first: ['abdicāvissemque', 'abdicāssemque'],
+								second: ['abdicāvissēsque', 'abdicāssēsque'],
+								third: ['abdicāvissetque', 'abdicāssetque'],
 							},
 							plural: {
-								first: ['abdicāvissēmusque'],
-								second: ['abdicāvissētisque'],
-								third: ['abdicāvissentque'],
+								first: ['abdicāvissēmusque', 'abdicāssēmusque'],
+								second: ['abdicāvissētisque', 'abdicāssētisque'],
+								third: ['abdicāvissentque', 'abdicāssentque'],
 							},
 						},
 					},
@@ -1439,7 +1439,7 @@ const tests = [
 								second: ['abdicāque'],
 							},
 							plural: {
-								third: ['abdicāteque'],
+								second: ['abdicāteque'],
 							},
 						},
 						future: {
@@ -1459,7 +1459,7 @@ const tests = [
 								second: ['abdicāreque'],
 							},
 							plural: {
-								third: ['abdicāminīque'],
+								second: ['abdicāminīque'],
 							},
 						},
 						future: {
@@ -1476,7 +1476,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāreque'],
-						perfect: ['abdicāvisseque'],
+						perfect: ['abdicāvisseque', 'abdicāsseque'],
 					},
 					passive: {
 						present: ['abdicārīque'],
@@ -1492,7 +1492,7 @@ const tests = [
 									accusative: ['abdicantemque'],
 									genitive: ['abdicantisque'],
 									dative: ['abdicantīque'],
-									ablative: ['abdicanteque'],
+									ablative: ['abdicantīque', 'abdicanteque'],
 								},
 								plural: {
 									nominative: ['abdicantēsque'],
@@ -1510,7 +1510,7 @@ const tests = [
 									accusative: ['abdicantemque'],
 									genitive: ['abdicantisque'],
 									dative: ['abdicantīque'],
-									ablative: ['abdicanteque'],
+									ablative: ['abdicantīque', 'abdicanteque'],
 								},
 								plural: {
 									nominative: ['abdicantēsque'],
@@ -1528,7 +1528,7 @@ const tests = [
 									accusative: ['abdicānsque'],
 									genitive: ['abdicantisque'],
 									dative: ['abdicantīque'],
-									ablative: ['abdicanteque'],
+									ablative: ['abdicantīque', 'abdicanteque'],
 								},
 								plural: {
 									nominative: ['abdicantiaque'],
@@ -1765,37 +1765,37 @@ const tests = [
 						perfect: {
 							singular: {
 								first: ['abdicāvīve'],
-								second: ['abdicāvistīve'],
+								second: ['abdicāvistīve', 'abdicāstīve'],
 								third: ['abdicāvitve'],
 							},
 							plural: {
 								first: ['abdicāvimusve'],
-								second: ['abdicāvistisve'],
-								third: ['abdicāvēruntve', 'abdicāvēreve'],
+								second: ['abdicāvistisve', 'abdicāstisve'],
+								third: ['abdicāvēruntve', 'abdicāruntve', 'abdicāvēreve'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāveramve'],
-								second: ['abdicāverāsve'],
-								third: ['abdicāveratve'],
+								first: ['abdicāveramve', 'abdicāramve'],
+								second: ['abdicāverāsve', 'abdicārāsve'],
+								third: ['abdicāveratve', 'abdicāratve'],
 							},
 							plural: {
-								first: ['abdicāverāmusve'],
-								second: ['abdicāverātisve'],
-								third: ['abdicāverantve'],
+								first: ['abdicāverāmusve', 'abdicārāmusve'],
+								second: ['abdicāverātisve', 'abdicārātisve'],
+								third: ['abdicāverantve', 'abdicārantve'],
 							},
 						},
 						futureperfect: {
 							singular: {
-								first: ['abdicāverōve'],
-								second: ['abdicāverisve'],
-								third: ['abdicāveritve'],
+								first: ['abdicāverōve', 'abdicārōve'],
+								second: ['abdicāverisve', 'abdicārisve'],
+								third: ['abdicāveritve', 'abdicāritve'],
 							},
 							plural: {
-								first: ['abdicāverimusve'],
-								second: ['abdicāveritisve'],
-								third: ['abdicāverintve'],
+								first: ['abdicāverimusve', 'abdicārimusve'],
+								second: ['abdicāveritisve', 'abdicāritisve'],
+								third: ['abdicāverintve', 'abdicārintve'],
 							},
 						},
 					},
@@ -1866,26 +1866,26 @@ const tests = [
 						},
 						perfect: {
 							singular: {
-								first: ['abdicāverimve'],
-								second: ['abdicāverīsve'],
-								third: ['abdicāveritve'],
+								first: ['abdicāverimve', 'abdicārimve'],
+								second: ['abdicāverīsve', 'abdicārīsve'],
+								third: ['abdicāveritve', 'abdicāritve'],
 							},
 							plural: {
-								first: ['abdicāverīmusve'],
-								second: ['abdicāverītisve'],
-								third: ['abdicāverintve'],
+								first: ['abdicāverīmusve', 'abdicārīmusve'],
+								second: ['abdicāverītisve', 'abdicārītisve'],
+								third: ['abdicāverintve', 'abdicārintve'],
 							},
 						},
 						pluperfect: {
 							singular: {
-								first: ['abdicāvissemve'],
-								second: ['abdicāvissēsve'],
-								third: ['abdicāvissetve'],
+								first: ['abdicāvissemve', 'abdicāssemve'],
+								second: ['abdicāvissēsve', 'abdicāssēsve'],
+								third: ['abdicāvissetve', 'abdicāssetve'],
 							},
 							plural: {
-								first: ['abdicāvissēmusve'],
-								second: ['abdicāvissētisve'],
-								third: ['abdicāvissentve'],
+								first: ['abdicāvissēmusve', 'abdicāssēmusve'],
+								second: ['abdicāvissētisve', 'abdicāssētisve'],
+								third: ['abdicāvissentve', 'abdicāssentve'],
 							},
 						},
 					},
@@ -1923,7 +1923,7 @@ const tests = [
 								second: ['abdicāve'],
 							},
 							plural: {
-								third: ['abdicāteve'],
+								second: ['abdicāteve'],
 							},
 						},
 						future: {
@@ -1943,7 +1943,7 @@ const tests = [
 								second: ['abdicāreve'],
 							},
 							plural: {
-								third: ['abdicāminīve'],
+								second: ['abdicāminīve'],
 							},
 						},
 						future: {
@@ -1960,7 +1960,7 @@ const tests = [
 				infinitive: {
 					active: {
 						present: ['abdicāreve'],
-						perfect: ['abdicāvisseve'],
+						perfect: ['abdicāvisseve', 'abdicāsseve'],
 					},
 					passive: {
 						present: ['abdicārīve'],
@@ -1976,7 +1976,7 @@ const tests = [
 									accusative: ['abdicantemve'],
 									genitive: ['abdicantisve'],
 									dative: ['abdicantīve'],
-									ablative: ['abdicanteve'],
+									ablative: ['abdicantīve', 'abdicanteve'],
 								},
 								plural: {
 									nominative: ['abdicantēsve'],
@@ -1994,7 +1994,7 @@ const tests = [
 									accusative: ['abdicantemve'],
 									genitive: ['abdicantisve'],
 									dative: ['abdicantīve'],
-									ablative: ['abdicanteve'],
+									ablative: ['abdicantīve', 'abdicanteve'],
 								},
 								plural: {
 									nominative: ['abdicantēsve'],
@@ -2012,7 +2012,7 @@ const tests = [
 									accusative: ['abdicānsve'],
 									genitive: ['abdicantisve'],
 									dative: ['abdicantīve'],
-									ablative: ['abdicanteve'],
+									ablative: ['abdicantīve', 'abdicanteve'],
 								},
 								plural: {
 									nominative: ['abdicantiave'],
@@ -2430,7 +2430,7 @@ const tests = [
 								second: ['abdīc'],
 							},
 							plural: {
-								third: ['abdīcite'],
+								second: ['abdīcite'],
 							},
 						},
 						future: {
@@ -2450,7 +2450,7 @@ const tests = [
 								second: ['abdīcere'],
 							},
 							plural: {
-								third: ['abdīciminī'],
+								second: ['abdīciminī'],
 							},
 						},
 						future: {
@@ -2483,7 +2483,7 @@ const tests = [
 									accusative: ['abdīcentem'],
 									genitive: ['abdīcentis'],
 									dative: ['abdīcentī'],
-									ablative: ['abdīcente'],
+									ablative: ['abdīcentī', 'abdīcente'],
 								},
 								plural: {
 									nominative: ['abdīcentēs'],
@@ -2501,7 +2501,7 @@ const tests = [
 									accusative: ['abdīcentem'],
 									genitive: ['abdīcentis'],
 									dative: ['abdīcentī'],
-									ablative: ['abdīcente'],
+									ablative: ['abdīcentī', 'abdīcente'],
 								},
 								plural: {
 									nominative: ['abdīcentēs'],
@@ -2519,7 +2519,7 @@ const tests = [
 									accusative: ['abdīcēns'],
 									genitive: ['abdīcentis'],
 									dative: ['abdīcentī'],
-									ablative: ['abdīcente'],
+									ablative: ['abdīcentī', 'abdīcente'],
 								},
 								plural: {
 									nominative: ['abdīcentia'],
@@ -2914,7 +2914,7 @@ const tests = [
 								second: ['abdīcne'],
 							},
 							plural: {
-								third: ['abdīcitene'],
+								second: ['abdīcitene'],
 							},
 						},
 						future: {
@@ -2934,7 +2934,7 @@ const tests = [
 								second: ['abdīcerene'],
 							},
 							plural: {
-								third: ['abdīciminīne'],
+								second: ['abdīciminīne'],
 							},
 						},
 						future: {
@@ -2967,7 +2967,7 @@ const tests = [
 									accusative: ['abdīcentemne'],
 									genitive: ['abdīcentisne'],
 									dative: ['abdīcentīne'],
-									ablative: ['abdīcentene'],
+									ablative: ['abdīcentīne', 'abdīcentene'],
 								},
 								plural: {
 									nominative: ['abdīcentēsne'],
@@ -2985,7 +2985,7 @@ const tests = [
 									accusative: ['abdīcentemne'],
 									genitive: ['abdīcentisne'],
 									dative: ['abdīcentīne'],
-									ablative: ['abdīcentene'],
+									ablative: ['abdīcentīne', 'abdīcentene'],
 								},
 								plural: {
 									nominative: ['abdīcentēsne'],
@@ -3003,7 +3003,7 @@ const tests = [
 									accusative: ['abdīcēnsne'],
 									genitive: ['abdīcentisne'],
 									dative: ['abdīcentīne'],
-									ablative: ['abdīcentene'],
+									ablative: ['abdīcentīne', 'abdīcentene'],
 								},
 								plural: {
 									nominative: ['abdīcentiane'],
@@ -3398,7 +3398,7 @@ const tests = [
 								second: ['abdīcque'],
 							},
 							plural: {
-								third: ['abdīciteque'],
+								second: ['abdīciteque'],
 							},
 						},
 						future: {
@@ -3418,7 +3418,7 @@ const tests = [
 								second: ['abdīcereque'],
 							},
 							plural: {
-								third: ['abdīciminīque'],
+								second: ['abdīciminīque'],
 							},
 						},
 						future: {
@@ -3451,7 +3451,7 @@ const tests = [
 									accusative: ['abdīcentemque'],
 									genitive: ['abdīcentisque'],
 									dative: ['abdīcentīque'],
-									ablative: ['abdīcenteque'],
+									ablative: ['abdīcentīque', 'abdīcenteque'],
 								},
 								plural: {
 									nominative: ['abdīcentēsque'],
@@ -3469,7 +3469,7 @@ const tests = [
 									accusative: ['abdīcentemque'],
 									genitive: ['abdīcentisque'],
 									dative: ['abdīcentīque'],
-									ablative: ['abdīcenteque'],
+									ablative: ['abdīcentīque', 'abdīcenteque'],
 								},
 								plural: {
 									nominative: ['abdīcentēsque'],
@@ -3487,7 +3487,7 @@ const tests = [
 									accusative: ['abdīcēnsque'],
 									genitive: ['abdīcentisque'],
 									dative: ['abdīcentīque'],
-									ablative: ['abdīcenteque'],
+									ablative: ['abdīcentīque', 'abdīcenteque'],
 								},
 								plural: {
 									nominative: ['abdīcentiaque'],
@@ -3882,7 +3882,7 @@ const tests = [
 								second: ['abdīcve'],
 							},
 							plural: {
-								third: ['abdīciteve'],
+								second: ['abdīciteve'],
 							},
 						},
 						future: {
@@ -3902,7 +3902,7 @@ const tests = [
 								second: ['abdīcereve'],
 							},
 							plural: {
-								third: ['abdīciminīve'],
+								second: ['abdīciminīve'],
 							},
 						},
 						future: {
@@ -3935,7 +3935,7 @@ const tests = [
 									accusative: ['abdīcentemve'],
 									genitive: ['abdīcentisve'],
 									dative: ['abdīcentīve'],
-									ablative: ['abdīcenteve'],
+									ablative: ['abdīcentīve', 'abdīcenteve'],
 								},
 								plural: {
 									nominative: ['abdīcentēsve'],
@@ -3953,7 +3953,7 @@ const tests = [
 									accusative: ['abdīcentemve'],
 									genitive: ['abdīcentisve'],
 									dative: ['abdīcentīve'],
-									ablative: ['abdīcenteve'],
+									ablative: ['abdīcentīve', 'abdīcenteve'],
 								},
 								plural: {
 									nominative: ['abdīcentēsve'],
@@ -3971,7 +3971,7 @@ const tests = [
 									accusative: ['abdīcēnsve'],
 									genitive: ['abdīcentisve'],
 									dative: ['abdīcentīve'],
-									ablative: ['abdīcenteve'],
+									ablative: ['abdīcentīve', 'abdīcenteve'],
 								},
 								plural: {
 									nominative: ['abdīcentiave'],
@@ -4175,7 +4175,7 @@ const tests = [
 			Meanings: 'and; compared to',
 			Forms: ['ac', 'atque'],
 		},
-		Expected: ['ac', 'atque'],
+		Expected: { unencliticized: ['ac', 'atque'] },
 	},
 ];
 
