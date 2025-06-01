@@ -572,17 +572,6 @@ function applyFieldsToForms(
 	return withoutEmptyFields;
 }
 
-// This is what I look for in the lemmata data to decide what lemmata to check next.
-// When I’ve finished checking all the lemmata that matched
-// (ie, when no lemmata have "20230721" fields matching the Json fragment),
-// I’ll change the Json fragment to match other lemmata.
-// Or actually, I won’t — ‘faciō’ is the last batch of lemmata to check!
-const SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	'["Verb", "Conjugation faciō", "Probably not checked"]';
-const JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN =
-	SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN.replaceAll(`", "`, `","`);
-let lemmataToOpen = '';
-
 ////
 //// Functions for building the output Json:
 ////
@@ -1751,15 +1740,6 @@ const inflectFuncs = {
 	},
 	Verb: ({ Lemma, PartOfSpeech, ...rest }) => {
 		const lemma = removeBrackets(Lemma);
-
-		// if (rest['20230721']) {
-		// 	console.log(JSON.stringify(rest['20230721']));
-		// }
-		if (
-			JSON.stringify(rest['20230721']) === JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN
-		) {
-			lemmataToOpen += ' ' + lemma;
-		}
 
 		let forms = {};
 
@@ -4786,10 +4766,6 @@ if (typeof require !== 'undefined') {
 					}
 				});
 
-				console.log(
-					`,\n"20230721": ${SPACED_JSON_STRING_TO_MATCH_LEMMATA_TO_OPEN}`,
-				);
-				console.log(lemmataToOpen);
 				console.log(
 					`There are ${countNotChecked} lemmata whose forms should be checked manually.`,
 				);
