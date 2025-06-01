@@ -5492,8 +5492,8 @@ if (typeof require !== 'undefined') {
 			};
 
 			generateOutput();
-			divideIntoBatches();
 			replaceFormsOfAmbiguousStress();
+			divideIntoBatches();
 			mergeWithLemmataJson();
 			checkAgainstExpected();
 			generateSummaryFile();
