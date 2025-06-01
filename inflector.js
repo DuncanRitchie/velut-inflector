@@ -4504,6 +4504,8 @@ if (typeof require !== 'undefined') {
 			const generateOutputAndSaveInBatches = () => {
 				console.time('generatingOutput');
 
+				const output = convertInputToOutputData(inputLemmata);
+
 				//// Eg [1,2,3,4,5,6,7], 2 => [[1,2],[3,4],[5,6],[7]]
 				// from https://stackoverflow.com/a/54029307
 				const splitArrayIntoBatches = (array, size) =>
@@ -4513,16 +4515,7 @@ if (typeof require !== 'undefined') {
 								...splitArrayIntoBatches(array.slice(size), size),
 						  ]
 						: [array];
-				const inputLemmataBatched = splitArrayIntoBatches(
-					inputLemmata,
-					batchSize,
-				);
-
-				let outputRowsBatched = [];
-				inputLemmataBatched.forEach((batch, index, array) => {
-					const outputBatch = convertInputToOutputData(batch);
-					outputRowsBatched.push({ ...outputBatch });
-				});
+				const outputRowsBatched = splitArrayIntoBatches(output, batchSize);
 
 				batchFilepaths = outputRowsBatched.map((batch, batchNumber) => {
 					const filepath = getOutputFileUrlForBatch(batchNumber);
