@@ -4523,17 +4523,123 @@ if (typeof require !== 'undefined') {
 				console.timeEnd('generatingOutput');
 			};
 
-			// const replaceFormsOfAmbiguousStress = () => {
-			// 	console.time('replacingFormsOfAmbiguousStress');
+			const replaceFormsOfAmbiguousStress = () => {
+				console.time('replacingFormsOfAmbiguousStress');
 
-			// 	const formsWithAmbiguousStress = [];
-			// 	batchFilepaths.forEach((filename) =>{
-			// 		const outputBatch = require(filename);
-			// 		//// More code here.
-			// 	});
+				const allOutput = require(outputFileUrlWithAmbiguousStress);
 
-			// 	console.timeEnd('replacingFormsOfAmbiguousStress');
-			// }
+				const formsStressedOnPenultAndTheirAddresses = [];
+				const otherFormsAndTheirAddresses = [];
+				const setOfFormsStressedOnPenult = new Set();
+				const setOfOtherForms = new Set();
+
+				const sliceOfOutput = allOutput;
+				// .slice(0, 3000);
+
+				function isPolysyllabicWithLightPenult(word) {
+					function deleteLastSyllable(word) {
+						return word.replace(
+							/([bcdfglmnprstv]|ch|ph|qu|th|((bcdfgkpt)[lr]))?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
+							'',
+						);
+					}
+					const wordWithoutUltima = deleteLastSyllable(word);
+					const hasHeavyPenult = /(ae|au|oe|[āēīōūȳbcdfgklmnprstvxz]|qu)$/.test(
+						wordWithoutUltima,
+					);
+					const hasMoreThanOneSyllable = /[aeiouyāēīōūȳ]/.test(
+						wordWithoutUltima,
+					);
+					const hasMoreThanTwoSyllables =
+						hasMoreThanOneSyllable &&
+						/[aeiouyāēīōūȳ]/.test(deleteLastSyllable(wordWithoutUltima));
+					const wordIsPolysyllabicWithLightPenult =
+						hasMoreThanTwoSyllables && !hasHeavyPenult;
+
+					// console.log(
+					// 	wordWithoutUltima,
+					// 	word,
+					// 	wordIsPolysyllabicWithLightPenult,
+					// );
+					return wordIsPolysyllabicWithLightPenult;
+				}
+
+				function convertFormsObjectIntoParsingsArray(lemmaWithForms) {
+					function traverseObject(object, previousKeys) {
+						Object.entries(object).forEach(([key, value]) => {
+							if (key === 'incorrect') {
+								return;
+							}
+
+							const keys = [...previousKeys, key];
+
+							if (Array.isArray(value)) {
+								value.forEach((form) => {
+									const formAsObject = {
+										Form: form,
+										Lemma: lemmaWithForms.Lemma,
+										Keys: keys,
+									};
+									if (isPolysyllabicWithLightPenult(form)) {
+										if (
+											keys.includes('ne') ||
+											keys.includes('que') ||
+											keys.includes('ve')
+										) {
+											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
+											setOfFormsStressedOnPenult.add(form);
+											return;
+										}
+										const lemmaWithoutBrackets = removeBrackets(
+											lemmaWithForms.Lemma,
+										);
+										if (
+											(lemmaWithoutBrackets.endsWith('ius') ||
+												lemmaWithoutBrackets.endsWith('ium')) &&
+											form.endsWith('ī') &&
+											!form.endsWith('iī') &&
+											!form.endsWith('issimī')
+										) {
+											// console.log(
+											// 	'Is this a syncopated genitive or vocative from -ius/-ium?',
+											// 	form,
+											// 	lemmaWithForms.Lemma,
+											// );
+											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
+											setOfFormsStressedOnPenult.add(form);
+											return;
+										}
+									}
+
+									setOfOtherForms.add(form);
+									otherFormsAndTheirAddresses.push(formAsObject);
+								});
+								return;
+							}
+							traverseObject(value, keys);
+						});
+					}
+					traverseObject(lemmaWithForms.Forms, []);
+				}
+
+				sliceOfOutput.forEach((lemma) => {
+					convertFormsObjectIntoParsingsArray(lemma);
+				});
+
+				setOfFormsStressedOnPenult.forEach((formStressedOnPenult) => {
+					if (setOfOtherForms.has(formStressedOnPenult)) {
+						console.log('Form has ambiguous stress!', formStressedOnPenult);
+					} else {
+						// console.log(
+						// 	'Form does not have ambiguous stress',
+						// 	formStressedOnPenult,
+						// );
+					}
+				});
+
+				// console.log(allFormsAndTheirAddresses);
+				console.timeEnd('replacingFormsOfAmbiguousStress');
+			};
 
 			const divideIntoBatches = () => {
 				console.time('divideIntoBatches');
@@ -5360,6 +5466,7 @@ if (typeof require !== 'undefined') {
 
 			generateOutput();
 			divideIntoBatches();
+			replaceFormsOfAmbiguousStress();
 			mergeWithLemmataJson();
 			checkAgainstExpected();
 			generateSummaryFile();
