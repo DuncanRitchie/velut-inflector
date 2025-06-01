@@ -4475,9 +4475,9 @@ if (typeof require !== 'undefined') {
 		const inputLemmata = require(inputFileUrl);
 		//// Output data are generated in batches & each batch is written to a file.
 		//// This allows me to track the output in Git without tracking a huge file.
-		const getOutputFileUrlForBatch = (batchNumber) =>
-			// 	FOLDER_PATH + `words-from-inflector_with-ambiguous-stress_mongo_batch${batchNumber}.json`;
-			// const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
+		const outputFileUrlWithAmbiguousStress =
+			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress.json`;
+		const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
 			FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`;
 		const batchSize = 1_000;
 		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
@@ -4501,32 +4501,23 @@ if (typeof require !== 'undefined') {
 			let totalLemmata = 0;
 			let countNotChecked = 0;
 
-			const generateOutputAndSaveInBatches = () => {
+			const generateOutput = () => {
 				console.time('generatingOutput');
 
 				const output = convertInputToOutputData(inputLemmata);
+				const outputAsArray = Object.entries(output).map(([key, value]) => ({
+					Lemma: key,
+					Forms: value,
+				}));
 
-				//// Eg [1,2,3,4,5,6,7], 2 => [[1,2],[3,4],[5,6],[7]]
-				// from https://stackoverflow.com/a/54029307
-				const splitArrayIntoBatches = (array, size) =>
-					array.length > size
-						? [
-								array.slice(0, size),
-								...splitArrayIntoBatches(array.slice(size), size),
-						  ]
-						: [array];
-				const outputRowsBatched = splitArrayIntoBatches(output, batchSize);
+				fs.writeFileSync(
+					outputFileUrlWithAmbiguousStress,
+					JSON.stringify(outputAsArray, null, '\t'),
+				);
 
-				batchFilepaths = outputRowsBatched.map((batch, batchNumber) => {
-					const filepath = getOutputFileUrlForBatch(batchNumber);
-					fs.writeFileSync(filepath, JSON.stringify(batch, null, '\t'));
-					return filepath;
-				});
 				console.log(
 					'Output all data! See your file at ' +
-						outputFileUrl +
-						' or ' +
-						batchFilepaths,
+						outputFileUrlWithAmbiguousStress,
 				);
 
 				console.timeEnd('generatingOutput');
@@ -4544,20 +4535,46 @@ if (typeof require !== 'undefined') {
 			// 	console.timeEnd('replacingFormsOfAmbiguousStress');
 			// }
 
-			const concatenateBatches = () => {
-				console.time('concatenatingOutput');
+			const divideIntoBatches = () => {
+				console.time('divideIntoBatches');
 
-				const combinedOutput = {};
-				batchFilepaths.forEach((filename) => {
-					const outputBatch = require(filename);
-					Object.entries(outputBatch).forEach(
-						([lemma, parsingData]) => (combinedOutput[lemma] = parsingData),
-					);
+				//// Eg [1,2,3,4,5,6,7], 2 => [[1,2],[3,4],[5,6],[7]]
+				// from https://stackoverflow.com/a/54029307
+				const splitArrayIntoBatches = (array, size) =>
+					array.length > size
+						? [
+								array.slice(0, size),
+								...splitArrayIntoBatches(array.slice(size), size),
+						  ]
+						: [array];
+
+				const allOutput = require(outputFileUrlWithAmbiguousStress);
+
+				const batches = splitArrayIntoBatches(allOutput, batchSize);
+
+				batches.forEach((batch, index) => {
+					console.debug('Creating batch… ', index);
+					const batchUrl =
+						getOutputFileUrlForBatchAfterHandingAmbiguousStress(index);
+					batchFilepaths.push(batchUrl);
+
+					const batchAsObject = {};
+					batch.forEach((lemma) => (batchAsObject[lemma.Lemma] = lemma.Forms));
+
+					fs.writeFileSync(batchUrl, JSON.stringify(batchAsObject, null, '\t'));
 				});
 
-				fs.writeFileSync(outputFileUrl, JSON.stringify(combinedOutput));
+				// const combinedOutput = {};
+				// batchFilepaths.forEach((filename) => {
+				// 	const outputBatch = require(filename);
+				// 	Object.entries(outputBatch).forEach(
+				// 		([lemma, parsingData]) => (combinedOutput[lemma] = parsingData),
+				// 	);
+				// });
 
-				console.timeEnd('concatenatingOutput');
+				// fs.writeFileSync(outputFileUrl, JSON.stringify(combinedOutput));
+
+				console.timeEnd('divideIntoBatches');
 			};
 
 			const mergeWithLemmataJson = () => {
@@ -5341,8 +5358,8 @@ if (typeof require !== 'undefined') {
 				console.timeEnd('generatingSummaryFile');
 			};
 
-			generateOutputAndSaveInBatches();
-			// concatenateBatches();
+			generateOutput();
+			divideIntoBatches();
 			mergeWithLemmataJson();
 			checkAgainstExpected();
 			generateSummaryFile();
