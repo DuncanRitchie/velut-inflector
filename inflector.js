@@ -4477,6 +4477,8 @@ if (typeof require !== 'undefined') {
 		//// This allows me to track the output in Git without tracking a huge file.
 		const outputFileUrlWithAmbiguousStress =
 			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress.json`;
+		const outputFileUrlWithAmbiguousStressHandled =
+			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress-handled.json`;
 		const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
 			FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`;
 		const batchSize = 1_000;
@@ -4535,14 +4537,14 @@ if (typeof require !== 'undefined') {
 
 				const sliceOfOutput = allOutput;
 				// .slice(0, 3000);
+				function deleteLastSyllable(word) {
+					return word.replace(
+						/([bcdfglmnprstv]|ch|ph|qu|th|((bcdfgkpt)[lr]))?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
+						'',
+					);
+				}
 
 				function isPolysyllabicWithLightPenult(word) {
-					function deleteLastSyllable(word) {
-						return word.replace(
-							/([bcdfglmnprstv]|ch|ph|qu|th|((bcdfgkpt)[lr]))?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
-							'',
-						);
-					}
 					const wordWithoutUltima = deleteLastSyllable(word);
 					const hasHeavyPenult = /(ae|au|oe|[āēīōūȳbcdfgklmnprstvxz]|qu)$/.test(
 						wordWithoutUltima,
@@ -4552,7 +4554,8 @@ if (typeof require !== 'undefined') {
 					);
 					const hasMoreThanTwoSyllables =
 						hasMoreThanOneSyllable &&
-						/[aeiouyāēīōūȳ]/.test(deleteLastSyllable(wordWithoutUltima));
+						/[aeiouyāēīōūȳ]/.test(deleteLastSyllable(wordWithoutUltima)) &&
+						word !== 'cuique'; // cuique has 2 syllables because “ui” is a diphthong in this word.
 					const wordIsPolysyllabicWithLightPenult =
 						hasMoreThanTwoSyllables && !hasHeavyPenult;
 
@@ -4562,6 +4565,21 @@ if (typeof require !== 'undefined') {
 					// 	wordIsPolysyllabicWithLightPenult,
 					// );
 					return wordIsPolysyllabicWithLightPenult;
+				}
+
+				function addAcuteToPenult(word) {
+					const wordWithoutUltima = deleteLastSyllable(word);
+					const ultima = word.replace(wordWithoutUltima, '');
+					const wordWithoutPenultOrUltima =
+						deleteLastSyllable(wordWithoutUltima);
+					const penult = wordWithoutUltima.replace(
+						wordWithoutPenultOrUltima,
+						'',
+					);
+					const penultWithAcute = penult.replace(/[aeiouy]/, (vowel) =>
+						`${vowel}\u0301`.normalize('NFC'),
+					);
+					return wordWithoutPenultOrUltima + penultWithAcute + ultima;
 				}
 
 				function convertFormsObjectIntoParsingsArray(lemmaWithForms) {
@@ -4628,7 +4646,36 @@ if (typeof require !== 'undefined') {
 
 				setOfFormsStressedOnPenult.forEach((formStressedOnPenult) => {
 					if (setOfOtherForms.has(formStressedOnPenult)) {
-						console.log('Form has ambiguous stress!', formStressedOnPenult);
+						const formWithAcuteAdded = addAcuteToPenult(formStressedOnPenult);
+						console.log(
+							`Form has ambiguous stress! Disambiguating ${formStressedOnPenult} to ${formWithAcuteAdded}`,
+						);
+
+						formsStressedOnPenultAndTheirAddresses
+							.filter((formObject) => {
+								// console.debug(formObject);
+								return formObject && formObject.Form === formStressedOnPenult;
+							})
+							.forEach((address) => {
+								// console.log(address);
+								const lemmaInOutput = sliceOfOutput.find(
+									(lemmaObject) => lemmaObject.Lemma === address.Lemma,
+								);
+								let formsArrayInOutput = lemmaInOutput.Forms;
+								for (let i = 0; i < address.Keys.length; i++) {
+									// console.log(formsArrayInOutput);
+									formsArrayInOutput = formsArrayInOutput[address.Keys[i]];
+								}
+								// console.log(formsArrayInOutput);
+								// const arrayWithSubstitution =
+								formsArrayInOutput.splice(
+									formsArrayInOutput.indexOf(formStressedOnPenult),
+									1,
+									formWithAcuteAdded,
+								);
+								// console.log(arrayWithSubstitution);
+								// consoleLogAsJson(lemmaInOutput);
+							});
 					} else {
 						// console.log(
 						// 	'Form does not have ambiguous stress',
@@ -4638,6 +4685,10 @@ if (typeof require !== 'undefined') {
 				});
 
 				// console.log(allFormsAndTheirAddresses);
+				fs.writeFileSync(
+					outputFileUrlWithAmbiguousStressHandled,
+					JSON.stringify(sliceOfOutput, null, '\t'),
+				);
 				console.timeEnd('replacingFormsOfAmbiguousStress');
 			};
 
@@ -4654,7 +4705,7 @@ if (typeof require !== 'undefined') {
 						  ]
 						: [array];
 
-				const allOutput = require(outputFileUrlWithAmbiguousStress);
+				const allOutput = require(outputFileUrlWithAmbiguousStressHandled);
 
 				const batches = splitArrayIntoBatches(allOutput, batchSize);
 
