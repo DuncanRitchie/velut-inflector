@@ -4539,7 +4539,7 @@ if (typeof require !== 'undefined') {
 				// .slice(0, 3000);
 				function deleteLastSyllable(word) {
 					return word.replace(
-						/([bcdfglmnprstv]|ch|ph|qu|th|((bcdfgkpt)[lr]))?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
+						/(([bcdfgkpt][lr])|[bcdfglmnprstv]|ch|ph|qu|th)?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
 						'',
 					);
 				}
