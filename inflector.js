@@ -3,6 +3,7 @@
 //// It has a section at the end that only runs in Node.
 //// The Node-only section reads from a hardcoded filepath, writes to a second
 //// hardcoded filepath, and compares the output to a third hardcoded filepath.
+//// It also writes to other hardcoded filepaths in between.
 ////
 //// Contents:
 //// - Helper functions
@@ -14,6 +15,12 @@
 //// Helper functions
 ////
 
+/**
+ * When lemmata in velut are spelt the same, I include disambiguating information in square brackets, eg "amīcus[adj]" and "amīcus[n]" represent ‘amīcus’ the adjective and ‘amīcus’ the noun.
+ * This function removes the brackets if they exist.
+ * @param {string} lemma Eg "amīcus[n]"
+ * @returns Eg "amīcus"
+ */
 const removeBrackets = (lemma) => {
 	if (lemma.includes('[')) {
 		return lemma.substring(0, lemma.indexOf('['));
@@ -21,11 +28,25 @@ const removeBrackets = (lemma) => {
 	return lemma;
 };
 
-// This func works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
-// From https://stackoverflow.com/a/37511463
+/**
+ * Deletes macra, acutes, etc from text.
+ * This function works by “normalising” characters like "ā" to "a¯" then deleting the diacritic characters.
+ * From https://stackoverflow.com/a/37511463
+ * @param {string} text Eg "Tibérī"
+ * @returns Eg "Tiberi"
+ */
 const removeDiacritics = (text) =>
 	`${text}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
+/**
+ * In Latin, the enclitics -ne, -que, and -ve can be appended to almost any word.
+ * So if ‘amīcus’ exists, ‘amīcusne’, ‘amīcusque’, and ‘amīcusve’ also exist.
+ * This function replicates a forms object into four copies, with the enclitics added into the values of the last three copies.
+ * If the parameter already has "unencliticized", "ne", "que", or "ve" fields, it is returned without modification.
+ * @param {Object} parsingObject Eg {positive: ["amīcus"]}
+ * @param {boolean} addIAfterC Controls whether an epenthetic -i- is inserted between final -c and -ne, such as in ‘sīc’ => ‘sīcine’
+ * @returns An object with "unencliticized", "ne", "que", "ve" fields, such as {unencliticized: {positive: ["amīcus"]}}, ne: {positive: ["amīcusne"]}}, que: {positive: ["amīcusque"]}}, ve: {positive: ["amīcusve"]}}}
+ */
 const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 	if (
 		parsingObject.unencliticized ||
@@ -36,12 +57,19 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 		return parsingObject;
 	}
 
+	/**
+	 * Recursive local function that scans through an object, looking for strings to append the enclitic to.
+	 * @param {Object} object Eg {positive: ["amīcus"]}
+	 * @param {string} enclitic Eg "ne"
+	 * @returns Eg {positive: ["amīcusne"]}
+	 */
 	const addEnclitic = (object, enclitic) => {
 		try {
 			if (!object) {
 				console.warn(`parsingObject is ${object} in addEnclitic`);
 				return {};
 			}
+
 			if (Array.isArray(object)) {
 				return object
 					.filter((form) => /[aeiouyāēīōūȳ]/i.test(form)) // Forms with no vowels (eg ‘st') should not get an enclitic
@@ -53,17 +81,20 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 							return `${form}`;
 						}
 						if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
-							return removeAcutes(form) + 'i' + enclitic;
+							return removeAcutes(form) + 'i' + enclitic; // Eg "sīc" + "ne" => "sīcine"
 						}
 						return removeAcutes(form) + enclitic;
 					});
 			}
+
 			if (typeof object === 'string') {
 				console.error(`parsingObject is a string: ${object}`);
 				throw `parsingObject is a string: ${object}`;
 			}
+
+			// Convert the object into an array of keys and values, map over them adding the enclitic, then convert back into an object.
 			return Object.entries(object)
-				.filter(([key, obj]) => obj !== null && obj !== undefined)
+				.filter(([_, obj]) => obj !== null && obj !== undefined)
 				.map(([key, obj]) => [key, addEnclitic(obj, enclitic)])
 				.reduce((accumulated, current) => {
 					accumulated[current[0]] = current[1];
@@ -83,6 +114,13 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 	};
 };
 
+/**
+ * Returns an object without any of the keys that were included in `unwantedParsings`.
+ * This is recursive, so nested objects have their unwanted keys deleted too.
+ * @param {Object} formsObject Eg {singular: ["Anglia"], plural: ["Angliae"]}
+ * @param {string[]} unwantedParsings Eg ["plural"]
+ * @returns Eg {singular: ["Anglia"]}
+ */
 const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 	if (!unwantedParsings) {
 		return formsObject;
@@ -95,7 +133,7 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		return formsObject;
 	}
 	return Object.entries(formsObject)
-		.filter(([key, obj]) => !unwantedParsings.includes(key))
+		.filter(([key, _]) => !unwantedParsings.includes(key))
 		.map(([key, obj]) => [key, deleteUnwantedForms(obj, unwantedParsings)])
 		.reduce((accumulated, current) => {
 			accumulated[current[0]] = current[1];
@@ -103,13 +141,20 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 		}, {});
 };
 
+/**
+ * Creates an object by merging together two objects.
+ * Recursive, so nested objects get merged too.
+ * @param {Object} formsObject Eg {singular: ["dūce"], plural: ["dūcite"]}
+ * @param {Object} objectToMerge Eg {singular: ["dūc"]}
+ * @returns Eg {singular: ["dūce", "dūc"], plural: ["dūcite"]}
+ */
 //// This code is horrific but it seems to work.
-const mergeObjects = (formsObject, objectToMerge) => {
+const mergeTwoObjects = (formsObject, objectToMerge) => {
 	if (!objectToMerge) {
 		return formsObject;
 	}
 	if (!formsObject) {
-		console.warn(`formsObject is ${formsObject} inside mergeObjects`);
+		console.warn(`formsObject is ${formsObject} inside mergeTwoObjects`);
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
@@ -126,7 +171,7 @@ const mergeObjects = (formsObject, objectToMerge) => {
 	//// Take `formsObject` & merge properties with the same key in the two objects.
 	const objectWithSamePropertiesMerged = Object.entries(formsObject)
 		.filter(([key, obj]) => obj !== null && obj !== undefined)
-		.map(([key, obj]) => [key, mergeObjects(obj, objectToMerge[key])])
+		.map(([key, obj]) => [key, mergeTwoObjects(obj, objectToMerge[key])])
 		.reduce((accumulated, current) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
@@ -157,18 +202,32 @@ const mergeObjects = (formsObject, objectToMerge) => {
 	return objectWithSamePropertiesMerged;
 };
 
-const mergeMoreThanTwoObjects = (objects) => {
+/**
+ * Creates an object by merging together several objects.
+ * If only one object is given, that one object is returned.
+ * @param {Object[]} objects  Eg [{singular: ["dūce"]}, {singular: ["dūc"]}, {plural: ["dūcite"]}]
+ * @returns Eg {singular: ["dūce", "dūc"], plural: ["dūcite"]}
+ */
+const mergeObjects = (objects) => {
 	if (!objects || !objects.length) {
-		console.error('No objects in mergeMoreThanTwoObjects', objects);
+		console.error('No objects in mergeObjects', objects);
 		return {};
 	}
 	let merged = objects[0];
 	for (let i = 1; i < objects.length; i++) {
-		merged = mergeObjects(merged, objects[i]);
+		merged = mergeTwoObjects(merged, objects[i]);
 	}
 	return merged;
 };
 
+/**
+ * Creates an object by merging together two objects.
+ * Keys in `replacementObject` override matching keys in `formsObject`.
+ * Recursive, so nested objects get merged too.
+ * @param {Object} formsObject Eg {singular: ["dūce"], plural: ["dūcite"]}
+ * @param {Object} replacementObject Eg {singular: ["dūc"]}
+ * @returns Eg {singular: ["dūc"], plural: ["dūcite"]}
+ */
 const replaceFieldsInObjects = (formsObject, replacementObject) => {
 	if (!replacementObject) {
 		return formsObject;
@@ -219,7 +278,13 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 	return objectWithSamePropertiesReplaced;
 };
 
-// Eg, plērusque is a [1,2]-declension adjective with -que suffixed
+/**
+ * Relabels "que" forms as "unencliticized" and deletes other forms.
+ * Used on lemmata such as plērusque, which is a [1,2]-declension adjective with -que suffixed.
+ * @param {Object} formsObject Eg {que: ["plērusque"]}
+ * @param {boolean} lemmaHasQueEnding The function only changes the object if this is true.
+ * @returns Eg {unencliticized: ["plērusque"]}
+ */
 const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
 	if (!lemmaHasQueEnding) {
 		return formsObject;
@@ -245,6 +310,12 @@ const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
 	return newFormsObject;
 };
 
+/**
+ * Returns an object that is the parameter but without any values that are false, an empty array [], or an empty object {}.
+ * Recursive, so nested objects get deleted too.
+ * @param {Object} formsObject
+ * @returns
+ */
 const deleteEmptyFields = (formsObject) => {
 	if (!formsObject) {
 		console.warn(`formsObject is ${formsObject} inside deleteUnwantedForms`);
@@ -256,14 +327,20 @@ const deleteEmptyFields = (formsObject) => {
 	return Object.entries(formsObject)
 		.filter(([key, obj]) => obj)
 		.map(([key, obj]) => [key, deleteEmptyFields(obj)])
-		.filter(([key, obj]) => Object.values(obj).length)
+		.filter(([key, obj]) => Object.values(obj).length) // This deletes [] as well as {}.
 		.reduce((accumulated, current) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
 		}, {});
 };
 
-//// Returns formsObject but with lambda run on every form.
+/**
+ * Returns `formObject` but with `lambda` run on every form.
+ * The `lambda` function can return a string or string array.
+ * @param {Object} formsObject Eg {first: ["1ō"], second: ["1ās"], third: ["1at"]}
+ * @param {Function} lambda Eg (x => x.replace("1", "am"))
+ * @returns Eg {first: ["amō"], second: ["amās"], third: ["amat"]}
+ */
 const runLambdaOnObject = (formsObject, lambda) => {
 	if (!formsObject) {
 		console.warn(`formsObject is ${formsObject} inside runLambdaOnObject`);
@@ -280,6 +357,11 @@ const runLambdaOnObject = (formsObject, lambda) => {
 		}, {});
 };
 
+/**
+ * Stringifies each key of each parameter and logs the result.
+ * This makes the log more useful than [object Object].
+ * @param  {...any} args Eg {positive: ["amīcus"]}
+ */
 const consoleLogAsJson = (...args) => {
 	if (!Array.isArray(args)) {
 		'args is not array: ' + JSON.stringify(args);
@@ -293,24 +375,39 @@ const consoleLogAsJson = (...args) => {
 	console.log(object);
 };
 
+/**
+ * Removes acute accents from a string.
+ * @param {string} string Eg "Tibérī"
+ * @returns Eg "Tiberī"
+ */
 const removeAcutes = (string) => {
 	// NFD splits characters (eg á => a + \u0301, which is the combining acute accent).
 	// NFC merges characters back together.
 	return string.normalize('NFD').replaceAll('\u0301', '').normalize('NFC');
 };
 
+/**
+ * Wraps the parameter in an array if it isn’t an array already.
+ * @param {Array | any} possibleArray Eg "amīcus" or ["amīcus"]
+ * @returns Eg ["amīcus"]
+ */
 const ensureIsArray = (possibleArray) => {
 	return Array.isArray(possibleArray) ? possibleArray : [possibleArray];
 };
 
-//// Returns an array with all the values of `stems`
-//// concatenated with all the values of `endings`.
-//// Adds diaereses if needed so that 'Tana' + 'e' => 'Tanaë'
-//// but 'Tana' + 'em' => 'Tanaem'.
-//// (The velut Word Data Generator interprets final vowel+'m' as nasalised
-//// before it interprets 'ae'/'au'/'oe' as a diphthong, which means that
-//// non-diphthong 'ae'/'au'/'oe' doesn’t need the diaeresis if it’s before final 'm'.)
-//// `includeSyncopation` means returning syncopated forms such as 'amāsse' alongside 'amāvisse'.
+/**
+ * Returns an array with all the values of `stems`
+ * concatenated with all the values of `endings`.
+ * Adds diaereses if needed so that 'Tana' + 'e' => 'Tanaë'
+ * but 'Tana' + 'em' => 'Tanaem'.
+ * (The velut Word Data Generator interprets final vowel+'m' as nasalised
+ * before it interprets 'ae'/'au'/'oe' as a diphthong, which means that
+ * non-diphthong 'ae'/'au'/'oe' doesn’t need the diaeresis if it’s before final 'm'.)
+ * @param {string | string[]} stems Eg "amāv"
+ * @param {string | string[]} endings Eg ["ērunt", "ēre"]
+ * @param {boolean} includeSyncopation True to return syncopated forms such as 'amāsse' alongside 'amāvisse'.
+ * @returns Eg ["amāvērunt", "amāvēre"] without syncopation, or ["amāvērunt", "amāvēre", "amārunt"] with syncopation
+ */
 const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
@@ -547,7 +644,7 @@ function applyFieldsToForms(
 		allUnencliticizedForms,
 		rest.ReplacementForms,
 	);
-	const withExtraForms = mergeObjects(withReplacements, rest.ExtraForms);
+	const withExtraForms = mergeTwoObjects(withReplacements, rest.ExtraForms);
 	const withEnclitics = multiplyWithEnclitics(
 		withExtraForms,
 		addIAfterCBeforeEncliticNe,
@@ -556,7 +653,7 @@ function applyFieldsToForms(
 		withEnclitics,
 		rest.ReplacementEncliticizedForms,
 	);
-	const withExtraEncliticizedForms = mergeObjects(
+	const withExtraEncliticizedForms = mergeTwoObjects(
 		withReplacementEncliticizedForms,
 		rest.ExtraEncliticizedForms,
 	);
@@ -1604,7 +1701,7 @@ const inflectFuncs = {
 					thirdDeclForms[gender] = getThirdDeclensionNeuterForms();
 				}
 			});
-			forms = mergeObjects(forms, thirdDeclForms);
+			forms = mergeTwoObjects(forms, thirdDeclForms);
 		}
 		if (declensions.includes(1)) {
 			const firstDeclForms = {};
@@ -1621,7 +1718,7 @@ const inflectFuncs = {
 					);
 				}
 			});
-			forms = mergeObjects(forms, firstDeclForms);
+			forms = mergeTwoObjects(forms, firstDeclForms);
 		}
 		if (declensions.includes(2)) {
 			const secondDeclForms = {};
@@ -1635,7 +1732,7 @@ const inflectFuncs = {
 					secondDeclForms[gender] = getSecondDeclensionNeuterForms();
 				}
 			});
-			forms = mergeObjects(forms, secondDeclForms);
+			forms = mergeTwoObjects(forms, secondDeclForms);
 		}
 		if (declensions.includes(4)) {
 			const fourthDeclForms = {};
@@ -1649,13 +1746,13 @@ const inflectFuncs = {
 					fourthDeclForms[gender] = getFourthDeclensionNeuterForms();
 				}
 			});
-			forms = mergeObjects(forms, fourthDeclForms);
+			forms = mergeTwoObjects(forms, fourthDeclForms);
 		}
 		if (declensions.includes(3) && rest.IsGreekThirdDeclensionInOmega) {
 			const fourthDeclForms = {};
 			if (genders.length === 1 && genders.includes('feminine')) {
 				fourthDeclForms.feminine = getFourthDeclensionGreekForms();
-				forms = mergeObjects(forms, fourthDeclForms);
+				forms = mergeTwoObjects(forms, fourthDeclForms);
 			} else {
 				console.warn(
 					`Don’t know how to handle a Greek third-declension noun that’s not feminine-only: ${Lemma} ${genders}`,
@@ -1677,7 +1774,7 @@ const inflectFuncs = {
 					);
 				}
 			});
-			forms = mergeObjects(forms, fifthDeclForms);
+			forms = mergeTwoObjects(forms, fifthDeclForms);
 		}
 
 		if (JSON.stringify(forms) === '{}') {
@@ -2594,7 +2691,7 @@ const inflectFuncs = {
 				const hasReducedVowel = lemma.endsWith('ficiō');
 
 				const gerundVowels = rest.GerundVowels || ['e'];
-				const gerunds = mergeMoreThanTwoObjects(
+				const gerunds = mergeObjects(
 					gerundVowels.map(
 						(vowel) =>
 							inflectFuncs['Adjective']({
@@ -2603,7 +2700,7 @@ const inflectFuncs = {
 							}).unencliticized.positive.neuter.singular,
 					),
 				);
-				const gerundives = mergeMoreThanTwoObjects(
+				const gerundives = mergeObjects(
 					gerundVowels.map(
 						(vowel) =>
 							inflectFuncs['Adjective']({ Lemma: `faci${vowel}ndus` })
@@ -3174,7 +3271,7 @@ const inflectFuncs = {
 				};
 
 				if (rest.HasArchaicInfinitiveInIer) {
-					forms = mergeObjects(forms, {
+					forms = mergeTwoObjects(forms, {
 						infinitive: { passive: { present: ['1ārier'] } },
 					});
 				}
@@ -3492,7 +3589,7 @@ const inflectFuncs = {
 				};
 
 				if (rest.HasArchaicInfinitiveInIer) {
-					forms = mergeObjects(forms, {
+					forms = mergeTwoObjects(forms, {
 						infinitive: { passive: { present: ['1ērier'] } },
 					});
 				}
@@ -3818,7 +3915,7 @@ const inflectFuncs = {
 				};
 
 				if (rest.HasArchaicInfinitiveInIer) {
-					forms = mergeObjects(forms, {
+					forms = mergeTwoObjects(forms, {
 						infinitive: { passive: { present: ['2ier'] } },
 					});
 				}
@@ -4157,7 +4254,7 @@ const inflectFuncs = {
 				};
 
 				if (rest.HasArchaicInfinitiveInIer) {
-					forms = mergeObjects(forms, {
+					forms = mergeTwoObjects(forms, {
 						infinitive: { passive: { present: ['1īrier'] } },
 					});
 				}
@@ -5062,7 +5159,7 @@ if (typeof require !== 'undefined') {
 
 			// This function receives a verb’s Forms output and checks that it doesn’t contain any fields that won’t display on the velut website.
 			// Eg formsData.unencliticized.supine.ablative is okay, but formsData.unencliticized.supine.dative is not — dative supines don’t exist.
-			// (Only `unencliticized fields` are checked.)
+			// (Only `unencliticized` fields are checked.)
 			const checkVerbFormTags = (formsData) => {
 				if (!formsData) {
 					console.debug({ formsData });
