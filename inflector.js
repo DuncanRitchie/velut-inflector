@@ -406,7 +406,7 @@ const ensureIsArray = (possibleArray) => {
  * @param {string | string[]} stems Eg "amāv"
  * @param {string | string[]} endings Eg ["ērunt", "ēre"]
  * @param {boolean} includeSyncopation True to return syncopated forms such as 'amāsse' alongside 'amāvisse'.
- * @returns Eg ["amāvērunt", "amāvēre"] without syncopation, or ["amāvērunt", "amāvēre", "amārunt"] with syncopation
+ * @returns Eg ["amāvērunt", "amāvēre"] without syncopation, or ["amāvērunt", "amārunt", "amāvēre"] with syncopation
  */
 const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
@@ -421,18 +421,24 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 		includeSyncopation &&
 		stemsArray.some((s) => s.endsWith('īv')) &&
 		stemsArray.some((s) => s.endsWith('i'));
+
+	const joinStemToEndingIntermediate = (stem, ending) => {
+		if (includeIntermediateSyncopation) {
+			return [
+				stem + '~' + ending,
+				stem.replace(/īv$/, 'i') + '~' + ending,
+				stem + '~~' + ending,
+			];
+		}
+		if (includeSyncopation) {
+			return [stem + '~' + ending, stem + '~~' + ending];
+		}
+		return [stem + '~' + ending];
+	};
+
 	const notDeduped = stemsArray.flatMap((stem) => {
 		return endingsArray.flatMap((ending) => {
-			const stemsAndEndings = includeIntermediateSyncopation
-				? [
-						stem + '~' + ending,
-						stem.replace(/īv$/, 'i') + '~' + ending,
-						stem + '~~' + ending,
-				  ]
-				: includeSyncopation
-				? [stem + '~' + ending, stem + '~~' + ending]
-				: [stem + '~' + ending];
-			return stemsAndEndings.map((stemAndEnding) =>
+			return joinStemToEndingIntermediate(stem, ending).map((stemAndEnding) =>
 				stemAndEnding
 					.replace(/a~+e(?!m$)/, 'aë')
 					.replace(/a~+u(?!m$)/, 'aü')
