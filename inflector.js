@@ -411,59 +411,73 @@ const ensureIsArray = (possibleArray) => {
 const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
-	//// TO DO: Refactor!
+
 	//// If syncopation is allowed and the stems include -īv and -i,
 	//// resulting forms should be like audīvistī, audiistī, audīstī, in that order,
 	//// with the audīstī form (created by syncopating audīvistī) coming after audiistī.
-	//// I expect the -īv and -i stems to be the same (except for the -īv and -i),
-	//// but this isn’t yet being checked.
+	//// I’m calling this “intermediate syncopation”.
 	const includeIntermediateSyncopation =
 		includeSyncopation &&
 		stemsArray.some((s) => s.endsWith('īv')) &&
 		stemsArray.some((s) => s.endsWith('i'));
 
-	const joinStemToEndingIntermediate = (stem, ending) => {
-		if (includeIntermediateSyncopation) {
-			return [
-				stem + '~' + ending,
-				stem.replace(/īv$/, 'i') + '~' + ending,
-				stem + '~~' + ending,
-			];
-		}
-		if (includeSyncopation) {
-			return [stem + '~' + ending, stem + '~~' + ending];
-		}
-		return [stem + '~' + ending];
-	};
-
-	const notDeduped = stemsArray.flatMap((stem) => {
-		return endingsArray.flatMap((ending) => {
-			return joinStemToEndingIntermediate(stem, ending).map((stemAndEnding) =>
-				stemAndEnding
-					.replace(/a~+e(?!m$)/, 'aë')
-					.replace(/a~+u(?!m$)/, 'aü')
-					.replace(/o~+e(?!m$)/, 'oë')
-					// The + in the previous regexes probably isn’t necessary because no perfect stems end in 'a' or 'o'.
-					.replace(/āv~~er/, 'ār') // eg amāverō -> amārō
-					.replace(/āv~~ēr(?!e)/, 'ār') // eg amāvērunt should syncopate to amārunt but amāvēre should not syncopate to amāre
-					.replace(/āv~~is/, 'ās') // eg amāvisse, amāvistī -> amāsse, amāstī
-					.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
-					.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
-					.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
-					// I have not found any attestations of -īver- or -īvēr- contracting to -īr-, except sīrint in Plautus (https://latin.packhum.org/loc/119/4/8/3793-3800).
-					// If I find more attestations, I might uncomment the next two lines.
-					// .replace(/īv~~er/, 'īr') // eg lacessīverō -> lacessīrō
-					// .replace(/īv~~ēr(?!e)/, 'īr') // eg lacessīvērunt would syncopate to lacessīrunt but lacessīvēre would not syncopate to lacessīre
-					.replace(/īv~~is/, 'īs') // eg lacessīvisse, lacessīvistī -> lacessīsse, lacessīstī
-					.replace(/ōv~~er/, 'ōr') // eg mōverō -> mōrō
-					.replace(/ōv~~ēr(?!e)/, 'ōr') // eg mōvērunt should syncopate to mōrunt but mōvēre should not syncopate to mōre
-					.replace(/ōv~~is/, 'ōs') // eg mōvisse, mōvistī -> mōsse, mōstī
-					.replace(/~+/, ''),
+	if (includeIntermediateSyncopation) {
+		// Check that the -īv and -i stems to be the same (except for the -īv and -i)
+		const stemBeforeI = stemsArray
+			.find((s) => s.endsWith('īv'))
+			.replace(/īv$/, '');
+		const stemWithIv = stemBeforeI + 'īv';
+		const stemWithI = stemBeforeI + 'i';
+		if (!stemsArray.includes(stemWithI) || !stemsArray.includes(stemWithIv)) {
+			console.warn(
+				'stemsArray looks weird for intermediate syncopation',
+				stemsArray,
 			);
-		});
-	});
+		}
+	}
+
+	const formsWithoutDeduplication = stemsArray
+		.flatMap((stem) => {
+			//// In intermediary values here, ~ means the join between a stem and ending without syncopation (eg audīv~istī will produce audīvistī),
+			//// and ~~ means the join with syncopation (eg audīv~~istī will produce audīstī).
+			return endingsArray.flatMap((ending) => {
+				if (includeIntermediateSyncopation) {
+					return [
+						stem + '~' + ending,
+						stem.replace(/īv$/, 'i') + '~' + ending,
+						stem + '~~' + ending,
+					];
+				}
+				if (includeSyncopation) {
+					return [stem + '~' + ending, stem + '~~' + ending];
+				}
+				return [stem + '~' + ending];
+			});
+		})
+		.map((stemAndEnding) =>
+			stemAndEnding
+				.replace(/a~+e(?!m$)/, 'aë')
+				.replace(/a~+u(?!m$)/, 'aü')
+				.replace(/o~+e(?!m$)/, 'oë')
+				// The + in the previous regexes probably isn’t necessary because no perfect stems end in 'a' or 'o'.
+				.replace(/āv~~er/, 'ār') // eg amāverō -> amārō
+				.replace(/āv~~ēr(?!e)/, 'ār') // eg amāvērunt should syncopate to amārunt but amāvēre should not syncopate to amāre
+				.replace(/āv~~is/, 'ās') // eg amāvisse, amāvistī -> amāsse, amāstī
+				.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
+				.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
+				.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
+				// I have not found any attestations of -īver- or -īvēr- contracting to -īr-, except sīrint in Plautus (https://latin.packhum.org/loc/119/4/8/3793-3800).
+				// If I find more attestations, I might uncomment the next two lines.
+				// .replace(/īv~~er/, 'īr') // eg lacessīverō -> lacessīrō
+				// .replace(/īv~~ēr(?!e)/, 'īr') // eg lacessīvērunt would syncopate to lacessīrunt but lacessīvēre would not syncopate to lacessīre
+				.replace(/īv~~is/, 'īs') // eg lacessīvisse, lacessīvistī -> lacessīsse, lacessīstī
+				.replace(/ōv~~er/, 'ōr') // eg mōverō -> mōrō
+				.replace(/ōv~~ēr(?!e)/, 'ōr') // eg mōvērunt should syncopate to mōrunt but mōvēre should not syncopate to mōre
+				.replace(/ōv~~is/, 'ōs') // eg mōvisse, mōvistī -> mōsse, mōstī
+				.replace(/~+/, ''),
+		);
 	// Remove any duplicates.
-	return [...new Set(notDeduped)];
+	return [...new Set(formsWithoutDeduplication)];
 };
 
 const generateComparativeForms = (comparativeStems) => {
