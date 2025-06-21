@@ -987,7 +987,6 @@ const inflectFuncs = {
 			!hasThreeTerminations &&
 			stems.some((stem) => lemma !== stem + 'is' && lemma !== stem + 'ēs');
 
-		// console.log(`${lemma} ${hasIStem}`);
 		const comparativeStems =
 			rest.ComparativeStems || joinStemsToEndings(stems, 'i');
 		const superlativeStems =
@@ -1465,7 +1464,7 @@ const inflectFuncs = {
 			return false;
 		})();
 
-		const getThirdDeclensionNonNeuterForms = () => {
+		function getThirdDeclensionNonNeuterForms() {
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1492,8 +1491,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : [],
 				},
 			};
-		};
-		const getThirdDeclensionNeuterForms = () => {
+		}
+		function getThirdDeclensionNeuterForms() {
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1514,8 +1513,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : [],
 				},
 			};
-		};
-		const getFirstDeclensionNonNeuterForms = () => {
+		}
+		function getFirstDeclensionNonNeuterForms() {
 			const isGreekFirstDeclension = (() => {
 				if (
 					rest.IsGreekFirstDeclension === true ||
@@ -1556,8 +1555,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'īs') : [],
 				},
 			};
-		};
-		const getSecondDeclensionNonNeuterForms = () => {
+		}
+		function getSecondDeclensionNonNeuterForms() {
 			//// Note on vocatives for -ius nouns:
 			//// Proper nouns that end in -ius (& fīlius, genius) should have vocative masculine singular in -ī.
 			//// (Exceptions include some Greek names that have vocative masculine singular in iota epsilon in Greek.)
@@ -1601,8 +1600,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'īs') : [],
 				},
 			};
-		};
-		const getSecondDeclensionNeuterForms = () => {
+		}
+		function getSecondDeclensionNeuterForms() {
 			const regularGenSings = joinStemsToEndings(stems, 'ī');
 			const genSings = regularGenSings.flatMap((form) => {
 				if (form.endsWith('iī')) {
@@ -1630,8 +1629,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'īs') : [],
 				},
 			};
-		};
-		const getFourthDeclensionNonNeuterForms = () => {
+		}
+		function getFourthDeclensionNonNeuterForms() {
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1652,8 +1651,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : [],
 				},
 			};
-		};
-		const getFourthDeclensionNeuterForms = () => {
+		}
+		function getFourthDeclensionNeuterForms() {
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1674,8 +1673,8 @@ const inflectFuncs = {
 					locative: hasLocativePlural ? joinStemsToEndings(stems, 'ibus') : [],
 				},
 			};
-		};
-		const getFourthDeclensionGreekForms = () => {
+		}
+		function getFourthDeclensionGreekForms() {
 			// Eg Clīō, Ēchō, Sapphō
 			return {
 				singular: {
@@ -1687,8 +1686,8 @@ const inflectFuncs = {
 					ablative: [lemma],
 				},
 			};
-		};
-		const getFifthDeclensionNonNeuterForms = () => {
+		}
+		function getFifthDeclensionNonNeuterForms() {
 			return {
 				singular: {
 					nominative: [lemma],
@@ -1707,7 +1706,7 @@ const inflectFuncs = {
 					ablative: joinStemsToEndings(stems, 'ēbus'),
 				},
 			};
-		};
+		}
 
 		if (declensions.includes(3) && !rest.IsGreekThirdDeclensionInOmega) {
 			const thirdDeclForms = {};
@@ -4501,7 +4500,9 @@ let outputAsObject = {};
 
 const validPartsOfSpeech = Object.keys(inflectFuncs);
 
-const clearOutputObject = () => (outputAsObject = {});
+function clearOutputObject() {
+	return (outputAsObject = {});
+}
 
 const convertInputToOutputData = (lemmata) => {
 	clearOutputObject(); // Clear the output in case there’s anything from previous runs.
@@ -4563,7 +4564,7 @@ const convertInputToOutputData = (lemmata) => {
 if (typeof require !== 'undefined') {
 	const fs = require('fs');
 
-	const runAllWords = () => {
+	function runAllWords() {
 		const FOLDER_PATH =
 			'C:/Users/Duncan Ritchie/Documents/Code/velut/velutSideAssets/Json/';
 
@@ -4578,7 +4579,7 @@ if (typeof require !== 'undefined') {
 			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress-handled.json`;
 		const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
 			FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`;
-		const batchSize = 1_000;
+		const batchSize = 1000;
 		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
 		const outputFileUrl = FOLDER_PATH + 'words-from-inflector_mongo.json';
 		//// The output from the Inflector is also merged into the input lemmata data, for Git to ignore and me to import to MongoDB.
@@ -4600,7 +4601,7 @@ if (typeof require !== 'undefined') {
 			let totalLemmata = 0;
 			let countNotChecked = 0;
 
-			const generateOutput = () => {
+			function generateOutput() {
 				console.time('generatingOutput');
 
 				const output = convertInputToOutputData(inputLemmata);
@@ -4620,9 +4621,9 @@ if (typeof require !== 'undefined') {
 				);
 
 				console.timeEnd('generatingOutput');
-			};
+			}
 
-			const replaceFormsOfAmbiguousStress = () => {
+			function replaceFormsOfAmbiguousStress() {
 				console.time('replacingFormsOfAmbiguousStress');
 
 				const allOutput = require(outputFileUrlWithAmbiguousStress);
@@ -4787,9 +4788,9 @@ if (typeof require !== 'undefined') {
 					JSON.stringify(sliceOfOutput, null, '\t'),
 				);
 				console.timeEnd('replacingFormsOfAmbiguousStress');
-			};
+			}
 
-			const divideIntoBatches = () => {
+			function divideIntoBatches() {
 				console.time('divideIntoBatches');
 
 				//// Eg [1,2,3,4,5,6,7], 2 => [[1,2],[3,4],[5,6],[7]]
@@ -4825,13 +4826,11 @@ if (typeof require !== 'undefined') {
 				// 		([lemma, parsingData]) => (combinedOutput[lemma] = parsingData),
 				// 	);
 				// });
-
 				// fs.writeFileSync(outputFileUrl, JSON.stringify(combinedOutput));
-
 				console.timeEnd('divideIntoBatches');
-			};
+			}
 
-			const mergeWithLemmataJson = () => {
+			function mergeWithLemmataJson() {
 				console.time('mergeWithLemmataJson');
 
 				const combinedLemmataDataAsObject = {};
@@ -4912,9 +4911,9 @@ if (typeof require !== 'undefined') {
 				fs.writeFileSync(combinedOutputFileUrl, combinedLemmataDataForMongo);
 
 				console.timeEnd('mergeWithLemmataJson');
-			};
+			}
 
-			const checkAgainstExpected = () => {
+			function checkAgainstExpected() {
 				console.time('checkingOutput');
 
 				successCount = 0;
@@ -4925,7 +4924,6 @@ if (typeof require !== 'undefined') {
 				const expectedOutput = require(expectedOutputFileUrl);
 
 				// const totalLemmata = outputEntries.length;
-
 				batchFilepaths.forEach((filename) => {
 					const outputBatch = require(filename);
 					const outputEntries = Object.entries(outputBatch);
@@ -4959,7 +4957,6 @@ if (typeof require !== 'undefined') {
 
 								const lemmasExpectedOutput = [...expectedOutput[lemmaToTest]];
 								// console.debug(lemma);
-
 								let didIfStatementsMatch = true;
 								if (lemmasExpectedOutput.some((form) => form.endsWith('āns'))) {
 									shouldLog &&
@@ -5159,7 +5156,6 @@ if (typeof require !== 'undefined') {
 				// Loop over the output forms objects (again), this time looking for properties that won’t display on the velut website.
 				// (The website won’t display any verb forms other than a set list of parsings.
 				// Forms of non-verbs don’t need to be checked here because the website displays them separately.)
-
 				console.time('checkingVerbFormTags');
 
 				batchFilepaths.forEach((filename) => {
@@ -5175,7 +5171,7 @@ if (typeof require !== 'undefined') {
 				});
 
 				console.timeEnd('checkingVerbFormTags');
-			};
+			}
 
 			// This function receives a verb’s Forms output and checks that it doesn’t contain any fields that won’t display on the velut website.
 			// Eg formsData.unencliticized.supine.ablative is okay, but formsData.unencliticized.supine.dative is not — dative supines don’t exist.
@@ -5532,7 +5528,7 @@ if (typeof require !== 'undefined') {
 				}
 			};
 
-			const generateSummaryFile = () => {
+			function generateSummaryFile() {
 				console.time('generatingSummaryFile');
 
 				const lastUpdatedDate = new Date().toISOString();
@@ -5602,11 +5598,11 @@ if (typeof require !== 'undefined') {
 
 				fs.writeFileSync(
 					summaryFileUrl,
-					JSON.stringify(summaryObject, null, 2) + '\n', // Pretty-printing & the extra newline aren’t technically necessary, but they make Git diffs nicer.
+					JSON.stringify(summaryObject, null, 2) + '\n',
 				);
 
 				console.timeEnd('generatingSummaryFile');
-			};
+			}
 
 			generateOutput();
 			replaceFormsOfAmbiguousStress();
@@ -5617,7 +5613,7 @@ if (typeof require !== 'undefined') {
 		} catch (err) {
 			console.error(err);
 		}
-	};
+	}
 
 	runAllWords();
 }
