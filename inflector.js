@@ -1868,6 +1868,8 @@ const inflectFuncs = {
 				console.warn('No Conjugations given for ' + Lemma);
 			}
 
+			const isDeponent = lemma.endsWith('or');
+
 			if (rest.Conjugations?.includes('sum')) {
 				const prefix = lemma.replace(/sum$/, '');
 				forms = {
@@ -3008,8 +3010,6 @@ const inflectFuncs = {
 						),
 				);
 			}
-
-			const isDeponent = lemma.endsWith('or');
 
 			if (rest.Conjugations?.includes(1) || rest.Conjugations?.includes('dō')) {
 				const presentStem = lemma.replace(/(ō|or|at)$/, ''); // Replaces 1 in forms below.
