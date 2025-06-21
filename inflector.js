@@ -21,12 +21,12 @@
  * @param {string} lemma Eg "amīcus[n]"
  * @returns Eg "amīcus"
  */
-const removeBrackets = (lemma) => {
+function removeBrackets(lemma) {
 	if (lemma.includes('[')) {
 		return lemma.substring(0, lemma.indexOf('['));
 	}
 	return lemma;
-};
+}
 
 /**
  * Deletes macra, acutes, etc from text.
@@ -35,8 +35,9 @@ const removeBrackets = (lemma) => {
  * @param {string} text Eg "Tibérī"
  * @returns Eg "Tiberi"
  */
-const removeDiacritics = (text) =>
-	`${text}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function removeDiacritics(text) {
+	return `${text}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
 /**
  * In Latin, the enclitics -ne, -que, and -ve can be appended to almost any word.
@@ -47,7 +48,7 @@ const removeDiacritics = (text) =>
  * @param {boolean} addIAfterC Controls whether an epenthetic -i- is inserted between final -c and -ne, such as in ‘sīc’ => ‘sīcine’
  * @returns An object with "unencliticized", "ne", "que", "ve" fields, such as {unencliticized: {positive: ["amīcus"]}}, ne: {positive: ["amīcusne"]}}, que: {positive: ["amīcusque"]}}, ve: {positive: ["amīcusve"]}}}
  */
-const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
+function multiplyWithEnclitics(parsingObject, addIAfterC = false) {
 	if (
 		parsingObject.unencliticized ||
 		parsingObject.ne ||
@@ -63,7 +64,7 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 	 * @param {string} enclitic Eg "ne"
 	 * @returns Eg {positive: ["amīcusne"]}
 	 */
-	const addEnclitic = (object, enclitic) => {
+	function addEnclitic(object, enclitic) {
 		try {
 			if (!object) {
 				console.warn(`parsingObject is ${object} in addEnclitic`);
@@ -104,7 +105,7 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 			console.error(`Error in addEnclitics(${object}): ${error}`);
 			return {};
 		}
-	};
+	}
 
 	return {
 		unencliticized: parsingObject,
@@ -112,7 +113,7 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
 		que: addEnclitic(parsingObject, 'que'),
 		ve: addEnclitic(parsingObject, 've'),
 	};
-};
+}
 
 /**
  * Returns an object without any of the keys that were included in `unwantedParsings`.
@@ -121,7 +122,7 @@ const multiplyWithEnclitics = (parsingObject, addIAfterC = false) => {
  * @param {string[]} unwantedParsings Eg ["plural"]
  * @returns Eg {singular: ["Anglia"]}
  */
-const deleteUnwantedForms = (formsObject, unwantedParsings) => {
+function deleteUnwantedForms(formsObject, unwantedParsings) {
 	if (!unwantedParsings) {
 		return formsObject;
 	}
@@ -139,7 +140,7 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
 		}, {});
-};
+}
 
 /**
  * Creates an object by merging together two objects.
@@ -149,7 +150,7 @@ const deleteUnwantedForms = (formsObject, unwantedParsings) => {
  * @returns Eg {singular: ["dūce", "dūc"], plural: ["dūcite"]}
  */
 //// This code is horrific but it seems to work.
-const mergeTwoObjects = (formsObject, objectToMerge) => {
+function mergeTwoObjects(formsObject, objectToMerge) {
 	if (!objectToMerge) {
 		return formsObject;
 	}
@@ -200,7 +201,7 @@ const mergeTwoObjects = (formsObject, objectToMerge) => {
 		return finallyMerged;
 	}
 	return objectWithSamePropertiesMerged;
-};
+}
 
 /**
  * Creates an object by merging together several objects.
@@ -208,7 +209,7 @@ const mergeTwoObjects = (formsObject, objectToMerge) => {
  * @param {Object[]} objects  Eg [{singular: ["dūce"]}, {singular: ["dūc"]}, {plural: ["dūcite"]}]
  * @returns Eg {singular: ["dūce", "dūc"], plural: ["dūcite"]}
  */
-const mergeObjects = (objects) => {
+function mergeObjects(objects) {
 	if (!objects || !objects.length) {
 		console.error('No objects in mergeObjects', objects);
 		return {};
@@ -218,7 +219,7 @@ const mergeObjects = (objects) => {
 		merged = mergeTwoObjects(merged, objects[i]);
 	}
 	return merged;
-};
+}
 
 /**
  * Creates an object by merging together two objects.
@@ -228,7 +229,7 @@ const mergeObjects = (objects) => {
  * @param {Object} replacementObject Eg {singular: ["dūc"]}
  * @returns Eg {singular: ["dūc"], plural: ["dūcite"]}
  */
-const replaceFieldsInObjects = (formsObject, replacementObject) => {
+function replaceFieldsInObjects(formsObject, replacementObject) {
 	if (!replacementObject) {
 		return formsObject;
 	}
@@ -276,7 +277,7 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
 			}, objectWithSamePropertiesReplaced);
 	}
 	return objectWithSamePropertiesReplaced;
-};
+}
 
 /**
  * Relabels "que" forms as "unencliticized" and deletes other forms.
@@ -285,7 +286,7 @@ const replaceFieldsInObjects = (formsObject, replacementObject) => {
  * @param {boolean} lemmaHasQueEnding The function only changes the object if this is true.
  * @returns Eg {unencliticized: ["plērusque"]}
  */
-const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
+function markQueAsUnencliticized(formsObject, lemmaHasQueEnding = false) {
 	if (!lemmaHasQueEnding) {
 		return formsObject;
 	}
@@ -308,7 +309,7 @@ const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
 	newFormsObject.unencliticized = newFormsObject.que;
 	delete newFormsObject.que;
 	return newFormsObject;
-};
+}
 
 /**
  * Returns an object that is the parameter but without any values that are false, an empty array [], or an empty object {}.
@@ -316,7 +317,7 @@ const markQueAsUnencliticized = (formsObject, lemmaHasQueEnding = false) => {
  * @param {Object} formsObject
  * @returns
  */
-const deleteEmptyFields = (formsObject) => {
+function deleteEmptyFields(formsObject) {
 	if (!formsObject) {
 		console.warn(`formsObject is ${formsObject} inside deleteUnwantedForms`);
 		return {};
@@ -332,7 +333,7 @@ const deleteEmptyFields = (formsObject) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
 		}, {});
-};
+}
 
 /**
  * Returns `formObject` but with `lambda` run on every form.
@@ -341,7 +342,7 @@ const deleteEmptyFields = (formsObject) => {
  * @param {Function} lambda Eg (x => x.replace("1", "am"))
  * @returns Eg {first: ["amō"], second: ["amās"], third: ["amat"]}
  */
-const runLambdaOnObject = (formsObject, lambda) => {
+function runLambdaOnObject(formsObject, lambda) {
 	if (!formsObject) {
 		console.warn(`formsObject is ${formsObject} inside runLambdaOnObject`);
 		return {};
@@ -355,14 +356,14 @@ const runLambdaOnObject = (formsObject, lambda) => {
 			accumulated[current[0]] = current[1];
 			return accumulated;
 		}, {});
-};
+}
 
 /**
  * Stringifies each key of each parameter and logs the result.
  * This makes the log more useful than [object Object].
  * @param  {...any} args Eg {positive: ["amīcus"]}
  */
-const consoleLogAsJson = (...args) => {
+function consoleLogAsJson(...args) {
 	if (!Array.isArray(args)) {
 		'args is not array: ' + JSON.stringify(args);
 	}
@@ -373,27 +374,27 @@ const consoleLogAsJson = (...args) => {
 		});
 	});
 	console.log(object);
-};
+}
 
 /**
  * Removes acute accents from a string.
  * @param {string} string Eg "Tibérī"
  * @returns Eg "Tiberī"
  */
-const removeAcutes = (string) => {
+function removeAcutes(string) {
 	// NFD splits characters (eg á => a + \u0301, which is the combining acute accent).
 	// NFC merges characters back together.
 	return string.normalize('NFD').replaceAll('\u0301', '').normalize('NFC');
-};
+}
 
 /**
  * Wraps the parameter in an array if it isn’t an array already.
  * @param {Array | any} possibleArray Eg "amīcus" or ["amīcus"]
  * @returns Eg ["amīcus"]
  */
-const ensureIsArray = (possibleArray) => {
+function ensureIsArray(possibleArray) {
 	return Array.isArray(possibleArray) ? possibleArray : [possibleArray];
-};
+}
 
 /**
  * Returns an array with all the values of `stems`
@@ -408,7 +409,7 @@ const ensureIsArray = (possibleArray) => {
  * @param {boolean} includeSyncopation True to return syncopated forms such as 'amāsse' alongside 'amāvisse'.
  * @returns Eg ["amāvērunt", "amāvēre"] without syncopation, or ["amāvērunt", "amārunt", "amāvēre"] with syncopation
  */
-const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
+function joinStemsToEndings(stems, endings, includeSyncopation = false) {
 	const stemsArray = ensureIsArray(stems);
 	const endingsArray = ensureIsArray(endings);
 
@@ -466,6 +467,7 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 				.replace(/ēv~~er/, 'ēr') // eg complēverō -> complērō
 				.replace(/ēv~~ēr(?!e)/, 'ēr') // eg complēvērunt should syncopate to complērunt but complēvēre should not syncopate to complēre
 				.replace(/ēv~~is/, 'ēs') // eg complēvisse, complēvistī -> complēsse, complēstī
+
 				// I have not found any attestations of -īver- or -īvēr- contracting to -īr-, except sīrint in Plautus (https://latin.packhum.org/loc/119/4/8/3793-3800).
 				// If I find more attestations, I might uncomment the next two lines.
 				// .replace(/īv~~er/, 'īr') // eg lacessīverō -> lacessīrō
@@ -478,9 +480,9 @@ const joinStemsToEndings = (stems, endings, includeSyncopation = false) => {
 		);
 	// Remove any duplicates.
 	return [...new Set(formsWithoutDeduplication)];
-};
+}
 
-const generateComparativeForms = (comparativeStems) => {
+function generateComparativeForms(comparativeStems) {
 	return {
 		masculine: {
 			singular: {
@@ -537,9 +539,9 @@ const generateComparativeForms = (comparativeStems) => {
 			},
 		},
 	};
-};
+}
 
-const generateSuperlativeForms = (superlativeStems) => {
+function generateSuperlativeForms(superlativeStems) {
 	return {
 		masculine: {
 			singular: {
@@ -596,7 +598,7 @@ const generateSuperlativeForms = (superlativeStems) => {
 			},
 		},
 	};
-};
+}
 
 // This should receive the `forms` object of intransitive verbs,
 // to clear out passive non-impersonal forms.
@@ -1345,7 +1347,7 @@ const inflectFuncs = {
 		}
 
 		const assumedStem = (() => {
-			const getAssumedStem = (tuples) => {
+			function getAssumedStem(tuples) {
 				for (let tuple of tuples) {
 					const [regex, ending] = tuple;
 					if (regex.test(lemma)) {
@@ -1353,7 +1355,7 @@ const inflectFuncs = {
 					}
 				}
 				return lemma;
-			};
+			}
 
 			const thirdDeclLemmaSuffixesAndOblique = [
 				[/al$/, 'āl'],
@@ -4418,7 +4420,7 @@ const inflectFuncs = {
 	},
 };
 
-const convertParsingObjectToFormsArray = (parsingObject) => {
+function convertParsingObjectToFormsArray(parsingObject) {
 	if (!parsingObject) {
 		console.warn(
 			`parsingObject is ${parsingObject} in convertParsingObjectToFormsArray`,
@@ -4436,10 +4438,10 @@ const convertParsingObjectToFormsArray = (parsingObject) => {
 			// .filter(object => object !== null && object !== undefined)
 			.flatMap((object) => convertParsingObjectToFormsArray(object))
 	);
-};
-const convertParsingObjectToFormsSet = (parsingObject) => {
+}
+function convertParsingObjectToFormsSet(parsingObject) {
 	return new Set(convertParsingObjectToFormsArray(parsingObject));
-};
+}
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#implementing_basic_set_operations
 function isSuperset(set, subset) {
 	for (const elem of subset) {
@@ -4504,7 +4506,7 @@ function clearOutputObject() {
 	return (outputAsObject = {});
 }
 
-const convertInputToOutputData = (lemmata) => {
+function convertInputToOutputData(lemmata) {
 	clearOutputObject(); // Clear the output in case there’s anything from previous runs.
 	const countRows = lemmata.length;
 
@@ -4554,7 +4556,7 @@ const convertInputToOutputData = (lemmata) => {
 		}
 	}
 	return outputAsObject;
-};
+}
 
 ////
 //// Code that only runs in Node:
@@ -4577,8 +4579,11 @@ if (typeof require !== 'undefined') {
 			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress.json`;
 		const outputFileUrlWithAmbiguousStressHandled =
 			FOLDER_PATH + `words-from-inflector_with-ambiguous-stress-handled.json`;
-		const getOutputFileUrlForBatchAfterHandingAmbiguousStress = (batchNumber) =>
-			FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`;
+		function getOutputFileUrlForBatchAfterHandingAmbiguousStress(batchNumber) {
+			return (
+				FOLDER_PATH + `words-from-inflector_mongo_batch${batchNumber}.json`
+			);
+		}
 		const batchSize = 1000;
 		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
 		const outputFileUrl = FOLDER_PATH + 'words-from-inflector_mongo.json';
@@ -4795,13 +4800,14 @@ if (typeof require !== 'undefined') {
 
 				//// Eg [1,2,3,4,5,6,7], 2 => [[1,2],[3,4],[5,6],[7]]
 				// from https://stackoverflow.com/a/54029307
-				const splitArrayIntoBatches = (array, size) =>
-					array.length > size
+				function splitArrayIntoBatches(array, size) {
+					return array.length > size
 						? [
 								array.slice(0, size),
 								...splitArrayIntoBatches(array.slice(size), size),
 						  ]
 						: [array];
+				}
 
 				const allOutput = require(outputFileUrlWithAmbiguousStressHandled);
 
@@ -5176,7 +5182,7 @@ if (typeof require !== 'undefined') {
 			// This function receives a verb’s Forms output and checks that it doesn’t contain any fields that won’t display on the velut website.
 			// Eg formsData.unencliticized.supine.ablative is okay, but formsData.unencliticized.supine.dative is not — dative supines don’t exist.
 			// (Only `unencliticized` fields are checked.)
-			const checkVerbFormTags = (formsData) => {
+			function checkVerbFormTags(formsData) {
 				if (!formsData) {
 					console.debug({ formsData });
 					return;
@@ -5503,7 +5509,7 @@ if (typeof require !== 'undefined') {
 				// Eg if the array is ['infinitive','active','present']
 				// formsObject.infinitive.active.present will be set to null.
 				// The `deleteEmptyForms` function will then delete all the null and empty-object properties.
-				const deleteForm = (formsObject, keysArray) => {
+				function deleteForm(formsObject, keysArray) {
 					if (keysArray.length === 1) {
 						formsObject[keysArray[0]] = null;
 						return;
@@ -5511,7 +5517,7 @@ if (typeof require !== 'undefined') {
 					if (formsObject[keysArray[0]]) {
 						deleteForm(formsObject[keysArray[0]], keysArray.slice(1));
 					}
-				};
+				}
 
 				classNames.forEach((className) => {
 					const classesArray = className.split(' ');
@@ -5526,7 +5532,7 @@ if (typeof require !== 'undefined') {
 				if (JSON.stringify(forms) !== '{}') {
 					consoleLogAsJson(forms);
 				}
-			};
+			}
 
 			function generateSummaryFile() {
 				console.time('generatingSummaryFile');
