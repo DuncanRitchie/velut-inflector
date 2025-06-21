@@ -1847,7 +1847,6 @@ const inflectFuncs = {
 				rest.Meanings,
 			)
 		) {
-			// console.log("Perhaps a locative should be given for " + Lemma + ": " + rest.Meanings);
 			console.log('Perhaps a locative should be given for ' + Lemma);
 		}
 
@@ -4407,14 +4406,7 @@ const inflectFuncs = {
 			}
 		}
 
-		//  if (rest["20230115"] && rest.Conjugations?.includes(1)) {
-		// 	console.log(`Conjugations ${rest.Conjugations} for ${Lemma}`);
-		//  }
-
 		forms = applyFieldsToForms(forms, rest);
-		// if (lemma === 'lavō') {
-		// 	consoleLogAsJson(forms);
-		// }
 
 		return forms;
 	},
@@ -4433,10 +4425,8 @@ function convertParsingObjectToFormsArray(parsingObject) {
 	if (typeof parsingObject === 'string') {
 		console.warn(`parsingObject is a string: ${parsingObject}`);
 	}
-	return (
-		Object.values(parsingObject)
-			// .filter(object => object !== null && object !== undefined)
-			.flatMap((object) => convertParsingObjectToFormsArray(object))
+	return Object.values(parsingObject).flatMap((object) =>
+		convertParsingObjectToFormsArray(object),
 	);
 }
 function convertParsingObjectToFormsSet(parsingObject) {
