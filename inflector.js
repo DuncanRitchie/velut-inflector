@@ -59,52 +59,22 @@ function multiplyWithEnclitics(parsingObject, addIAfterC = false) {
 	}
 
 	/**
-	 * Recursive local function that scans through an object, looking for strings to append the enclitic to.
+	 * Local function that scans through an object, looking for strings to append the enclitic to.
 	 * @param {Object} object Eg {positive: ["amīcus"]}
 	 * @param {string} enclitic Eg "ne"
 	 * @returns Eg {positive: ["amīcusne"]}
 	 */
-	function addEnclitic(object, enclitic) {
-		try {
-			if (!object) {
-				console.warn(`parsingObject is ${object} in addEnclitic`);
-				return {};
+	function addEnclitic(forms, enclitic) {
+		return runLambdaOnObject(forms, (f) => {
+			if (!/[aeiouyāēīōūȳ]/i.test(f)) {
+				// Forms with no vowels (eg ‘st') should not get an enclitic)
+				return;
 			}
-
-			if (Array.isArray(object)) {
-				return object
-					.filter((form) => /[aeiouyāēīōūȳ]/i.test(form)) // Forms with no vowels (eg ‘st') should not get an enclitic
-					.map((form) => {
-						if (typeof form !== 'string') {
-							console.warn(
-								`Form ${form} is not a string but of type ${typeof form}`,
-							);
-							return `${form}`;
-						}
-						if (form.endsWith('c') && addIAfterC && enclitic === 'ne') {
-							return removeAcutes(form) + 'i' + enclitic; // Eg "sīc" + "ne" => "sīcine"
-						}
-						return removeAcutes(form) + enclitic;
-					});
+			if (addIAfterC && f.endsWith('c') && enclitic === 'ne') {
+				return removeAcutes(f) + 'i' + enclitic;
 			}
-
-			if (typeof object === 'string') {
-				console.error(`parsingObject is a string: ${object}`);
-				throw `parsingObject is a string: ${object}`;
-			}
-
-			// Convert the object into an array of keys and values, map over them adding the enclitic, then convert back into an object.
-			return Object.entries(object)
-				.filter(([_, obj]) => obj !== null && obj !== undefined)
-				.map(([key, obj]) => [key, addEnclitic(obj, enclitic)])
-				.reduce((accumulated, current) => {
-					accumulated[current[0]] = current[1];
-					return accumulated;
-				}, {});
-		} catch (error) {
-			console.error(`Error in addEnclitics(${object}): ${error}`);
-			return {};
-		}
+			return removeAcutes(f) + enclitic;
+		});
 	}
 
 	return {
@@ -323,7 +293,7 @@ function deleteEmptyFields(formsObject) {
 		return {};
 	}
 	if (Array.isArray(formsObject)) {
-		return formsObject;
+		return formsObject.filter(Boolean); // Removes null etc from arrays.
 	}
 	return Object.entries(formsObject)
 		.filter(([key, obj]) => obj)
