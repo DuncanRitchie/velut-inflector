@@ -167,6 +167,7 @@
 					<p>
 						Object of forms to use instead of anything the Inflector would generate itself.
 						But if the object does not have <code>"unencliticized"</code> (or <code>"ne"</code> or <code>"que"</code> or <code>"ve"</code>) as a field at root, encliticized forms will be generated from anything in the <code>"Forms"</code> object.
+						(However, enclitics are not added for interjections, conjunctions that lack <samp>"Forms": true</samp>, and anything with <samp>"ParsingsToExclude": ["ne", "que", "ve"]</samp>.)
 					</p>
 				</dd>
 
@@ -182,7 +183,7 @@
 				<dt><code>"GerundVowels"</code></dt>
 				<dd>
 					<p>
-						String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the 3rd or 4th conjugation.
+						String array of vowels to use before the “nd” in gerunds and gerundives for verbs of the 3rd, 4th, or <q lang="la">faciō</q> conjugation.
 						For example, the array is <samp>["e", "u"]</samp> for <q lang="la">gerō</q>, so the gerundive forms are <q lang="la">gerendus/gerundus</q> etc.
 						If this is not specified (or the verb is not of the 3rd or 4th conjugation), the default is <samp>["e"]</samp>.
 						The only lemmata that currently have this are <q lang="la">faciō</q> and <q lang="la">gerō</q>; curiously one of the few verbs in Latin with an irregular gerund is the source of the word “gerund”.
@@ -225,7 +226,7 @@
 						These all belong to the 1st/2nd declension.
 						They will get the locative for all three genders in both singular and plural, but only for the positive degree.
 						(The adjective <q lang="la">aliēnus</q> is not attested in the locative comparative/superlative; the other adjectives have no comparative or superlative at all.
-						Theoretically “in the Athens of complete strangers” could be translated as <q lang="la">Athēnīs aliēnissimīs</q>, but I’m not allowing that without attestation.)
+						Theoretically “in the Athens of complete strangers” could be translated as <q lang="la">Athēnīs aliēnissimīs</q>, for example, but I’m not allowing that without attestation.)
 					</p>
 				</dd>
 
@@ -1245,11 +1246,34 @@
 				Instead, the Node-only code splits the data into batches of 1,000 lemmata and saves the batches as files, and Git tracks those files.
 			</p>
 
+			<h3>Ambiguously stressed forms</h3>
+
+			<p>
+				There exist pairs of forms in Latin which are spelt and macronized the same, but which are stressed on different syllables.
+				For example <q lang="la">dominī</q> is stressed on the do- when it’s a form of <q lang="la">dominus</q>, but it’s stressed on the -mi- when it’s a form of <q lang="la">dominium</q>.
+			</p>
+
+			<p>
+				The Node-only code looks for coincidences like this, and applies an acute accent to the form that’s stressed on the penult.
+				Hence, we get <q lang="la">dominī</q> in the forms of <q lang="la">dominus</q> and <q lang="la">domínī</q> in the forms of <q lang="la">dominium</q>.
+			</p>
+
+			<p>
+				This enables velut to handle the different forms properly.
+				For example, <a href="https://www.velut.co.uk/domini-"><q lang="la">dominī</q></a> should rhyme with <q lang="la">hominī</q> and <a href="https://www.velut.co.uk/domi.ni-"><q lang="la">domínī</q></a> should rhyme with <q lang="la">inī</q>, <q lang="la">linī</q>, <q lang="la">Tarquinī</q>, <q lang="la">ratiōcinī</q>, etc.
+				(Words don’t get an acute when there’s no other way of stressing them.)
+			</p>
+
+			<p>
+				Because I’ve put this disambiguation code in the Node-only section, it won’t run in the browser.
+				So if you input <samp>[{"Lemma": "dominus", "PartOfSpeech": "Noun"}, {"Lemma": "dominium", "PartOfSpeech": "Noun"}]</samp> in <a href="#textarea-input">the field above</a>, the output will be the correct forms of the two nouns, but with no acute accent. 
+			</p>
+
 			<h3>Checking the output in Node</h3>
 
 			<p>
 				I can also use Node to check the output against the forms I had in Excel.
-				The code for this check is at <a href="https://github.com/DuncanRitchie/velut-inflector/blob/main/inflector.js#L4075">the end of inflector.js</a>.
+				The code for this check is at <a href="https://github.com/DuncanRitchie/velut-inflector/blob/14bca4d1d67b0ef5aa71d37f1b29bbbb230b16ca/inflector.js#L4882">the end of inflector.js</a>.
 			</p>
 
 			<p>
