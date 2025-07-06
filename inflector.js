@@ -4845,6 +4845,26 @@ if (typeof require !== 'undefined') {
 								lemmataOfSamePartOfSpeech += ' ' + NoTypeTag;
 							}
 						}
+
+						if (lemmaObject.Root !== null) {
+							const rootLemma = inputLemmata.find(
+								(l) => l.Lemma === lemmaObject.Root,
+							);
+							if (!rootLemma) {
+								console.warn(
+									'Lemma has a Root that is not itself a lemma',
+									lemmaObject.Lemma,
+									lemmaObject.Root,
+								);
+							} else if (rootLemma.Root !== lemmaObject.Root) {
+								console.warn(
+									'Lemma has a Root that doesn’t have itself as its own Root',
+									lemmaObject.Lemma,
+									lemmaObject.Root,
+									rootLemma.Root,
+								);
+							}
+						}
 					}
 				});
 
