@@ -4553,8 +4553,6 @@ if (typeof require !== 'undefined') {
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
 		const expectedOutputFileUrl =
 			FOLDER_PATH + 'lemmata-from-collator_mongo.json';
-		//// This will go into a `summary` MongoDB collection which will be read from a page on the velut site giving my progress in generating and checking inflections.
-		const summaryFileUrl = FOLDER_PATH + 'summary-from-inflector_mongo.json';
 
 		try {
 			let batchFilepaths = [];
@@ -5514,88 +5512,11 @@ if (typeof require !== 'undefined') {
 				}
 			}
 
-			function generateSummaryFile() {
-				console.time('generatingSummaryFile');
-
-				const lastUpdatedDate = new Date().toISOString();
-
-				const inflectorCounts = {
-					mismatches: errorCount,
-					successes: successCount,
-					inflectFuncNotDefined: skippedCount,
-					noTestData: noTestDataCount,
-					total: totalLemmata,
-					toBeManuallyChecked: countNotChecked,
-					manuallyChecked: totalLemmata - countNotChecked,
-				};
-
-				const errata = inputLemmata
-					.filter(
-						(lemmaObject) =>
-							lemmaObject.ExtraEncliticizedForms?.incorrect?.length,
-					)
-					.map((lemmaObject) => {
-						return {
-							lemma: lemmaObject.Lemma,
-							incorrectForms: lemmaObject.ExtraEncliticizedForms?.incorrect,
-						};
-					})
-					.sort((a, b) => {
-						const aNoTypeTag = removeBrackets(a.lemma);
-						const aNoMacra = removeDiacritics(aNoTypeTag);
-						const aNoMacraLowerCase = aNoMacra.toLowerCase();
-						const bNoTypeTag = removeBrackets(b.lemma);
-						const bNoMacra = removeDiacritics(bNoTypeTag);
-						const bNoMacraLowerCase = bNoMacra.toLowerCase();
-
-						if (aNoMacraLowerCase > bNoMacraLowerCase) {
-							return 1;
-						}
-						if (aNoMacraLowerCase < bNoMacraLowerCase) {
-							return -1;
-						}
-						if (aNoMacra > bNoMacra) {
-							return 1;
-						}
-						if (aNoMacra < bNoMacra) {
-							return -1;
-						}
-						if (aNoTypeTag > bNoTypeTag) {
-							return 1;
-						}
-						if (aNoTypeTag < bNoTypeTag) {
-							return -1;
-						}
-						if (a.lemma > b.lemma) {
-							return 1;
-						}
-						if (a.lemma < b.lemma) {
-							return -1;
-						}
-						return 0;
-					});
-
-				//// Fields are camel-cased in the `summary` MongoDB collection.
-				const summaryObject = {
-					lastUpdatedDate,
-					inflectorCounts,
-					errata,
-				};
-
-				fs.writeFileSync(
-					summaryFileUrl,
-					JSON.stringify(summaryObject, null, 2) + '\n',
-				);
-
-				console.timeEnd('generatingSummaryFile');
-			}
-
 			generateOutput();
 			replaceFormsOfAmbiguousStress();
 			divideIntoBatches();
 			mergeWithLemmataJson();
-			checkAgainstExpected();
-			generateSummaryFile();
+			// checkAgainstExpected();
 		} catch (err) {
 			console.error(err);
 		}
