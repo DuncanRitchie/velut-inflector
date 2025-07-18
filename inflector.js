@@ -4597,7 +4597,6 @@ if (typeof require !== 'undefined') {
 				const setOfOtherForms = new Set();
 
 				const sliceOfOutput = allOutput;
-				// .slice(0, 3000);
 				function deleteLastSyllable(word) {
 					return word.replace(
 						/(([bcdfgkpt][lr])|[bcdfglmnprstv]|ch|ph|qu|th)?([aeiouyāēīōūȳ]|ae|au|oe)[bcdfgklmnpqrstvxz]*h?$/,
@@ -4620,11 +4619,6 @@ if (typeof require !== 'undefined') {
 					const wordIsPolysyllabicWithLightPenult =
 						hasMoreThanTwoSyllables && !hasHeavyPenult;
 
-					// console.log(
-					// 	wordWithoutUltima,
-					// 	word,
-					// 	wordIsPolysyllabicWithLightPenult,
-					// );
 					return wordIsPolysyllabicWithLightPenult;
 				}
 
@@ -4679,11 +4673,6 @@ if (typeof require !== 'undefined') {
 											!form.endsWith('iī') &&
 											!form.endsWith('issimī')
 										) {
-											// console.log(
-											// 	'Is this a syncopated genitive or vocative from -ius/-ium?',
-											// 	form,
-											// 	lemmaWithForms.Lemma,
-											// );
 											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
 											setOfFormsStressedOnPenult.add(form);
 											return;
@@ -4707,45 +4696,30 @@ if (typeof require !== 'undefined') {
 
 				setOfFormsStressedOnPenult.forEach((formStressedOnPenult) => {
 					if (setOfOtherForms.has(formStressedOnPenult)) {
+						// Here we have found a form with ambiguous stress.
 						const formWithAcuteAdded = addAcuteToPenult(formStressedOnPenult);
-						console.log(
-							`Form has ambiguous stress! Disambiguating ${formStressedOnPenult} to ${formWithAcuteAdded}`,
-						);
 
 						formsStressedOnPenultAndTheirAddresses
 							.filter((formObject) => {
-								// console.debug(formObject);
 								return formObject && formObject.Form === formStressedOnPenult;
 							})
 							.forEach((address) => {
-								// console.log(address);
 								const lemmaInOutput = sliceOfOutput.find(
 									(lemmaObject) => lemmaObject.Lemma === address.Lemma,
 								);
 								let formsArrayInOutput = lemmaInOutput.Forms;
 								for (let i = 0; i < address.Keys.length; i++) {
-									// console.log(formsArrayInOutput);
 									formsArrayInOutput = formsArrayInOutput[address.Keys[i]];
 								}
-								// console.log(formsArrayInOutput);
-								// const arrayWithSubstitution =
 								formsArrayInOutput.splice(
 									formsArrayInOutput.indexOf(formStressedOnPenult),
 									1,
 									formWithAcuteAdded,
 								);
-								// console.log(arrayWithSubstitution);
-								// consoleLogAsJson(lemmaInOutput);
 							});
-					} else {
-						// console.log(
-						// 	'Form does not have ambiguous stress',
-						// 	formStressedOnPenult,
-						// );
 					}
 				});
 
-				// console.log(allFormsAndTheirAddresses);
 				fs.writeFileSync(
 					outputFileUrlWithAmbiguousStressHandled,
 					JSON.stringify(sliceOfOutput, null, '\t'),
