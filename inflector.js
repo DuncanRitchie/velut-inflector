@@ -661,6 +661,30 @@ function applyFieldsToForms(
 	return withoutEmptyFields;
 }
 
+function doesFormsObjectContainForm(forms, form) {
+	if (!forms) {
+		console.error('Invalid forms in doesFormsObjectContainForms', {
+			invalidForms: forms,
+			searchItem: form,
+		});
+		return;
+	}
+	if (!form) {
+		console.error('Invalid form in doesFormsObjectContainForms', form);
+		return;
+	}
+	if (Array.isArray(forms)) {
+		return forms.includes(form);
+	}
+	const subobjects = Object.values(forms);
+	for (let i = 0; i < subobjects.length; i++) {
+		if (doesFormsObjectContainForm(subobjects[i], form)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 ////
 //// Functions for building the output Json:
 ////
@@ -4852,6 +4876,19 @@ if (typeof require !== 'undefined') {
 
 					for ([lemma, parsingData] of outputEntries) {
 						combinedLemmataDataAsObject[lemma].Forms = parsingData;
+
+						// Check that the Forms data include the lemma itself as a form.
+						// This check could be moved earlier in the script, but it’s probably sensible
+						// to run it after forms of ambiguous stress have been disambiguated.
+						if (
+							!doesFormsObjectContainForm(parsingData, removeBrackets(lemma))
+						) {
+							console.warn(
+								'Forms for a lemma do not contain the lemma itself',
+								lemma,
+								parsingData,
+							);
+						}
 					}
 				});
 
