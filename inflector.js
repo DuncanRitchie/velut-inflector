@@ -4701,6 +4701,17 @@ if (typeof require !== 'undefined') {
 											setOfFormsStressedOnPenult.add(form);
 											return;
 										}
+										// Eg ‘petiī’ as a contraction of ‘petīvī’
+										if (
+											(form.endsWith('iī') || form.endsWith('iit')) &&
+											keys.includes('perfect') &&
+											value.includes(form.replace(/i(?=(ī|it)$)/, 'īv')) &&
+											!lemmaWithForms.Conjugations?.includes('eō')
+										) {
+											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
+											setOfFormsStressedOnPenult.add(form);
+											return;
+										}
 									}
 
 									setOfOtherForms.add(form);
