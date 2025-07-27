@@ -4668,49 +4668,45 @@ if (typeof require !== 'undefined') {
 							const keys = [...previousKeys, key];
 
 							if (Array.isArray(value)) {
-								value.forEach((form) => {
+								const formsWithSameParsing = value;
+								formsWithSameParsing.forEach((form) => {
 									const formAsObject = {
 										Form: form,
 										Lemma: lemmaWithForms.Lemma,
 										Keys: keys,
 									};
 									if (isPolysyllabicWithLightPenult(form)) {
-										if (
-											keys.includes('ne') ||
-											keys.includes('que') ||
-											keys.includes('ve')
-										) {
-											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
-											setOfFormsStressedOnPenult.add(form);
-											return;
-										}
 										const lemmaWithoutBrackets = removeBrackets(
 											lemmaWithForms.Lemma,
 										);
+
 										if (
-											(lemmaWithoutBrackets.endsWith('ius') ||
+											// Encliticized forms get penult stress.
+											keys.includes('ne') ||
+											keys.includes('que') ||
+											keys.includes('ve') ||
+											// Contracted genitives and vocatives of -ius/-ium nouns.
+											((lemmaWithoutBrackets.endsWith('ius') ||
 												lemmaWithoutBrackets.endsWith('ium')) &&
-											form.endsWith('ī') &&
-											!form.endsWith('iī') &&
-											!form.endsWith('issimī')
+												form.endsWith('ī') &&
+												!form.endsWith('iī') &&
+												!form.endsWith('issimī')) ||
+											// Eg ‘petiī’ as a contraction of ‘petīvī’
+											((form.endsWith('iī') || form.endsWith('iit')) &&
+												keys.includes('perfect') &&
+												formsWithSameParsing.includes(
+													form.replace(/i(?=(ī|it)$)/, 'īv'),
+												) &&
+												!lemmaWithForms.Conjugations?.includes('eō'))
 										) {
-											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
-											setOfFormsStressedOnPenult.add(form);
-											return;
-										}
-										// Eg ‘petiī’ as a contraction of ‘petīvī’
-										if (
-											(form.endsWith('iī') || form.endsWith('iit')) &&
-											keys.includes('perfect') &&
-											value.includes(form.replace(/i(?=(ī|it)$)/, 'īv')) &&
-											!lemmaWithForms.Conjugations?.includes('eō')
-										) {
+											// These forms will receive penult stress.
 											formsStressedOnPenultAndTheirAddresses.push(formAsObject);
 											setOfFormsStressedOnPenult.add(form);
 											return;
 										}
 									}
 
+									// These other forms will not receive penult stress.
 									setOfOtherForms.add(form);
 									otherFormsAndTheirAddresses.push(formAsObject);
 								});
