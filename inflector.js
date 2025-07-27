@@ -4602,10 +4602,7 @@ if (typeof require !== 'undefined') {
 					JSON.stringify(outputAsArray, null, '\t'),
 				);
 
-				console.log(
-					'Output all data! See your file at ' +
-						outputFileUrlWithAmbiguousStress,
-				);
+				console.log('Inflected forms have been created for all lemmata!');
 
 				console.timeEnd('generatingOutput');
 			}
@@ -4874,10 +4871,6 @@ if (typeof require !== 'undefined') {
 						}
 					}
 				});
-
-				console.log(
-					`There are ${countNotChecked} lemmata whose forms should be checked manually.`,
-				);
 
 				//// Add data from output of inflector to a "Forms" field in each lemma.
 				//// (This overrides any "Forms" field the lemma already has.)
