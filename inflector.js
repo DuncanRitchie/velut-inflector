@@ -4569,14 +4569,18 @@ if (typeof require !== 'undefined') {
 			);
 		}
 		const batchSize = 1000;
-		//// The output batches are concatenated into one file, for Git to ignore and me to (maybe) import to MongoDB.
-		const outputFileUrl = FOLDER_PATH + 'words-from-inflector_mongo.json';
+		//// The output batches are concatenated into one file, for Git to ignore and me to import to MongoDB.
 		//// The output from the Inflector is also merged into the input lemmata data, for Git to ignore and me to import to MongoDB.
 		const combinedOutputFileUrl =
 			FOLDER_PATH + 'lemmata-with-words-from-inflector_mongo.json';
 		//// For regression testing, I have a file of expected output, that the actual output is compared against.
 		const expectedOutputFileUrl =
 			FOLDER_PATH + 'lemmata-from-collator_mongo.json';
+		//// Basic statistics are appended to this file when the Inflector runs.
+		//// The Inflector has similar code.
+		const logFolderUrl =
+			'C:/Users/Duncan Ritchie/Documents/Code/velut/velutSideAssets/data-updater-log/';
+		const logFileUrl = logFolderUrl + 'log.txt';
 
 		try {
 			let batchFilepaths = [];
@@ -4602,9 +4606,26 @@ if (typeof require !== 'undefined') {
 					JSON.stringify(outputAsArray, null, '\t'),
 				);
 
-				console.log('Inflected forms have been created for all lemmata!');
+				console.log(
+					`Inflected forms have been created for all ${outputAsArray.length} lemmata!`,
+				);
 
 				console.timeEnd('generatingOutput');
+
+				//// Record the lemma count in a log file, so it’s easy for me to see how velut has grown over time.
+				//// The Word Data Generator has similar code.
+				console.time('loggingLemmaCount');
+				if (!fs.existsSync(logFolderUrl)) {
+					fs.mkdirSync(logFolderUrl);
+				}
+				if (!fs.existsSync(logFileUrl)) {
+					fs.writeFileSync(logFileUrl, '');
+				}
+				fs.appendFileSync(
+					logFileUrl,
+					`Date: ${new Date()}, Lemmata: ${outputAsArray.length}\n`,
+				);
+				console.timeEnd('loggingLemmaCount');
 			}
 
 			function replaceFormsOfAmbiguousStress() {
