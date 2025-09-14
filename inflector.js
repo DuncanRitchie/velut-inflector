@@ -1111,7 +1111,7 @@ const inflectFuncs = {
 		}
 		const positive = removeBrackets(Lemma);
 		const stems = rest.ObliqueStems || [
-			positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī)$/, ''),
+			positive.replace(/(ē|iter|(?<=c)ter|er|im|om|um|ō|e|ī|ā)$/, ''),
 		];
 
 		if (
