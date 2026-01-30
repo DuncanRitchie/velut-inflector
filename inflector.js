@@ -1527,8 +1527,8 @@ const inflectFuncs = {
 			const accSingEnding = isGreekFirstDeclensionE
 				? 'ēn'
 				: isGreekFirstDeclensionA
-				? 'ān'
-				: 'am';
+					? 'ān'
+					: 'am';
 			const genSingEnding = isGreekFirstDeclensionE ? 'ēs' : 'ae';
 			const ablSingEnding = isGreekFirstDeclensionE ? 'ē' : 'ā';
 			return {
@@ -2695,7 +2695,7 @@ const inflectFuncs = {
 												.replace('eīb', 'īb')
 												.replace(/ee(?=[aā])/, 'ē'),
 										]),
-								  ]
+									]
 								: form,
 						),
 				);
@@ -4818,7 +4818,7 @@ if (typeof require !== 'undefined') {
 						? [
 								array.slice(0, size),
 								...splitArrayIntoBatches(array.slice(size), size),
-						  ]
+							]
 						: [array];
 				}
 
