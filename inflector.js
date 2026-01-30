@@ -701,12 +701,12 @@ const inflectFuncs = {
 		const declensionsString = rest.Declensions
 			? JSON.stringify(rest.Declensions)
 			: lemma.endsWith('us') ||
-			  lemma.endsWith('üs') ||
-			  lemma.endsWith('er') ||
-			  lemma.endsWith('a') ||
-			  lemma.endsWith('ī')
-			? '[1,2]'
-			: '[3]';
+				  lemma.endsWith('üs') ||
+				  lemma.endsWith('er') ||
+				  lemma.endsWith('a') ||
+				  lemma.endsWith('ī')
+				? '[1,2]'
+				: '[3]';
 
 		//// Indeclinable adjectives
 		if (declensionsString === '[0]') {
@@ -3647,7 +3647,7 @@ const inflectFuncs = {
 					console.warn('PerfectStems not set for ' + Lemma);
 				}
 
-				const presentStem = lemma.replace(/(ō|or|it)$/, ''); // Replaces 1 in forms below.
+				const presentStem = lemma.replace(/(ō|or|it|ī)$/, ''); // Replaces 1 in forms below.
 				const presentInfinitiveStem = presentStem.replace(/i$/, ''); // Replaces 2 in forms below.
 				const perfectStems = rest.PerfectStems || [presentStem + 's']; // Replaces 3 in forms below.
 				const supineStems = rest.SupineStems || [presentStem + 't']; // Replaces 4 in forms below.
@@ -4397,6 +4397,38 @@ const inflectFuncs = {
 				rest.IsIntransitive !== false
 			) {
 				console.warn(`IsIntransitive is not set for ${lemma}`);
+			}
+
+			// Preteritive verbs (eg meminī & ōdī) replace present-system forms with perfect-system.
+			if (rest.IsPreteritive) {
+				// The present active indicative is formed from the perfect.
+				forms.indicative.active.present = forms.indicative.active.perfect;
+				delete forms.indicative.active.perfect;
+				// The imperfect active indicative is formed from the pluperfect.
+				forms.indicative.active.imperfect = forms.indicative.active.pluperfect;
+				delete forms.indicative.active.pluperfect;
+				// The future active indicative is formed from the future perfect.
+				forms.indicative.active.future = forms.indicative.active.futureperfect;
+				delete forms.indicative.active.futureperfect;
+				// The present active subjunctive is formed from the perfect.
+				forms.subjunctive.active.present = forms.subjunctive.active.perfect;
+				delete forms.subjunctive.active.perfect;
+				// The imperfect active subjunctive is formed from the pluperfect.
+				forms.subjunctive.active.imperfect =
+					forms.subjunctive.active.pluperfect;
+				delete forms.subjunctive.active.pluperfect;
+				// The present active infinitive is formed from the perfect.
+				forms.infinitive.active.present = forms.infinitive.active.perfect;
+				delete forms.infinitive.active.perfect;
+
+				// Preteritives have no passive, no gerund, and no supine.
+				delete forms.indicative.passive;
+				delete forms.subjunctive.passive;
+				delete forms.infinitive.passive;
+				delete forms.imperative.passive;
+
+				delete forms.gerund;
+				delete forms.supine;
 			}
 		}
 
