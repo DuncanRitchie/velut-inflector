@@ -4873,6 +4873,7 @@ if (typeof require !== 'undefined') {
 							Notes,
 							Transliterations,
 							Root,
+							Roots,
 						} = lemmaObject;
 						const Index = index;
 						// The velut website uses NoMacra & NoMacraLowerCase when sorting lemmata.
@@ -4888,6 +4889,7 @@ if (typeof require !== 'undefined') {
 							Notes,
 							Transliterations,
 							Root,
+							Roots,
 							NoMacra,
 							NoMacraLowerCase,
 						};
@@ -4917,6 +4919,26 @@ if (typeof require !== 'undefined') {
 									rootLemma.Root,
 								);
 							}
+						}
+
+						if (lemmaObject.Roots) {
+							lemmaObject.Roots.forEach((root) => {
+								const rootLemma = inputLemmata.find((l) => l.Lemma === root);
+								if (!rootLemma) {
+									console.warn(
+										'Lemma has a root in Roots that is not itself a lemma',
+										lemmaObject.Lemma,
+										root,
+									);
+								} else if (rootLemma.Root !== root) {
+									console.warn(
+										'Lemma has a root in Roots that doesn’t have itself as its own Root',
+										lemmaObject.Lemma,
+										root,
+										rootLemma.Root,
+									);
+								}
+							});
 						}
 					}
 				});
