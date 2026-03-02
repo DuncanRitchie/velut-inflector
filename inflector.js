@@ -4855,8 +4855,8 @@ if (typeof require !== 'undefined') {
 				const combinedLemmataDataAsObject = {};
 
 				countNotChecked = 0;
-				const PART_OF_SPEECH_TO_LOG = 'Verb';
-				let lemmataOfSamePartOfSpeech = '';
+				const LEMMA_LENGTH_TO_LOG = 15;
+				let longerLemmataWithoutRoots = '';
 
 				//// Add data from input lemmata data.
 				inputLemmata.forEach((lemmaObject, index) => {
@@ -4894,10 +4894,10 @@ if (typeof require !== 'undefined') {
 							NoMacraLowerCase,
 						};
 
-						if (lemmaObject['20230721']) {
+						if (!lemmaObject['20260302']) {
 							countNotChecked++;
-							if (PartOfSpeech === PART_OF_SPEECH_TO_LOG) {
-								lemmataOfSamePartOfSpeech += ' ' + NoTypeTag;
+							if (Lemma.length >= LEMMA_LENGTH_TO_LOG) {
+								longerLemmataWithoutRoots += ' ' + NoTypeTag;
 							}
 						}
 
@@ -4922,6 +4922,12 @@ if (typeof require !== 'undefined') {
 						}
 
 						if (lemmaObject.Roots) {
+							if (!lemmaObject.Roots.includes) {
+								console.error(
+									'lemmaObject.Roots is does not have a `includes` method',
+									lemmaObject,
+								);
+							}
 							lemmaObject.Roots.forEach((root) => {
 								const rootLemma = inputLemmata.find((l) => l.Lemma === root);
 								if (!rootLemma) {
@@ -4929,6 +4935,13 @@ if (typeof require !== 'undefined') {
 										'Lemma has a root in Roots that is not itself a lemma',
 										lemmaObject.Lemma,
 										root,
+									);
+								} else if (rootLemma.Roots && !rootLemma.Roots.includes(root)) {
+									console.warn(
+										'Lemma has a root in Roots that doesn’t have itself among its own Roots',
+										lemmaObject.Lemma,
+										root,
+										rootLemma.Roots,
 									);
 								} else if (rootLemma.Root !== root) {
 									console.warn(
@@ -4938,10 +4951,23 @@ if (typeof require !== 'undefined') {
 										rootLemma.Root,
 									);
 								}
+								if (rootLemma && rootLemma.Roots && !rootLemma.Roots.includes) {
+									console.error(
+										'rootLemma.Roots is does not have a `includes` method',
+										rootLemma,
+									);
+								}
 							});
+						} else {
+							console.warn('Lemma doesn’t have Roots', lemmaObject.Lemma);
 						}
 					}
 				});
+
+				console.warn(
+					'These longer lemmata don’t have Roots',
+					longerLemmataWithoutRoots,
+				);
 
 				//// Add data from output of inflector to a "Forms" field in each lemma.
 				//// (This overrides any "Forms" field the lemma already has.)
