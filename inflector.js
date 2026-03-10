@@ -4849,13 +4849,17 @@ if (typeof require !== 'undefined') {
 				console.timeEnd('divideIntoBatches');
 			}
 
+			function isGreek(word) {
+				return /[αβγδεζηθικλμνξοπρςτυφχψωἀάᾶήίὖώῶ]/i.test(word);
+			}
+
 			function mergeWithLemmataJson() {
 				console.time('mergeWithLemmataJson');
 
 				const combinedLemmataDataAsObject = {};
 
 				countNotChecked = 0;
-				const LEMMA_LENGTH_TO_LOG = 15;
+				const LEMMA_LENGTH_TO_LOG = 13;
 				let longerLemmataWithoutRoots = '';
 
 				//// Add data from input lemmata data.
@@ -4872,7 +4876,6 @@ if (typeof require !== 'undefined') {
 							Meanings,
 							Notes,
 							Transliterations,
-							Root,
 							Roots,
 						} = lemmaObject;
 						const Index = index;
@@ -4888,36 +4891,20 @@ if (typeof require !== 'undefined') {
 							Meanings,
 							Notes,
 							Transliterations,
-							Root,
 							Roots,
 							NoMacra,
 							NoMacraLowerCase,
 						};
 
-						if (!lemmaObject['20260302']) {
+						// On 2026 Mar 02, I added a property to all the lemmata that didn’t have a Roots field,
+						// and I added a Roots field to the same lemmata by making an array out of Root.
+						// (Eg a lemma with Root="vōx" would get Roots=["vōx"])
+						// When I’ve checked the Roots field of a lemma, I delete the '20260302' field.
+						// I have since deleted Root.
+						if (lemmaObject['20260302']) {
 							countNotChecked++;
 							if (Lemma.length >= LEMMA_LENGTH_TO_LOG) {
-								longerLemmataWithoutRoots += ' ' + NoTypeTag;
-							}
-						}
-
-						if (lemmaObject.Root !== null) {
-							const rootLemma = inputLemmata.find(
-								(l) => l.Lemma === lemmaObject.Root,
-							);
-							if (!rootLemma) {
-								console.warn(
-									'Lemma has a Root that is not itself a lemma',
-									lemmaObject.Lemma,
-									lemmaObject.Root,
-								);
-							} else if (rootLemma.Root !== lemmaObject.Root) {
-								console.warn(
-									'Lemma has a Root that doesn’t have itself as its own Root',
-									lemmaObject.Lemma,
-									lemmaObject.Root,
-									rootLemma.Root,
-								);
+								longerLemmataWithoutRoots += ' ' + Lemma;
 							}
 						}
 
@@ -4928,36 +4915,38 @@ if (typeof require !== 'undefined') {
 									lemmaObject,
 								);
 							}
-							lemmaObject.Roots.forEach((root) => {
-								const rootLemma = inputLemmata.find((l) => l.Lemma === root);
-								if (!rootLemma) {
-									console.warn(
-										'Lemma has a root in Roots that is not itself a lemma',
-										lemmaObject.Lemma,
-										root,
-									);
-								} else if (rootLemma.Roots && !rootLemma.Roots.includes(root)) {
-									console.warn(
-										'Lemma has a root in Roots that doesn’t have itself among its own Roots',
-										lemmaObject.Lemma,
-										root,
-										rootLemma.Roots,
-									);
-								} else if (rootLemma.Root !== root) {
-									console.warn(
-										'Lemma has a root in Roots that doesn’t have itself as its own Root',
-										lemmaObject.Lemma,
-										root,
-										rootLemma.Root,
-									);
-								}
-								if (rootLemma && rootLemma.Roots && !rootLemma.Roots.includes) {
-									console.error(
-										'rootLemma.Roots is does not have a `includes` method',
-										rootLemma,
-									);
-								}
-							});
+							lemmaObject.Roots.filter((word) => !isGreek(word)).forEach(
+								(root) => {
+									const rootLemma = inputLemmata.find((l) => l.Lemma === root);
+									if (!rootLemma) {
+										console.warn(
+											'Lemma has a root in Roots that is not itself a lemma',
+											lemmaObject.Lemma,
+											root,
+										);
+									} else if (
+										rootLemma.Roots &&
+										!rootLemma.Roots.includes(root)
+									) {
+										console.warn(
+											'Lemma has a root in Roots that doesn’t have itself among its own Roots',
+											lemmaObject.Lemma,
+											root,
+											rootLemma.Roots,
+										);
+									}
+									if (
+										rootLemma &&
+										rootLemma.Roots &&
+										!rootLemma.Roots.includes
+									) {
+										console.error(
+											'rootLemma.Roots is does not have a `includes` method',
+											rootLemma,
+										);
+									}
+								},
+							);
 						} else {
 							console.warn('Lemma doesn’t have Roots', lemmaObject.Lemma);
 						}
@@ -4965,7 +4954,7 @@ if (typeof require !== 'undefined') {
 				});
 
 				console.warn(
-					'These longer lemmata don’t have Roots',
+					'These longer lemmata need their Roots checked',
 					longerLemmataWithoutRoots,
 				);
 
